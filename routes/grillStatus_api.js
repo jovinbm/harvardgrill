@@ -19,9 +19,9 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
-            if (theAdminUser.customLoggedInStatus == 1) {
-                grillStatus_handler.openGrill(req, res, theAdminUser);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                grillStatus_handler.openGrill(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }
@@ -43,9 +43,9 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
-            if (theAdminUser.customLoggedInStatus == 1) {
-                grillStatus_handler.closeGrill(req, res, theAdminUser);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                grillStatus_handler.closeGrill(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }
@@ -62,9 +62,31 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
-            if (theAdminUser.customLoggedInStatus == 1) {
-                grillStatus_handler.getCurrentGrillStatus(req, res, theAdminUser);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                grillStatus_handler.getCurrentGrillStatus(req, res, theUser);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findUser(req.user.openId, error, error, success);
+    },
+
+    updateAvailableComponents: function (req, res) {
+
+        var allComponents = req.body.allComponents;
+
+        consoleLogger('grillstatus_api: updateAvailableComponents event received');
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'updateAvailableComponentsAPI: Could not retrieve admin user', err: err});
+                consoleLogger("ERROR: updateAvailableComponentsAPI: Could not retrieve admin user: " + err);
+            }
+        }
+
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                grillStatus_handler.updateAvailableComponents(req, res, theUser, allComponents);
             }
             //TODO -- redirect to custom login
         }

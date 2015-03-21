@@ -9,6 +9,12 @@ angular.module('grillApp')
 
                 closeGrill: function () {
                     return $http.get('api/closeGrill');
+                },
+
+                updateAvailableComponents: function (allComponents) {
+                    return $http.post('/api/updateAvailableComponents', {
+                        allComponents: allComponents
+                    })
                 }
             }
         }]);

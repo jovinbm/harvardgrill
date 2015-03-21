@@ -60,9 +60,9 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
-            if (theAdminUser.customLoggedInStatus == 1) {
-                basic_handlers.adminStartUp(req, res, theAdminUser);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                basic_handlers.adminStartUp(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }

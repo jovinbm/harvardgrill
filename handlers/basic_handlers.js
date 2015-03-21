@@ -4,7 +4,7 @@ var statsDB = require('../db/stats_db.js');
 
 module.exports = {
 
-    adminStartUp: function (req, res, theAdminUser) {
+    adminStartUp: function (req, res, theUser) {
         consoleLogger('startUp: ADMIN_STARTUP handler called');
 
         function adminStartUpError(status, err) {

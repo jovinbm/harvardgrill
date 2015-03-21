@@ -1,6 +1,6 @@
 angular.module('grillApp')
-    .factory('mainService', ['$window', '$rootScope', 'socket', 'socketService', 'globals',
-        function ($window, $rootScope, socket, socketService, globals) {
+    .factory('mainService', ['$window', '$rootScope', '$log', 'socket', 'socketService', 'globals',
+        function ($window, $rootScope, $log, socket, socketService, globals) {
 
             socket.on('joined', function () {
                 console.log("JOINED EVENT RECEIVED");
@@ -13,6 +13,11 @@ angular.module('grillApp')
                     .error(function (errResponse) {
                         $window.location.href = "/error/500.html";
                     });
+            });
+
+            socket.on('reconnect', function () {
+                $log.info("'reconnect sequence' triggered");
+                $rootScope.$broadcast('reconnectSuccess');
             });
 
             return {

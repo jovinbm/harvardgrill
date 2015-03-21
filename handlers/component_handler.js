@@ -5,7 +5,7 @@ var cuid = require('cuid');
 
 module.exports = {
 
-    addComponent: function (req, res, theAdminUser, currentGrillStatus, theComponent) {
+    addComponent: function (req, res, theUser, currentGrillStatus, theComponent) {
         basic.consoleLogger('component_handler: ADD_COMPONENT event received');
 
         function error(status, err) {
@@ -31,11 +31,16 @@ module.exports = {
             componentUniqueId: cuid()
         };
 
+        //if the component is a weekly special, then put available by default to no
+        if (theComponent.componentGroup == 'ws') {
+            newComponent.available = 'no';
+        }
+
         componentDB.addComponent(newComponent, error, error, success);
     },
 
 
-    saveEditedComponent: function (req, res, theAdminUser, currentGrillStatus, theComponent) {
+    saveEditedComponent: function (req, res, theUser, currentGrillStatus, theComponent) {
         basic.consoleLogger('component_handler: SAVE_EDITED_COMPONENT event received');
 
         function error(status, err) {
@@ -59,7 +64,7 @@ module.exports = {
     },
 
 
-    deleteComponent: function (req, res, theAdminUser, currentGrillStatus, componentIndex) {
+    deleteComponent: function (req, res, theUser, currentGrillStatus, componentIndex) {
         basic.consoleLogger('component_handler: DELETE_COMPONENT event received');
 
         function error(status, err) {
@@ -83,7 +88,7 @@ module.exports = {
     },
 
 
-    getAllOrderComponents: function (req, res, theAdminUser) {
+    getAllOrderComponents: function (req, res, theUser) {
         basic.consoleLogger('component_handler: getAllOrderComponents event received');
 
         function error(status, err) {
@@ -106,7 +111,7 @@ module.exports = {
     },
 
 
-    getAllOmelets: function (req, res, theAdminUser) {
+    getAllOmelets: function (req, res, theUser) {
         basic.consoleLogger('component_handler: getAllOmelets event received');
 
         function error(status, err) {
@@ -129,7 +134,7 @@ module.exports = {
     },
 
 
-    getAllWeeklySpecials: function (req, res, theAdminUser) {
+    getAllWeeklySpecials: function (req, res, theUser) {
         basic.consoleLogger('component_handler: getAllWeeklySpecials event received');
 
         function error(status, err) {
@@ -152,7 +157,7 @@ module.exports = {
     },
 
 
-    getAllExtras: function (req, res, theAdminUser) {
+    getAllExtras: function (req, res, theUser) {
         basic.consoleLogger('component_handler: getAllExtras event received');
 
         function error(status, err) {

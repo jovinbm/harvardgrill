@@ -67,6 +67,39 @@ module.exports = {
                     success(components);
                 }
             });
+    },
+
+    updateAvailableComponents: function (allComponents, error_neg_1, error_0, success) {
+        var errors = 0;
+        allComponents.forEach(function (component) {
+            Component.findOne({componentIndex: component.componentIndex}).exec(
+                function (err, retrievedComponent) {
+                    if (err) {
+                        error_neg_1(-1, err);
+                        errors++
+                    } else if (retrievedComponent == null || retrievedComponent == undefined) {
+                        //means the 'stats' document is not available, create it
+                        error_0(0, err);
+                        errors++;
+                    } else {
+                        //update the document
+                        retrievedComponent.available = component.available;
+                        retrievedComponent.save(function (err) {
+                            if (err) {
+                                error_neg_1(-1, err);
+                                errors++;
+                            }
+                        });
+                    }
+                }
+            )
+        });
+
+        if (errors > 0) {
+            error_neg_1(-1, "Errors happened while updating components")
+        } else {
+            success();
+        }
     }
 
 };

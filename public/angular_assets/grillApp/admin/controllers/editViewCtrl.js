@@ -14,15 +14,18 @@ angular.module('grillApp')
             $scope.allWeeklySpecials = [];
             $scope.allExtras = [];
 
+            $scope.editViewReference = {};
+
             //request all components;
             function getAllOrderComponents() {
                 EditService.getAllOrderComponents()
                     .success(function (orderComponents) {
                         $scope.allOrderComponents = orderComponents.allComponents;
+                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occured. Please reload the page");
+                        $scope.showToast("error", "A problem has occurred. Please reload the page");
                     });
             }
 
@@ -30,10 +33,11 @@ angular.module('grillApp')
                 EditService.getAllOmelets()
                     .success(function (orderComponents) {
                         $scope.allOmelets = orderComponents.allComponents;
+                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occured. Please reload the page");
+                        $scope.showToast("error", "A problem has occurred. Please reload the page");
                     });
             }
 
@@ -42,10 +46,11 @@ angular.module('grillApp')
                 EditService.getAllWeeklySpecials()
                     .success(function (orderComponents) {
                         $scope.allWeeklySpecials = orderComponents.allComponents;
+                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occured. Please reload the page");
+                        $scope.showToast("error", "A problem has occurred. Please reload the page");
                     });
             }
 
@@ -53,10 +58,11 @@ angular.module('grillApp')
                 EditService.getAllExtras()
                     .success(function (orderComponents) {
                         $scope.allExtras = orderComponents.allComponents;
+                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occured. Please reload the page");
+                        $scope.showToast("error", "A problem has occurred. Please reload the page");
                     });
             }
 
@@ -71,6 +77,7 @@ angular.module('grillApp')
                 getAllWeeklySpecials();
                 getAllExtras();
             }
+
 
             $scope.currentTime = "";
             if ($scope.stateChanges < 2) {
@@ -102,6 +109,7 @@ angular.module('grillApp')
                 var availableModalInstance = $modal.open({
                     templateUrl: 'AvailableModalContent.html',
                     controller: 'AvailableModalController',
+                    scope: $scope,
                     backdrop: 'static',
                     size: size
                 });
@@ -256,6 +264,34 @@ angular.module('grillApp')
             };
 
 
+            $scope.editComponent = function (componentIndex) {
+                //this will be replaced with 'false' in reference factory upon successful update
+                $scope.editViewReference[componentIndex].componentEditingMode = true;
+                $scope.editViewReference.isInEditingMode = true;
+            };
+
+            $scope.cancelComponentEdit = function (componentIndex, componentGroup) {
+                //the componentEditing mode and isInEditingMode will both be replaced with 'false' in reference factory upon successful refresh
+                //of either of the following
+
+                switch (componentGroup) {
+                    case "oc":
+                        getAllOrderComponents();
+                        break;
+                    case "oo":
+                        getAllOmelets();
+                        break;
+                    case "ws":
+                        getAllWeeklySpecials();
+                        break;
+                    case "oe":
+                        getAllExtras();
+                        break;
+                    default:
+                        getAllAll();
+                }
+            };
+
             $scope.deleteComponent = function (componentIndex, componentGroup) {
 
                 EditService.deleteComponent(componentIndex)
@@ -285,6 +321,12 @@ angular.module('grillApp')
                     });
 
             };
+
+            $rootScope.$on('reconnectSuccess', function () {
+                getAllAll();
+                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
+            });
 
             $log.info('EditViewController booted successfully');
         }

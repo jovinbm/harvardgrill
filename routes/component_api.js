@@ -20,9 +20,9 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
+        function success(theUser) {
 
-            if (theAdminUser.customLoggedInStatus == 1) {
+            if (theUser.customLoggedInStatus == 1) {
                 //get the current Grill Status
 
                 function error(status, err) {
@@ -35,7 +35,7 @@ module.exports = {
 
                 function statsSuccess(currentGrillStatus) {
                     if (currentGrillStatus.grillStatus == "closed") {
-                        component_handler.addComponent(req, res, theAdminUser, currentGrillStatus, theComponent);
+                        component_handler.addComponent(req, res, theUser, currentGrillStatus, theComponent);
                     } else {
                         res.status(500).send({
                             msg: 'getCurrentGrillStatus in addComponentAPI: GRILL NOT CLOSED'
@@ -66,9 +66,9 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
+        function success(theUser) {
 
-            if (theAdminUser.customLoggedInStatus == 1) {
+            if (theUser.customLoggedInStatus == 1) {
                 //get the current Grill Status
 
                 function error(status, err) {
@@ -81,7 +81,7 @@ module.exports = {
 
                 function statsSuccess(currentGrillStatus) {
                     if (currentGrillStatus.grillStatus == "closed") {
-                        component_handler.saveEditedComponent(req, res, theAdminUser, currentGrillStatus, theComponent);
+                        component_handler.saveEditedComponent(req, res, theUser, currentGrillStatus, theComponent);
                     } else {
                         res.status(500).send({
                             msg: 'getCurrentGrillStatus in addComponentAPI: GRILL NOT CLOSED'
@@ -112,9 +112,9 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
+        function success(theUser) {
 
-            if (theAdminUser.customLoggedInStatus == 1) {
+            if (theUser.customLoggedInStatus == 1) {
                 //get the current Grill Status
 
                 function error(status, err) {
@@ -127,7 +127,7 @@ module.exports = {
 
                 function statsSuccess(currentGrillStatus) {
                     if (currentGrillStatus.grillStatus == "closed") {
-                        component_handler.deleteComponent(req, res, theAdminUser, currentGrillStatus, componentIndex);
+                        component_handler.deleteComponent(req, res, theUser, currentGrillStatus, componentIndex);
                     } else {
                         res.status(500).send({
                             msg: 'getCurrentGrillStatus in deleteComponentAPI: GRILL NOT CLOSED'
@@ -154,10 +154,10 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
+        function success(theUser) {
 
-            if (theAdminUser.customLoggedInStatus == 1) {
-                component_handler.getAllOrderComponents(req, res, theAdminUser);
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAllOrderComponents(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }
@@ -175,10 +175,10 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
+        function success(theUser) {
 
-            if (theAdminUser.customLoggedInStatus == 1) {
-                component_handler.getAllOmelets(req, res, theAdminUser);
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAllOmelets(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }
@@ -197,10 +197,10 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
+        function success(theUser) {
 
-            if (theAdminUser.customLoggedInStatus == 1) {
-                component_handler.getAllWeeklySpecials(req, res, theAdminUser);
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAllWeeklySpecials(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }
@@ -219,10 +219,10 @@ module.exports = {
             }
         }
 
-        function success(theAdminUser) {
+        function success(theUser) {
 
-            if (theAdminUser.customLoggedInStatus == 1) {
-                component_handler.getAllExtras(req, res, theAdminUser);
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAllExtras(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }

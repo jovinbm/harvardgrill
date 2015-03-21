@@ -121,6 +121,7 @@ app.post('/api/reconnect', authenticate.ensureAuthenticated, basicAPI.reconnect)
 app.get('/api/openGrill', authenticate.ensureAuthenticated, grillStatusAPI.openGrill);
 app.get('/api/closeGrill', authenticate.ensureAuthenticated, grillStatusAPI.closeGrill);
 app.post('/api/getCurrentGrillStatus', authenticate.ensureAuthenticated, grillStatusAPI.getCurrentGrillStatus);
+app.post('/api/updateAvailablecomponents', authenticate.ensureAuthenticated, grillStatusAPI.updateAvailableComponents);
 
 app.post('/api/addComponent', authenticate.ensureAuthenticated, componentAPI.addComponent);
 app.post('/api/saveEditedComponent', authenticate.ensureAuthenticated, componentAPI.saveEditedComponent);

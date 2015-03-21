@@ -8,33 +8,15 @@
         </div>
 
         <div>
+            <h6>Order Components</h6>
             <ul class="list-unstyled">
-                <li class="list-unstyled clearfix">
-                    <i class="fa fa-spoon"></i> Chicken Breast
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Halal Hotdog
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Hot dog
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Beet &amp; Kale Burger - vgn
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Sweet Potato &amp; Black Bean Burger - vgn
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Grilled Cheddar Cheese Sandwich - v
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Cage-Free Eggs - v
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Turkey Burger
-                </li>
-                <li class="list-unstyled">
-                    <i class="fa fa-spoon"></i> Egg Whites -v
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allOrderComponents">
+                    <input type="checkbox"
+                           ng-disabled="isLoading"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"> {{component.name}}
                 </li>
             </ul>
         </div>
@@ -42,23 +24,49 @@
         <div>
             <h6>Omelets</h6>
             <ul class="list-unstyled">
-                <li class="list-unstyled clearfix">
-                    <i class="fa fa-spoon"></i> Ham &amp; Cheese
-                </li>
-                <li class="list-unstyled clearfix">
-                    <i class="fa fa-spoon"></i> Peppers &amp; Onion - v
-                </li>
-                <li class="list-unstyled clearfix">
-                    <i class="fa fa-spoon"></i> Tomato &amp; Mushroom - v
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allOmelets">
+                    <input type="checkbox"
+                           ng-disabled="isLoading"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"> {{component.name}}
                 </li>
             </ul>
         </div>
 
         <div>
-            <h6>Weekly Special</h6>
+            <h6>Extras</h6>
             <ul class="list-unstyled">
-                <li class="list-unstyled clearfix">
-                    <i class="fa fa-spoon"></i> Veritaffles
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allExtras">
+                    <input type="checkbox"
+                           ng-disabled="isLoading"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"> {{component.name}}
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h6>Weekly Specials</h6>
+
+            <div class="pull-right">
+                <a href ng-click="unSelectAllWeeklySpecials()"
+                   class="btn btn-default btn-sm">Unselect All
+                </a>
+            </div>
+            <ul class="list-unstyled">
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allWeeklySpecials">
+                    <input type="checkbox"
+                           ng-disabled="isLoading"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"
+                           ng-click="weeklySpecialRadioChange(component.componentIndex)"> {{component.name}}
+
                 </li>
             </ul>
         </div>
@@ -68,7 +76,9 @@
     <div class="card-action clearfix">
 
         <div class="pull-right">
-            <a href="#" class="btn btn-primary btn-md">
+            <a href ng-click="updateAvailableComponents()"
+               ng-disabled="isLoading"
+               class="btn btn-info btn-md">
                 Update
             </a>
         </div>

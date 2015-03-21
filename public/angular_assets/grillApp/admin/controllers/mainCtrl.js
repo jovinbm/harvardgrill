@@ -9,13 +9,13 @@ angular.module('grillApp')
             $scope.showToast = function (toastType, text) {
                 switch (toastType) {
                     case "success":
+                        toastr.clear();
                         toastr.success(text);
                         break;
                     case "warning":
                         toastr.warning(text, 'Warning', {
                             closeButton: true,
-                            tapToDismiss: true,
-                            timeOut: false
+                            tapToDismiss: true
                         });
                         break;
                     case "error":
@@ -30,6 +30,13 @@ angular.module('grillApp')
                         toastr.clear();
                 }
             };
+
+            $rootScope.$on('showToast', function (event, data) {
+                var toastType = data.toastType;
+                var text = data.text;
+
+                $scope.showToast(toastType, text);
+            });
 
             //keeping track of how many times the state has changed (useful for refreshing controllers if the state has changed once)
             $scope.stateChanges = 0;
@@ -64,6 +71,7 @@ angular.module('grillApp')
                 .error(function (errResponse) {
                     $window.location.href = "/error/500.html";
                 });
+
 
             $log.info('MainController booted successfully');
         }]);
