@@ -1,0 +1,26 @@
+{
+  "name": "grill",
+  "version": "0.0.0",
+  "authors": [
+    "Jovin Mwilanga <jovinbeda@hotmail.com>"
+  ],
+  "description": "A website to help harvard students order food from dining grill",
+  "keywords": [
+    "harvard"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize.css": "~3.0.2",
+    "toastr": "~2.1.0",
+    "bootstrap": "~3.3.2",
+    "angular-loading-bar": "~0.6.0",
+    "angulartics": "~0.17.2"
+  }
+}

@@ -1,0 +1,36 @@
+<div class="card">
+
+    <div class="card-content">
+        <h2>{{currentTime}}</h2>
+
+        <ul class="list-unstyled"
+            ng-if="currentGrillStatus.grillStatus == 'open'">
+            <li class="list-unstyled clearfix">
+                <strong>Total Orders: </strong>{{currentGrillStatus.totalOrders}}
+            </li>
+            <li class="list-unstyled clearfix">
+                <strong>Total Processed: </strong>{{currentGrillStatus.totalProcessedOrders}}
+            </li>
+            <li class="list-unstyled clearfix">
+                <strong>Total Remaining: </strong>{{currentGrillStatus.totalUnattendedOrders}}
+            </li>
+            <li class="list-unstyled clearfix">
+                <strong>Total Declined: </strong>{{currentGrillStatus.totalOrderDeclines}}
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="card-action clearfix ng-cloak">
+        <div ng-class="grillStatusReference.grillStatusAlertClass">
+            <strong>Grill status:</strong> {{grillStatusReference.grillStatusAlertText}}
+        </div>
+
+        <div class="pull-right">
+            <a href="#"
+               ng-class="grillStatusReference.openCloseClass"
+               ng-click="openCloseGrill()">{{grillStatusReference.openCloseText}}
+            </a>
+        </div>
+    </div>
+</div>

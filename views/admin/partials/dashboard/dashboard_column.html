@@ -1,0 +1,22 @@
+<section class="col-lg-4 col-md-4 col-sm-5 hidden-xs"
+         ng-controller="GrillStatusController">
+    <h1 class="column-heading"><i class="fa fa-tachometer"></i> DASHBOARD
+    </h1>
+
+    <ul class="list-unstyled animated fadeIn">
+
+        <!--start of GrillStatusCard-->
+        <li class="list-unstyled clearfix ng-cloak">
+            <div grill-status-card></div>
+        </li>
+        <!--end of GrillStatusCard-->
+
+        <li class="list-unstyled clearfix">
+            <div available-card></div>
+
+            <!--start of available modal-->
+            <div confirm-available-modal></div>
+            <!--end of available today modal-->
+        </li>
+    </ul>
+</section>

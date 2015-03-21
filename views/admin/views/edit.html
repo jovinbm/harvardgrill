@@ -1,0 +1,275 @@
+<section class="row"
+         ng-controller="EditViewController">
+
+    <h1>
+        <strong>ADD OR REMOVE ORDERS</strong>
+        <span class="pull-right">
+            {{currentTime}}
+        </span>
+    </h1>
+
+    <div ng-if="currentGrillStatus.grillStatus == 'open'">
+        <div class="alert alert-warning">
+            <strong>The Grill is currently OPEN. The Grill should be closed first before adding or removing components.
+                Please click the CLOSE GRILL button to change</strong>
+
+            <div class="pull-right">
+                <a href="#"
+                   class="btn btn-md btn-primary"
+                   ng-click="openCloseGrill()">{{grillStatusReference.openCloseText}}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="currentGrillStatus.grillStatus == 'closed'">
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Heads up!</strong><br/>
+
+            <p>1) There are 4 sections: <strong>Order Components, Omelets, Weekly Specials, and Extras</strong>.
+                Examples of
+                what goes into each are given. Please add each type to the specified section. <br/>
+                2) Note that this is the way the orders will appear on the client's side.
+            </p>
+        </div>
+
+        <section class="edit-section">
+            <h3>Order Components
+            <span>
+                <small>e.g. Chicken Breast</small>
+            </span>
+            </h3>
+
+            <!--order add form-->
+            <div class="input-group">
+                <input type="text"
+                       class="form-control"
+                       ng-model="orderComponentModel.inputText"
+                       placeholder="Add Order (*not omelet, *not weekly special)"
+                       aria-describedby="AddOrderComponentButton">
+        <span class="input-group-addon"
+              id="AddOrderComponentButton">
+            <button class="btn btn-primary btn-md"
+                    ng-disabled='!orderComponentModel.inputText'
+                    ng-click="addOrderComponent()">ADD TO ORDERS
+            </button>
+        </span>
+            </div>
+            <!--end of order add form-->
+
+            <!--start of available order components-->
+            <h4>Available now</h4>
+            <table class="table table-striped table-hover ">
+                <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="orderComponent in allOrderComponents">
+                    <td>{{orderComponent.componentIndex}}</td>
+                    <td ng-if="!orderComponent.editingMode">
+                        {{orderComponent.name}}
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-md"
+                                    ng-click="orderComponent.editingMode = true">
+                                <i class="fa fa-pencil"></i> EDIT
+                            </button>
+                            <button class="btn btn-warning btn-md"
+                                    ng-click="deleteComponent(orderComponent.componentIndex, 'oc')">
+                                <i class="fa fa-times"></i> DELETE
+                            </button>
+                        </div>
+                    </td>
+                    <td ng-if="orderComponent.editingMode">
+                        <!--order component edit form-->
+                        <div class="input-group">
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="orderComponent.name"
+                                   aria-describedby="AddOrderComponentButton">
+                            <span class="input-group-addon" id="EditOrderComponentButton">
+                                <button class="btn btn-primary btn-md"
+                                        ng-disabled='!orderComponent.name'
+                                        ng-click="saveEditedOrderComponent(orderComponent.componentIndex,orderComponent.name, 'oc'); orderComponent.editingMode = false">
+                                    SAVE
+                                </button>
+                            </span>
+                        </div>
+                        <!--end of order add form-->
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--end of available order components-->
+        </section>
+
+
+        <section class="edit-section">
+
+            <h3>Omelets
+            <span>
+                <small>e.g. Ham &amp; Cheese</small>
+            </span>
+            </h3>
+
+
+            <!--omelets add form-->
+            <div class="input-group">
+                <input type="text"
+                       class="form-control"
+                       ng-model="omeletModel.inputText"
+                       placeholder="Add Omelet"
+                       aria-describedby="AddOmeletButton">
+        <span class="input-group-addon"
+              id="AddOmeletButton">
+            <button class="btn btn-primary btn-md"
+                    ng-disabled="!omeletModel.inputText"
+                    ng-click="addOmelet()">ADD TO OMELETS
+            </button>
+        </span>
+            </div>
+            <!--end of omelets add form-->
+
+
+            <!--start of available omelets-->
+            <h4>Available now</h4>
+            <table class="table table-striped table-hover ">
+                <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="omelet in allOmelets">
+                    <td>{{omelet.componentIndex}}</td>
+                    <td>
+                        {{omelet.name}}
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-md">
+                                <i class="fa fa-pencil"></i> EDIT
+                            </button>
+                            <button class="btn btn-warning btn-md"
+                                    ng-click="deleteComponent(omelet.componentIndex, 'oo')">
+                                <i class="fa fa-times"></i> DELETE
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--end of available omelets-->
+        </section>
+
+
+        <section class="edit-section">
+
+            <h3>Weekly Specials</h3>
+
+            <!--weekly special add form-->
+            <div class="input-group">
+                <input type="text"
+                       class="form-control"
+                       ng-model="weeklySpecialModel.inputText"
+                       placeholder="Add Weekly Special"
+                       aria-describedby="AddWeeklySpecialButton">
+        <span class="input-group-addon"
+              id="AddWeeklySpecialButton">
+            <button class="btn btn-primary btn-md"
+                    ng-disabled="!weeklySpecialModel.inputText"
+                    ng-click="addWeeklySpecial()">ADD TO WEEKLY SPECIALS
+            </button>
+        </span>
+            </div>
+            <!--end of weekly special add form-->
+
+            <!--start of available weekly specials-->
+            <h4>Available now</h4>
+            <table class="table table-striped table-hover ">
+                <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="weeklySpecial in allWeeklySpecials">
+                    <td>{{weeklySpecial.componentIndex}}</td>
+                    <td>
+                        {{weeklySpecial.name}}
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-md">
+                                <i class="fa fa-pencil"></i> EDIT
+                            </button>
+                            <button class="btn btn-warning btn-md"
+                                    ng-click="deleteComponent(weeklySpecial.componentIndex, 'ws')">
+                                <i class="fa fa-times"></i> DELETE
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--end of available weekly specials-->
+        </section>
+
+
+        <section class="edit-section">
+
+            <h3>Extras
+            <span>
+                <small>e.g. Add Cheese</small>
+            </span>
+            </h3>
+
+            <!--extras add form-->
+            <div class="input-group">
+                <input type="text"
+                       class="form-control"
+                       ng-model="extraModel.inputText"
+                       placeholder="Add Weekly Special"
+                       aria-describedby="AddExtraButton">
+        <span class="input-group-addon"
+              id="AddExtraButton">
+            <button class="btn btn-primary btn-md"
+                    ng-disabled="!extraModel.inputText"
+                    ng-click="addExtra()">ADD TO EXTRAS
+            </button>
+        </span>
+            </div>
+            <!--end of extras add form-->
+
+            <!--start of available extras-->
+            <h4>Available now</h4>
+            <table class="table table-striped table-hover ">
+                <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="extra in allExtras">
+                    <td>{{extra.componentIndex}}</td>
+                    <td>
+                        {{extra.name}}
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-md">
+                                <i class="fa fa-pencil"></i> EDIT
+                            </button>
+                            <button class="btn btn-warning btn-md"
+                                    ng-click="deleteComponent(extra.componentIndex, 'oe')">
+                                <i class="fa fa-times"></i> DELETE
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--end of available extras-->
+        </section>
+    </div>
+</section>
