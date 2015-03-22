@@ -2,8 +2,8 @@ var path = require('path');
 var basic = require('../functions/basic.js');
 var userDB = require('../db/user_db.js');
 
-//var adminOrOrder = "order.html";
 var adminOrOrder = "order.html";
+//var adminOrOrder = "admin.html";
 
 module.exports = {
     loginHtml: function (req, res) {
@@ -81,7 +81,7 @@ module.exports = {
 
         function success(theUser) {
             if (req.user && theUser.customLoggedInStatus == 1) {
-                res.sendFile(path.join(__dirname, '../views/clients', 'order.html'));
+                res.sendFile(path.join(__dirname, '../views/client', 'order.html'));
             } else if (req.user) {
                 res.redirect("login1.html");
             } else {
@@ -104,7 +104,7 @@ module.exports = {
 
         function success(theUser) {
             if (req.user && theUser.customLoggedInStatus == 1) {
-                res.sendFile(path.join(__dirname, '../views/clients', 'favourites.html'));
+                res.sendFile(path.join(__dirname, '../views/client', 'favourites.html'));
             } else if (req.user) {
                 res.redirect("login1.html");
             } else {

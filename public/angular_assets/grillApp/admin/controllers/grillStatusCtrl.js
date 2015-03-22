@@ -3,6 +3,13 @@ angular.module('grillApp')
         function ($window, $location, $log, $scope, $rootScope, $interval, $modal, globals, grillStatusService, ReferenceService, EditService) {
 
             $scope.isLoading = false;
+
+            //variable to keep track if the user made changes to the available card that have not been updated yet
+            $scope.availableCardIsDirty = false;
+            $scope.makeAvailableCardDirty = function () {
+                $scope.availableCardIsDirty = true;
+            };
+
             $scope.currentTime = "";
 
             if ($scope.stateChanges < 2) {
@@ -155,6 +162,7 @@ angular.module('grillApp')
             getAllAll();
 
             $scope.weeklySpecialRadioChange = function (componentIndex) {
+                $scope.availableCardIsDirty = true;
                 //manipulate al weekly specials
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
                     if (weeklySpecial.componentIndex == componentIndex) {
@@ -166,6 +174,7 @@ angular.module('grillApp')
             };
 
             $scope.unSelectAllWeeklySpecials = function () {
+                $scope.availableCardIsDirty = true;
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
                     weeklySpecial.available = "no";
                 })
@@ -185,6 +194,7 @@ angular.module('grillApp')
                         $scope.showToast("success", "Update successful");
                         getAllAll();
                         $scope.isLoading = false;
+                        $scope.availableCardIsDirty = false;
                     })
                     .error(function (errResponse) {
                         console.log(JSON.stringify(errResponse));

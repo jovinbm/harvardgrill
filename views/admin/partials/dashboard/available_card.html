@@ -16,7 +16,8 @@
                            ng-disabled="isLoading"
                            ng-model="component.available"
                            ng-true-value="'yes'"
-                           ng-false-value="'no'"> {{component.name}}
+                           ng-false-value="'no'"
+                           ng-click="makeAvailableCardDirty()"> {{component.name}}
                 </li>
             </ul>
         </div>
@@ -30,7 +31,8 @@
                            ng-disabled="isLoading"
                            ng-model="component.available"
                            ng-true-value="'yes'"
-                           ng-false-value="'no'"> {{component.name}}
+                           ng-false-value="'no'"
+                           ng-click="makeAvailableCardDirty()"> {{component.name}}
                 </li>
             </ul>
         </div>
@@ -44,7 +46,8 @@
                            ng-disabled="isLoading"
                            ng-model="component.available"
                            ng-true-value="'yes'"
-                           ng-false-value="'no'"> {{component.name}}
+                           ng-false-value="'no'"
+                           ng-click="makeAvailableCardDirty()"> {{component.name}}
                 </li>
             </ul>
         </div>
@@ -69,6 +72,11 @@
 
                 </li>
             </ul>
+        </div>
+
+        <div class="alert alert-warning"
+             ng-if="availableCardIsDirty == true">
+            <p>You have made changes to what's available above. Please click UPDATE below to save changes when done</p>
         </div>
 
     </div>

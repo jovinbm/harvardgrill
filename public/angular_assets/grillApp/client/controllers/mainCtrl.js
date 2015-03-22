@@ -34,10 +34,4 @@ angular.module('grillApp')
                     $window.location.href = "/error/500.html";
                 });
 
-
-            $scope.$on('startUpSuccess', function (event, data) {
-                $scope.uniqueCuid = data.uniqueCuid;
-                $scope.questionReference = data.questionReference;
-            });
-
         }]);

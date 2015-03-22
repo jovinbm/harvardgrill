@@ -3,7 +3,7 @@ angular.module('grillApp')
         function ($window, $rootScope, socket, socketService, globals) {
 
             socket.on('joined', function () {
-                console.log("Joined Successfully")
+                console.log("Joined Successfully");
                 //socketService.startUp()
                 //    .success(function (resp) {
                 //        var questionArray = resp.questionsArray;

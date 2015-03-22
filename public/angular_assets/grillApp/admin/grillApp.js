@@ -11,21 +11,19 @@ angular.module('grillApp', [
     'ui.router'
 ])
     .run(function ($templateCache, $http) {
+        //views
+        $http.get('views/admin/views/edit.html', {cache: $templateCache});
+        $http.get('views/admin/views/home.html', {cache: $templateCache});
+        //partials
+        $http.get('views/admin/partials/incoming_orders.html', {cache: $templateCache});
+        //partials->navs
+        $http.get('views/admin/partials/navs/admin_top_nav.html', {cache: $templateCache});
         //partials->dashboard
         $http.get('views/admin/partials/dashboard/available_card.html', {cache: $templateCache});
         $http.get('views/admin/partials/dashboard/dashboard_column.html', {cache: $templateCache});
         $http.get('views/admin/partials/dashboard/grill_status_card.html', {cache: $templateCache});
         //partials->modals
         $http.get('views/admin/partials/modals/confirm_available.html', {cache: $templateCache});
-        //partials->navs
-        $http.get('views/admin/partials/navs/admin_top_nav.html', {cache: $templateCache});
-        //partials
-        $http.get('views/admin/partials/incoming_orders.html', {cache: $templateCache});
-        //views
-        $http.get('views/admin/views/edit.html', {cache: $templateCache});
-        $http.get('views/admin/views/home.html', {cache: $templateCache});
-        //admin
-        $http.get('views/admin/admin.html', {cache: $templateCache});
     })
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

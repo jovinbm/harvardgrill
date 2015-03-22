@@ -19,7 +19,8 @@
                                ng-disabled="isLoading"
                                ng-model="component.available"
                                ng-true-value="'yes'"
-                               ng-false-value="'no'"> {{component.name}}
+                               ng-false-value="'no'"
+                               ng-click="makeConfirmModalDirty()"> {{component.name}}
                     </li>
                 </ul>
             </div>
@@ -33,7 +34,8 @@
                                ng-disabled="isLoading"
                                ng-model="component.available"
                                ng-true-value="'yes'"
-                               ng-false-value="'no'"> {{component.name}}
+                               ng-false-value="'no'"
+                               ng-click="makeConfirmModalDirty()"> {{component.name}}
                     </li>
                 </ul>
             </div>
@@ -47,7 +49,8 @@
                                ng-disabled="isLoading"
                                ng-model="component.available"
                                ng-true-value="'yes'"
-                               ng-false-value="'no'"> {{component.name}}
+                               ng-false-value="'no'"
+                               ng-click="makeConfirmModalDirty()"> {{component.name}}
                     </li>
                 </ul>
             </div>
@@ -74,6 +77,12 @@
                 </ul>
             </div>
 
+            <div class="alert alert-warning"
+                 ng-if="confirmModalIsDirty == true">
+                <p>You have made changes to what's available above. Please click UPDATE below to save changes when
+                    done</p>
+            </div>
+
         </div>
         </div>
         <div class="modal-footer">
@@ -87,7 +96,7 @@
             </button>
             <button class="btn btn-primary"
                     ng-click="ok()"
-                    ng-disabled="isLoading">Open Grill
+                    ng-disabled="isLoading || confirmModalIsDirty == true">Open Grill
             </button>
         </div>
     </script>

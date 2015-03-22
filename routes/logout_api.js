@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/12/15.
- */
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var logout_handler = require('../handlers/logout_handler.js');

@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/4/15.
- */
 /* form validation plugin */
 $.fn.goValidate = function () {
     var $form = this,

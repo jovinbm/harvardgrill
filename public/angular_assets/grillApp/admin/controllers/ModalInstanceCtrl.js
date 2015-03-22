@@ -4,6 +4,12 @@ angular.module('grillApp')
 
             $scope.isLoading = false;
 
+            //variable to keep track if the user made changes to the confirm card that have not been updated yet
+            $scope.confirmModalIsDirty = false;
+            $scope.makeConfirmModalDirty = function () {
+                $scope.confirmModalIsDirty = true;
+            };
+
             $scope.ok = function () {
                 $modalInstance.close("ok");
             };
@@ -93,6 +99,7 @@ angular.module('grillApp')
             getAllAll();
 
             $scope.weeklySpecialRadioChange = function (componentIndex) {
+                $scope.confirmModalIsDirty = true;
                 //manipulate al weekly specials
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
                     if (weeklySpecial.componentIndex == componentIndex) {
@@ -104,6 +111,7 @@ angular.module('grillApp')
             };
 
             $scope.unSelectAllWeeklySpecials = function () {
+                $scope.confirmModalIsDirty = true;
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
                     weeklySpecial.available = "no";
                 })
@@ -126,6 +134,7 @@ angular.module('grillApp')
                         });
                         getAllAll();
                         $scope.isLoading = false;
+                        $scope.confirmModalIsDirty = false;
                     })
                     .error(function (errResponse) {
                         console.log(JSON.stringify(errResponse));

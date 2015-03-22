@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/19/15.
- */
 angular.module('grillApp')
 
     .factory('socket', ['$location', '$rootScope',
@@ -63,24 +60,6 @@ angular.module('grillApp')
                     })
                 }
             }
-        }])
-
-
-    .factory('onlineService', ['socket', 'globals',
-        function (socket, globals) {
-
-            socket.on('usersOnline', function (onlineUsers) {
-                console.log("'usersOnline' event received");
-                var temp = {};
-                temp["onlineUsers"] = globals.usersOnline(onlineUsers, true);
-            });
-
-            return {
-                done: function () {
-                    return 1;
-                }
-            }
-
         }])
 
 
