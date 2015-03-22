@@ -20,9 +20,8 @@ angular.module('grillApp', [
         //partials->sections
         $http.get('views/client/partials/sections/my_recent_orders.html', {cache: $templateCache});
         $http.get('views/client/partials/sections/recent_order_stream.html', {cache: $templateCache});
-        $http.get('views/client/partials/sections/weekly_special_card.html', {cache: $templateCache});
+        $http.get('views/client/partials/sections/main_order_card.html', {cache: $templateCache});
         //partials->modals
-        $http.get('views/client/partials/modals/order_input.html', {cache: $templateCache});
     })
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

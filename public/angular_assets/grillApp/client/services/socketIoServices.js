@@ -43,21 +43,19 @@ angular.module('grillApp')
         }])
 
 
-    .factory('socketService', ['$http', 'globals',
-        function ($http, globals) {
+    .factory('socketService', ['$http',
+        function ($http) {
             return {
                 getSocketRoom: function () {
                     return $http.get('/api/getMyRoom');
                 },
 
-                startUp: function () {
-                    return $http.post('/api/startUp');
+                clientStartUp: function () {
+                    return $http.post('/api/clientStartUp');
                 },
 
-                reconnect: function (currentPage) {
-                    return $http.post('/api/reconnect', {
-                        "page": currentPage
-                    })
+                getCurrentGrillStatus: function () {
+                    return $http.post('/api/getCurrentGrillStatus');
                 }
             }
         }])

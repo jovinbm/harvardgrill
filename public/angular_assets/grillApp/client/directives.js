@@ -7,9 +7,9 @@ angular.module('grillApp')
             }
         }
     }])
-    .directive('weeklySpecialJumbo', [function () {
+    .directive('mainOrderJumbo', [function () {
         return {
-            templateUrl: 'views/client/partials/sections/weekly_special_card.html',
+            templateUrl: 'views/client/partials/sections/main_order_card.html',
             restrict: 'AEC',
             link: function ($scope, $element, $attrs) {
             }
@@ -26,14 +26,6 @@ angular.module('grillApp')
     .directive('recentOrderStream', [function () {
         return {
             templateUrl: 'views/client/partials/sections/recent_order_stream.html',
-            restrict: 'AEC',
-            link: function ($scope, $element, $attrs) {
-            }
-        }
-    }])
-    .directive('mainOrderModal', [function () {
-        return {
-            templateUrl: 'views/client/partials/modals/order_input.html',
             restrict: 'AEC',
             link: function ($scope, $element, $attrs) {
             }

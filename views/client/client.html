@@ -40,6 +40,19 @@
 
 <section class="container">
 
+    <div class="alert alert-success"
+         ng-if="mainCurrentGrillStatus.grillStatus == 'open'">
+        <p><strong>Grill Status: Open and accepting orders</strong></p>
+    </div>
+
+    <div class="alert alert-warning"
+         ng-if="mainCurrentGrillStatus.grillStatus == 'closed'">
+        <p><strong>Grill Status: Closed!</strong><br/>
+            The grill is currently closed, please check in during normal dining hours. This section will be updated once
+            the administrators are ready to start processing orders
+        </p>
+    </div>
+
     <!--all views loaded here by ui-router-->
     <div ui-view></div>
 

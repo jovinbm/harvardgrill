@@ -1,6 +1,6 @@
 angular.module('grillApp')
-    .controller('NavBarController', ['$window', '$scope', '$rootScope', 'logoutService',
-        function ($window, $scope, $rootScope, logoutService) {
+    .controller('NavBarController', ['$log', '$window', '$scope', '$rootScope', 'logoutService',
+        function ($log, $window, $scope, $rootScope, logoutService) {
 
             $scope.logoutCustomOrder = function () {
                 logoutService.logoutCustomOrder()
@@ -22,4 +22,5 @@ angular.module('grillApp')
                     });
             };
 
+            $log.info('NavBarController booted successfully');
         }]);

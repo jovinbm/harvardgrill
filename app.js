@@ -105,8 +105,7 @@ app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
 app.get('/login1.html', authenticate.ensureAuthenticated, routes.login_1_Html);
 app.get('/admin.html', authenticate.ensureAuthenticated, routes.admin_Html);
-app.get('/order.html', authenticate.ensureAuthenticated, routes.orderHtml);
-app.get('/favourites.html', authenticate.ensureAuthenticated, routes.favouritesHtml);
+app.get('/client.html', authenticate.ensureAuthenticated, routes.client_Html);
 app.post('/infoLogin', routes.infoLogin);
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
@@ -116,7 +115,7 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 app.post('/sendEmail', basicAPI.sendEmail);
 app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRoom);
 app.post('/api/adminStartUp', authenticate.ensureAuthenticated, basicAPI.adminStartUp);
-app.post('/api/reconnect', authenticate.ensureAuthenticated, basicAPI.reconnect);
+app.post('/api/clientStartUp', authenticate.ensureAuthenticated, basicAPI.clientStartUp);
 
 app.get('/api/openGrill', authenticate.ensureAuthenticated, grillStatusAPI.openGrill);
 app.get('/api/closeGrill', authenticate.ensureAuthenticated, grillStatusAPI.closeGrill);

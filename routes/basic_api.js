@@ -70,21 +70,18 @@ module.exports = {
         userDB.findUser(req.user.openId, error, error, success);
     },
 
-
-    reconnect: function (req, res) {
-        consoleLogger('RECONNECT event received');
-        var page = req.body.page;
-
+    clientStartUp: function (req, res) {
+        consoleLogger('basic_api: CLIENT_STARTUP event received');
         function error(status, err) {
             if (status == -1 || status == 0) {
-                res.status(500).send({msg: 'reconnectPOST: Could not retrieve user', err: err});
-                consoleLogger("ERROR: reconnectPOST: Could not retrieve user: " + err);
+                res.status(500).send({msg: 'basic_api: clientStartUpAPI: Could not retrieve admin user', err: err});
+                consoleLogger("ERROR: basic_api: clientStartUpAPI: Could not retrieve admin user: " + err);
             }
         }
 
         function success(theUser) {
             if (theUser.customLoggedInStatus == 1) {
-                basic_handlers.reconnect(req, res, theUser, page);
+                basic_handlers.clientStartUp(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }

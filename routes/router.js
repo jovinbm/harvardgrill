@@ -2,7 +2,7 @@ var path = require('path');
 var basic = require('../functions/basic.js');
 var userDB = require('../db/user_db.js');
 
-var adminOrOrder = "order.html";
+var adminOrOrder = "client.html";
 //var adminOrOrder = "admin.html";
 
 module.exports = {
@@ -70,41 +70,18 @@ module.exports = {
     },
 
 
-    orderHtml: function (req, res) {
+    client_Html: function (req, res) {
         //get the customUsername
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.orderHtml: " + err);
+                basic.consoleLogger("ERROR: exports.client_Html: " + err);
                 res.redirect("login.html");
             }
         }
 
         function success(theUser) {
             if (req.user && theUser.customLoggedInStatus == 1) {
-                res.sendFile(path.join(__dirname, '../views/client', 'order.html'));
-            } else if (req.user) {
-                res.redirect("login1.html");
-            } else {
-                res.redirect("login.html");
-            }
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
-    },
-
-
-    favouritesHtml: function (req, res) {
-        //get the customUsername
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.favouritesHtml: " + err);
-                res.redirect("login.html");
-            }
-        }
-
-        function success(theUser) {
-            if (req.user && theUser.customLoggedInStatus == 1) {
-                res.sendFile(path.join(__dirname, '../views/client', 'favourites.html'));
+                res.sendFile(path.join(__dirname, '../views/client', 'client.html'));
             } else if (req.user) {
                 res.redirect("login1.html");
             } else {
