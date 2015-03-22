@@ -104,71 +104,6 @@
         </div>
     </nav>
     <!--end of desktop nav view-->
-
-
-    <!--start of mobile nav view-->
-    <nav>
-        <div class="navbar navbar-default navbar-fixed-top visible-xs"
-             id="mobile-nav-header"
-             role="navigation">
-
-            <div class="navbar-header">
-                <a class="navbar-brand"
-                   href="#/home"
-                   id="brand-name">
-                    <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                    HarvardClass
-                </a>
-            <span class="hidden-sm hidden-md hidden-lg">
-            <a type="button"
-               class="navbar-btn btn btn-primary btn-xs pull-right"
-               href="#myModal"
-               target="_self"
-               role="button"
-               data-toggle="modal">
-                <i class="fa fa-pencil"></i> New Question
-            </a>
-        </span>
-            </div>
-
-            <div class="navbar-header">
-                <a href="#/1"
-                   class="navbar-brand"><i class="fa fa-chevron-left"></i> Back
-                </a>
-            </div>
-
-        </div>
-
-        <ul class="nav nav-tabs visible-xs">
-            <li class="col-xs-4">
-                <a href="#/1"
-                   class="nav-tab-a"><i class="fa fa-home"></i> Home
-                </a>
-
-            </li>
-            <li class="col-xs-4">
-                <a href="#/trending/full/"
-                   class="nav-tab-a"><i class="fa fa-line-chart"></i> Menu
-                </a>
-            </li>
-            <li class="col-xs-4">
-                <a href="#"
-                   target="_self"
-                   class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-user"></i> jbm <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#"
-                           target="_self"
-                           class="logoutHarvardOrder">Logout
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-    <!--end of mobile nav view-->
 </div>
 <!--end of nav-->
 
@@ -197,7 +132,7 @@
                     </div>
 
                     <div class="card-action clearfix">
-                        <div class="btn-group btn-group-xs pull-right">
+                        <div class="pull-right">
                             <a href="#" class="btn btn-default btn-xs">
                                     <span class="glyphicon glyphicon-star"
                                           aria-hidden="true">
@@ -672,12 +607,12 @@
 <script src="/bower_components/toastr/toastr.min.js"></script>
 
 <script type="text/javascript" src="/public/js/order.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/public/grillApp.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/public/controllers/mainCtrl.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/public/controllers/navBarCtrl.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/public/services/globals.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/public/services/socketIoServices.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/public/services/mainFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/grillApp/client/grillApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/grillApp/client/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/grillApp/client/controllers/navBarCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/grillApp/client/services/globals.js"></script>
+<script type="text/javascript" src="/public/angular_assets/grillApp/client/services/socketIoServices.js"></script>
+<script type="text/javascript" src="/public/angular_assets/grillApp/client/services/mainFactory.js"></script>
 
 
 </body>

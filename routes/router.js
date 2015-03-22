@@ -3,7 +3,7 @@ var basic = require('../functions/basic.js');
 var userDB = require('../db/user_db.js');
 
 //var adminOrOrder = "order.html";
-var adminOrOrder = "admin.html";
+var adminOrOrder = "order.html";
 
 module.exports = {
     loginHtml: function (req, res) {

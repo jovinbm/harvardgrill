@@ -100,6 +100,39 @@ module.exports = {
         } else {
             success();
         }
+    },
+
+
+    updateTotalOrderdAndLastOrderTime: function (componentIndex, error_neg_1, error_0, success) {
+        Component.update({componentIndex: componentIndex}, {
+                $inc: {totalOrdered: 1},
+                $set: {lastOrderTime: Date.now}
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
+
+    updateComponentRates: function (componentIndex, amount, error_neg_1, error_0, success) {
+        //the amount is the total stars awarded out of five
+        Component.update({componentIndex: componentIndex}, {
+                $inc: {
+                    totalRates: 1,
+                    rateSum: amount
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
     }
 
 };

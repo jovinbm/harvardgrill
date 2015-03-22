@@ -8,7 +8,7 @@ var orderSchema = new Schema({
     clientName: {type: String, required: true, unique: false, index: true},
     clientDisplayName: {type: String, required: true, unique: false, index: true},
     clientEmail: {type: String, required: true, unique: false, index: true},
-    clientCuid: {type: String, required: true, unique: false, index: true},
+    clientUniqueCuid: {type: String, required: true, unique: false, index: true},
     orderTime: {type: Date, default: Date.now, unique: false, required: true, index: true},
     readyTime: {type: Date, unique: false, index: true},
     declineTime: {type: Date, unique: false, index: true},
