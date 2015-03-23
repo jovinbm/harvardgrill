@@ -6,11 +6,11 @@ var componentDB = require('../db/component_db.js');
 module.exports = {
 
     openGrill: function (req, res, theUser) {
-        basic.consoleLogger('grillStatus_handler: OPEN_GRILL event received');
+        consoleLogger('grillStatus_handler: OPEN_GRILL event received');
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("grillStatus_handler: OPEN_GRILL: Error executing db operations: err = " + err);
+                consoleLogger("grillStatus_handler: OPEN_GRILL: Error executing db operations: err = " + err);
                 res.status(500).send({
                     msg: 'grillStatus_handler: OPEN_GRILL: Error executing db operations',
                     err: err
@@ -29,11 +29,11 @@ module.exports = {
     },
 
     closeGrill: function (req, res, theUser) {
-        basic.consoleLogger('grillStatus_handler: CLOSE_GRILL event received');
+        consoleLogger('grillStatus_handler: CLOSE_GRILL event received');
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("grillStatus_handler: CLOSE_GRILL: Error executing db operations: err = " + err);
+                consoleLogger("grillStatus_handler: CLOSE_GRILL: Error executing db operations: err = " + err);
                 res.status(500).send({
                     msg: 'grillStatus_handler: CLOSE_GRILL: Error executing db operations',
                     err: err
@@ -83,7 +83,7 @@ module.exports = {
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("grillStatus_handler: updateAvailableComponents: Error executing db operations: err = " + err);
+                consoleLogger("grillStatus_handler: updateAvailableComponents: Error executing db operations: err = " + err);
                 res.status(500).send({
                     msg: 'grillStatus_handler: updateAvailableComponents: Error executing db operations',
                     err: err

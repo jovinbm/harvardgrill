@@ -1,6 +1,7 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var Stats = require("../database/stats/stats_model.js");
+var cuid = require('cuid');
 
 module.exports = {
 
@@ -33,7 +34,7 @@ module.exports = {
     },
 
 
-    getCurrentTimeId: function (name, error_neg_1, error_0, success) {
+    getCurrentTimeUniqueCuid: function (name, error_neg_1, error_0, success) {
         Stats.findOne({name: name}).exec(
             function (err, currentGrillStatus) {
                 if (err) {
@@ -54,8 +55,8 @@ module.exports = {
                         }
                     });
                 } else {
-                    //return the timeID
-                    success(currentGrillStatus.timeId);
+                    //return the timeUniqueCuid
+                    success(currentGrillStatus.timeUniqueCuid);
                 }
             }
         )
@@ -74,6 +75,7 @@ module.exports = {
                 } else {
                     //update the document
                     currentGrillStatus.grillStatus = "open";
+                    currentGrillStatus.timeUniqueCuid = cuid();
                     currentGrillStatus.save(function (err, savedCurrentGrillStatus) {
                         if (err) {
                             error_neg_1(-1, err);

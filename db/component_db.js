@@ -69,6 +69,22 @@ module.exports = {
             });
     },
 
+    getAvailableComponents: function (componentGroup, sort, error_neg_1, error_0, success) {
+        Component
+            .find({componentGroup: componentGroup, available: 'yes'})
+            .sort({componentIndex: sort})
+            .exec(function (err, components) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else if (components == null || components == undefined || components.length == 0) {
+                    components = [];
+                    success(components);
+                } else {
+                    success(components);
+                }
+            });
+    },
+
     updateAvailableComponents: function (allComponents, error_neg_1, error_0, success) {
         var errors = 0;
         allComponents.forEach(function (component) {

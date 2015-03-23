@@ -228,5 +228,94 @@ module.exports = {
         }
 
         userDB.findUser(req.user.openId, error, error, success);
+    },
+
+
+    getAvailableOrderComponents: function (req, res) {
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    msg: "ERROR: getAvailableOrderComponentsAPI: Could not retrieve user:"
+                });
+                consoleLogger("ERROR: getAvailableOrderComponentsAPI: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theUser) {
+
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAvailableOrderComponents(req, res, theUser);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findUser(req.user.openId, error, error, success);
+    },
+
+    getAvailableOmelets: function (req, res) {
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    msg: "ERROR: getAvailableOmeletsAPI: Could not retrieve user:"
+                });
+                consoleLogger("ERROR: getAvailableOmeletsAPI: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theUser) {
+
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAvailableOmelets(req, res, theUser);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findUser(req.user.openId, error, error, success);
+    },
+
+
+    getAvailableWeeklySpecials: function (req, res) {
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    msg: "ERROR: getAvailableWeeklySpecials: Could not retrieve user:"
+                });
+                consoleLogger("ERROR: getAvailableWeeklySpecials: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theUser) {
+
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAvailableWeeklySpecials(req, res, theUser);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findUser(req.user.openId, error, error, success);
+    },
+
+
+    getAvailableExtras: function (req, res) {
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    msg: "ERROR: getAvailableExtras: Could not retrieve user:"
+                });
+                consoleLogger("ERROR: getAvailableExtras: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theUser) {
+
+            if (theUser.customLoggedInStatus == 1) {
+                component_handler.getAvailableExtras(req, res, theUser);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findUser(req.user.openId, error, error, success);
     }
+    
+    
 };

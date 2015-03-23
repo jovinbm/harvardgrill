@@ -177,6 +177,98 @@ module.exports = {
 
         //calls success with all the components of specified group or empty when not found
         componentDB.getAllComponents("oe", -1, error, error, success);
+    },
+
+
+    getAvailableOrderComponents: function (req, res, theUser) {
+        basic.consoleLogger('component_handler: getAvailableOrderComponents event received');
+
+        function error(status, err) {
+            basic.consoleLogger("component_handler: getAvailableOrderComponents: Error executing db operations: err = " + err);
+            res.status(500).send({
+                msg: 'component: getAvailableOrderComponents: Error executing db operations',
+                err: err
+            })
+        }
+
+        function success(availableOrderComponents) {
+            res.status(200).send({
+                availableComponents: availableOrderComponents
+            });
+            consoleLogger("component_handler: getAvailableOrderComponents success");
+        }
+
+        //calls success with all the components of specified group or empty when not found
+        componentDB.getAvailableComponents("oc", -1, error, error, success);
+    },
+
+
+    getAvailableOmelets: function (req, res, theUser) {
+        basic.consoleLogger('component_handler: getAvailableOmelets event received');
+
+        function error(status, err) {
+            basic.consoleLogger("component_handler: getAvailableOmelets: Error executing db operations: err = " + err);
+            res.status(500).send({
+                msg: 'component: getAvailableOmelets: Error executing db operations',
+                err: err
+            })
+        }
+
+        function success(availableOmelets) {
+            res.status(200).send({
+                availableComponents: availableOmelets
+            });
+            consoleLogger("component_handler: getAvailableOmelets success");
+        }
+
+        //calls success with all the components of specified group or empty when not found
+        componentDB.getAvailableComponents("oo", -1, error, error, success);
+    },
+
+
+    getAvailableWeeklySpecials: function (req, res, theUser) {
+        basic.consoleLogger('component_handler: getAvailableWeeklySpecials event received');
+
+        function error(status, err) {
+            basic.consoleLogger("component_handler: getAvailableWeeklySpecials: Error executing db operations: err = " + err);
+            res.status(500).send({
+                msg: 'component:getAvailableWeeklySpecials: Error executing db operations',
+                err: err
+            })
+        }
+
+        function success(availableWeeklySpecials) {
+            res.status(200).send({
+                availableComponents: availableWeeklySpecials
+            });
+            consoleLogger("component_handler: getAvailableWeeklySpecials success");
+        }
+
+        //calls success with all the components of specified group or empty when not found
+        componentDB.getAvailableComponents("ws", -1, error, error, success);
+    },
+
+
+    getAvailableExtras: function (req, res, theUser) {
+        basic.consoleLogger('component_handler: getAvailableExtras event received');
+
+        function error(status, err) {
+            basic.consoleLogger("component_handler: getAvailableExtras: Error executing db operations: err = " + err);
+            res.status(500).send({
+                msg: 'component: getAvailableExtras: Error executing db operations',
+                err: err
+            })
+        }
+
+        function success(availableExtras) {
+            res.status(200).send({
+                availableComponents: availableExtras
+            });
+            consoleLogger("component_handler: getAvailableExtras success");
+        }
+
+        //calls success with all the components of specified group or empty when not found
+        componentDB.getAvailableComponents("oe", -1, error, error, success);
     }
 
 };

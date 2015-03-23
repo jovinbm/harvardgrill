@@ -14,7 +14,6 @@ angular.module('grillApp', [
     .run(function ($templateCache, $http) {
         //views
         $http.get('views/client/views/home.html', {cache: $templateCache});
-        $http.get('views/client/views/favourites.html', {cache: $templateCache});
         //partials->navs
         $http.get('views/client/partials/navs/client_top_nav.html', {cache: $templateCache});
         //partials->sections
@@ -34,10 +33,6 @@ angular.module('grillApp', [
             .state('home', {
                 url: '/home',
                 templateUrl: 'views/client/views/home.html'
-            })
-            .state('favourites', {
-                url: '/edit',
-                templateUrl: 'views/client/views/favourites.html'
             })
             .state("otherwise", {
                 url: "*path",

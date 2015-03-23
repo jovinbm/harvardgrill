@@ -30,6 +30,7 @@ var routes = require('./routes/router.js');
 var basicAPI = require('./routes/basic_api.js');
 var grillStatusAPI = require('./routes/grillStatus_api');
 var componentAPI = require('./routes/component_api');
+var orderAPI = require('./routes/order_api');
 var logoutAPI = require('./routes/logout_api.js');
 
 //version1 of connect
@@ -46,6 +47,13 @@ var componentSchema = require('./database/order_components/component_schema.js')
 componentSchema.plugin(autoIncrement.plugin, {
     model: 'Component',
     field: 'componentIndex',
+    startAt: 1
+});
+
+var orderSchema = require('./database/orders/order_schema.js');
+orderSchema.plugin(autoIncrement.plugin, {
+    model: 'Order',
+    field: 'orderIndex',
     startAt: 1
 });
 
@@ -131,6 +139,14 @@ app.get('/api/getAllOmelets', authenticate.ensureAuthenticated, componentAPI.get
 app.get('/api/getAllWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAllWeeklySpecials);
 app.get('/api/getAllExtras', authenticate.ensureAuthenticated, componentAPI.getAllExtras);
 
+app.get('/api/getAvailableOrderComponents', authenticate.ensureAuthenticated, componentAPI.getAvailableOrderComponents);
+app.get('/api/getAvailableOmelets', authenticate.ensureAuthenticated, componentAPI.getAvailableOmelets);
+app.get('/api/getAvailableWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAvailableWeeklySpecials);
+app.get('/api/getAvailableExtras', authenticate.ensureAuthenticated, componentAPI.getAvailableExtras);
+
+app.get('/api/getMyRecentOrders', authenticate.ensureAuthenticated, orderAPI.getMyRecentOrders);
+app.post('/api/newClientOrder', authenticate.ensureAuthenticated, orderAPI.newClientOrder);
+
 app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
 app.post('/api/logoutCustomOrder', authenticate.ensureAuthenticated, logoutAPI.logoutCustomOrder);
 app.post('/api/logoutHarvardOrder', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardOrder);
@@ -138,3 +154,5 @@ app.post('/api/logoutHarvardOrder', authenticate.ensureAuthenticated, logoutAPI.
 server.listen(port, function () {
     consoleLogger("Server listening at port " + port);
 });
+
+exports.io = io;
