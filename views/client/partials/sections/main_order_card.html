@@ -1,6 +1,7 @@
 <div class="card main-order-card">
 
-    <div class="card-content clearfix">
+    <div class="card-content clearfix"
+         ng-if="myRecentOrders[0].status != 'processing'">
 
         <div>
             <h1><strong>{{currentTime}}</strong></h1>
@@ -10,137 +11,70 @@
             </h4>
         </div>
 
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Order Components</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-repeat="component in availableOrderComponents">
                 <div>
                     <label>
-                        <input type="checkbox"> Chicken Breast
+                        <input type="checkbox"
+                               ng-disabled="isLoading"
+                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-true-value="'yes'"
+                               ng-false-value="'no'"> {{component.name}}
                     </label>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Halal Hot dog
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Hot dog
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Beet &amp; Kale Burger - vgn
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Sweet Potato &amp; Black Bean Burger - vgn
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Grilled Cheddar Cheese Sandwich - v
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Weekly Special
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Cage-Free Eggs - v
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Turkey Burger <br/>
-                        <small><i>blended with Brown Rice &amp; Vegetables</i></small>
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Egg Whites -v <br/>
-                        <input class="form-control input-sm"
-                               type="text"
-                               placeholder="What Style?">
-                    </label>
-                </div>
-            </div>
+
         </div>
 
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Omelets</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-repeat="component in availableOmelets">
                 <div>
                     <label>
-                        <input type="checkbox"> Ham &amp; Cheese
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Peppers &amp; Onion - v
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Tomato &amp; Mushroom - v
+                        <input type="checkbox"
+                               ng-disabled="isLoading"
+                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-true-value="'yes'"
+                               ng-false-value="'no'"> {{component.name}}
                     </label>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Extras</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-repeat="component in availableExtras">
                 <div>
                     <label>
-                        <input type="checkbox"> Add Fries
-                    </label>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div>
-                    <label>
-                        <input type="checkbox"> Add Cheese
+                        <input type="checkbox"
+                               ng-disabled="isLoading"
+                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-true-value="'yes'"
+                               ng-false-value="'no'"> {{component.name}}
                     </label>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Weekly Special</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-repeat="component in availableWeeklySpecials">
                 <div>
                     <label>
-                        <input type="checkbox"> Veritaffles
+                        <input type="checkbox"
+                               ng-disabled="isLoading"
+                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-true-value="'yes'"
+                               ng-false-value="'no'"> {{component.name}}
                     </label>
                 </div>
             </div>
@@ -148,11 +82,21 @@
 
         <div class="pull-right">
             <a type="button"
-               class="btn btn-primary btn-md">
+               class="btn btn-primary btn-md"
+               ng-disabled="isLoading"
+               ng-click="placeMyNewOrderOrder()">
                 <i class="fa fa-spoon"></i> Order
             </a>
         </div>
 
+    </div>
+
+    <div class="card-content clearfix"
+         ng-if="myRecentOrders[0].status == 'processing'">
+        <div class="alert alert-warning">
+            <strong>You are allowed to have only one order at a processing stage. Please wait until your current order
+                has been processed to order again</strong>
+        </div>
     </div>
 
 

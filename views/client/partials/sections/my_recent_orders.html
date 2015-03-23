@@ -3,147 +3,41 @@
 </h1>
 
 <ul class="list-unstyled animated fadeIn">
-    <li class="list-unstyled clearfix">
+    <li class="list-unstyled clearfix"
+        ng-repeat="recentOrder in myRecentOrders">
         <div class="card">
 
             <div class="card-content">
-                <h2>Sat March 7, 6:30 PM <br/>
-                    <small>10 mins ago</small>
+                <h2>{{recentOrder.momentJsTime}}<br/>
+                    <small>{{recentOrder.orderTime | timeago}}</small>
                 </h2>
 
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Chicken Breast</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hamburger</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Weekly Special</li>
+                <ul class="list-unstyled"
+                    ng-repeat="componentIndex in recentOrder.orderComponents">
+                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
+                        {{allAvailableCombinedObject[componentIndex].name}}
+                    </li>
                 </ul>
 
             </div>
 
             <div class="card-action clearfix">
-                <div class="animated fade-in alert alert-dismissible alert-info">
+                <div class="alert alert-info"
+                     ng-if="recentOrder.status == 'processing'">
                     <strong>Order status:</strong> Processing
                 </div>
 
-                <div class="btn-group btn-group-xs pull-right">
-                    <a href="#" class="btn btn-default btn-xs disabled">
-                                    <span class="glyphicon glyphicon-star"
-                                          aria-hidden="true"></span> Rate
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs disabled">
-                                    <span class="glyphicon glyphicon-heart"
-                                          aria-hidden="true"></span> Favourite
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs disabled">
-                        <i class="fa fa-spoon"></i> Order
-                    </a>
-                </div>
-            </div>
-        </div>
-    </li>
-
-    <li class="list-unstyled clearfix">
-        <div class="card">
-
-            <div class="card-content">
-                <h2>Sat March 7, 5:30 PM
-                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span><br/>
-                    <small>1 hr ago</small>
-                </h2>
-
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Chicken Breast</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hotdog</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hamburger</li>
-                </ul>
-
-            </div>
-
-            <div class="card-action clearfix">
-                <div class="animated fade-in alert alert-dismissible alert-success">
-                    <strong>Order status:</strong> Ready
+                <div class="alert alert-success"
+                     ng-if="recentOrder.status == 'done'">
+                    <strong>Order status:</strong> This order is ready
                 </div>
 
-                <div class="btn-group btn-group-xs pull-right">
-                    <a href="#" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-star"
-                                          aria-hidden="true"></span> Rate
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-heart"
-                                          aria-hidden="true"></span> Favourite
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs">
-                        <i class="fa fa-spoon"></i> Order
-                    </a>
-                </div>
-            </div>
-        </div>
-    </li>
+                <small>This order is subject to changes depending on the current available components from the grill, or
+                    decline
+                    from the
+                    grill Admin
+                </small>
 
-    <li class="list-unstyled clearfix">
-        <div class="card">
-
-            <div class="card-content">
-                <h2>Fri March 6, 10:30 AM</h2>
-
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Chicken Breast</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hotdog</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hamburger</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Weekly Special</li>
-                </ul>
-
-            </div>
-
-            <div class="card-action clearfix">
-                <div class="btn-group btn-group-xs pull-right">
-                    <a href="#" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-star"
-                                          aria-hidden="true"></span> Rate
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-heart"
-                                          aria-hidden="true"></span> Favourite
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs">
-                        <i class="fa fa-spoon"></i> Order
-                    </a>
-                </div>
-            </div>
-        </div>
-    </li>
-
-    <li class="list-unstyled clearfix">
-        <div class="card">
-
-            <div class="card-content">
-                <h2>Thur March 6, 9:30 AM
-                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-                </h2>
-
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Chicken Breast</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hotdog</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hamburger</li>
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Weekly Special</li>
-                </ul>
-
-            </div>
-
-            <div class="card-action clearfix">
-                <div class="btn-group btn-group-xs pull-right">
-                    <a href="#" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-star"
-                                          aria-hidden="true"></span> Rate
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-heart"
-                                          aria-hidden="true"></span> Favourite
-                    </a>
-                    <a href="#" class="btn btn-default btn-xs">
-                        <i class="fa fa-spoon"></i> Order
-                    </a>
-                </div>
             </div>
         </div>
     </li>

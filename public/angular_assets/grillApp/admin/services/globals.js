@@ -1,6 +1,7 @@
 angular.module('grillApp')
 
-    .factory('globals', ['$window', '$rootScope', 'socketService', function ($window, $rootScope, socketService) {
+    .factory('globals', ['$window', '$rootScope', 'socketService',
+        function ($window, $rootScope, socketService) {
         var myCustomUsername;
         var myUniqueCuid;
         var mySocketRoom;

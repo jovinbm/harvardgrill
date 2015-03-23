@@ -1,6 +1,6 @@
 angular.module('grillApp')
 
-    .factory('globals', ['$rootScope', function ($rootScope) {
+    .factory('globals', ['$rootScope', 'socketService', function ($rootScope, socketService) {
         var myCustomUsername;
         var myUniqueCuid;
         var mySocketRoom;
@@ -34,9 +34,11 @@ angular.module('grillApp')
 
             currentGrillStatus: function (newGrillStatus, broadcast, refreshGrillStatus) {
                 if (refreshGrillStatus) {
+                    $rootScope.$broadcast('isLoadingTrue');
                     socketService.getCurrentGrillStatus()
                         .success(function (resp) {
                             currentGrillStatus = resp.currentGrillStatus;
+                            $rootScope.$broadcast('isLoadingFalse');
                         })
                         .error(function (errResponse) {
                             toastr.error("A fatal error has occurred. Please reload the page", 'Error');

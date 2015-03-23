@@ -3,11 +3,6 @@ angular.module('grillApp')
     .factory('EditService', ['$window', '$http', '$rootScope', 'globals',
         function ($window, $http, $rootScope, globals) {
 
-            var allOrderComponents;
-            var allOmelets;
-            var allWeeklySpecials;
-            var allExtras;
-
             return {
                 addComponent: function (theComponentObject) {
                     if (globals.currentGrillStatus().grillStatus == "closed") {
