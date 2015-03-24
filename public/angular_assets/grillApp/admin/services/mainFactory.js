@@ -3,8 +3,6 @@ angular.module('grillApp')
         function ($window, $rootScope, $log, socket, socketService, globals) {
 
             socket.on('joined', function () {
-                console.log("JOINED EVENT RECEIVED");
-
                 //adminStartup request seeks the overall status of the grill e.g open, closed, etc(not the orders)
                 socketService.adminStartUp()
                     .success(function (resp) {

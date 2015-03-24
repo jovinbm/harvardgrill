@@ -2,6 +2,7 @@ var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var statsDB = require('../db/stats_db.js');
 var componentDB = require('../db/component_db.js');
+var orderDB = require('../db/order_db.js');
 
 module.exports = {
 
@@ -68,15 +69,45 @@ module.exports = {
         }
 
         function success(currentGrillStatus) {
-            consoleLogger("getCurrentGrillStatus: getCurrentGrillStatus: Success");
             res.status(200).send({
                 currentGrillStatus: currentGrillStatus
             });
+            consoleLogger("getCurrentGrillStatus: getCurrentGrillStatus: Success");
         }
 
         statsDB.getCurrentGrillStatus("stats", error, error, success)
 
     },
+
+
+    getAdminClientOrders: function (req, res, theUser, currentGrillStatus, amount) {
+        consoleLogger('grillStatus_handler: getAdminClientOrders  called');
+
+        function error(status, err) {
+            if (status == -1) {
+                consoleLogger("getAdminClientOrders handler: getAdminClientOrders: Error while retrieving grill info: err = " + err);
+                res.status(500).send({
+                    msg: 'getCurrentGrillStatus handler: getAdminClientOrders: Error while retrieving grill info',
+                    err: err
+                });
+                consoleLogger('getAdminClientOrders handler: failed!');
+            } else if (status == 0) {
+                consoleLogger("getAdminClientOrders handler: Could not find data, proceeding to create first instance");
+            }
+        }
+
+        function success(orders) {
+            res.status(200).send({
+                orders: orders
+            });
+            consoleLogger("getAdminClientOrders: getAdminClientOrders: Success");
+        }
+
+        //sort here is 1 to bring the oldest orders first
+        orderDB.getAdminClientOrders(theUser, currentGrillStatus, amount, 1, error, error, success);
+
+    },
+
 
     updateAvailableComponents: function (req, res, theUser, allComponents) {
         consoleLogger('grillStatus_handler: updateAvailableComponent  called');
@@ -92,10 +123,10 @@ module.exports = {
         }
 
         function success() {
-            consoleLogger("updateAvailableComponents: Success");
             res.status(200).send({
                 msg: "updateAvailableComponents success"
             });
+            consoleLogger("updateAvailableComponents: Success");
         }
 
         componentDB.updateAvailableComponents(allComponents, error, error, success)

@@ -3,11 +3,12 @@ var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
     openId: {type: String, required: true, unique: true, index: true},
+    isAdmin: {type: String, required: true, default: "no", index: true},
     uniqueCuid: {type: String, required: true, unique: true, index: true},
-    socketRoom: {type: String, required: true, unique: true, index: true},
+    socketRoom: {type: String, required: true, unique: false, index: true},
     displayName: {type: String, default: "jHarvard", required: true, unique: false},
     email: {type: String, default: "@harvardclass.com", required: true, unique: false},
-    customUsername: {type: String, required: false, unique: true, index: true},
+    customUsername: {type: String, required: false, unique: false, index: true},
     customLoggedInStatus: {type: Number, default: 0, unique: false, index: true},
     totalOrders: {type: Number, default: 0, unique: false, index: true},
     totalUnattendedOrders: {type: Number, default: 0, unique: false, index: true},

@@ -69,6 +69,23 @@ module.exports = {
             });
     },
 
+
+    getAllComponentsIndexNames: function (sort, error_neg_1, error_0, success) {
+        Component
+            .find({}, {componentIndex: 1, name: 1})
+            .sort({componentIndex: sort})
+            .exec(function (err, ComponentsIndexNames) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else if (ComponentsIndexNames == null || ComponentsIndexNames == undefined || ComponentsIndexNames.length == 0) {
+                    ComponentsIndexNames = [];
+                    success(ComponentsIndexNames);
+                } else {
+                    success(ComponentsIndexNames);
+                }
+            });
+    },
+
     getAvailableComponents: function (componentGroup, sort, error_neg_1, error_0, success) {
         Component
             .find({componentGroup: componentGroup, available: 'yes'})

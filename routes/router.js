@@ -2,8 +2,6 @@ var path = require('path');
 var basic = require('../functions/basic.js');
 var userDB = require('../db/user_db.js');
 
-var adminOrOrder = "client.html";
-//var adminOrOrder = "admin.html";
 
 module.exports = {
     loginHtml: function (req, res) {
@@ -24,12 +22,15 @@ module.exports = {
         }
 
         function success(theUser) {
-            //if logged in in both harvard and custom login take them to order directly
-            if (req.user && theUser.customLoggedInStatus == 1) {
-                res.redirect(adminOrOrder);
+            if (req.user && theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
+                res.redirect('admin.html');
+            } else if (req.user && theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'no') {
+                res.redirect('client.html');
             }
+
+            //only clients will reach this stage
             else if (req.user) {
-                res.render('login1', {displayName: 'Hello, ' + theUser.displayName});
+                res.render('login1', {displayName: theUser.displayName});
             } else {
                 res.redirect("login.html");
             }
@@ -40,12 +41,6 @@ module.exports = {
 
 
     infoLogin: function (req, res) {
-        //if user got here without doing a harvard login, redirect them back to harvard login
-        if (!req.user) {
-            res.redirect("login.html");
-        }
-
-        //get the customLoggedInStatus
         function error(status, err) {
             if (status == -1 || status == 0) {
                 basic.consoleLogger("ERROR: exports.login_1_Html: " + err);
@@ -55,18 +50,23 @@ module.exports = {
 
         function success(theUser) {
             function successUpdate() {
-                res.redirect(adminOrOrder);
+                if (theUser.isAdmin == 'yes') {
+                    res.redirect('admin.html');
+                } else if (theUser.isAdmin == 'no') {
+                    res.redirect('client.html');
+                } else {
+                    error();
+                }
             }
 
-            //if logged in in both harvard and custom login take them to order directly
-            if (req.user && theUser.customLoggedInStatus == 1) {
-                res.redirect(adminOrOrder);
-            } else {
-                userDB.updateCuCls(req.user.openId, req.body.customUsername, 1, error, error, successUpdate)
-            }
+            userDB.updateCuCls(req.user.openId, req.body.customUsername, 1, error, error, successUpdate)
         }
 
-        userDB.findUser(req.user.openId, error, error, success);
+        if (!req.user) {
+            res.redirect("login.html");
+        } else {
+            userDB.findUser(req.user.openId, error, error, success);
+        }
     },
 
 
@@ -80,11 +80,19 @@ module.exports = {
         }
 
         function success(theUser) {
-            if (req.user && theUser.customLoggedInStatus == 1) {
-                res.sendFile(path.join(__dirname, '../views/client', 'client.html'));
-            } else if (req.user) {
-                res.redirect("login1.html");
-            } else {
+            if (req.user) {
+                if (theUser.customLoggedInStatus == 1) {
+                    if (theUser.isAdmin == 'yes') {
+                        res.redirect('admin.html');
+                    } else if (theUser.isAdmin == 'no') {
+                        res.sendFile(path.join(__dirname, '../views/client', 'client.html'));
+                    }
+                }
+                else {
+                    res.redirect("login1.html");
+                }
+            }
+            else {
                 res.redirect("login.html");
             }
         }
@@ -102,11 +110,19 @@ module.exports = {
         }
 
         function success(theUser) {
-            if (req.user && theUser.customLoggedInStatus == 1) {
-                res.sendFile(path.join(__dirname, '../views/admin', 'admin.html'));
-            } else if (req.user) {
-                res.redirect("login1.html");
-            } else {
+            if (req.user) {
+                if (theUser.customLoggedInStatus == 1) {
+                    if (theUser.isAdmin == 'yes') {
+                        res.sendFile(path.join(__dirname, '../views/admin', 'admin.html'));
+                    } else if (theUser.isAdmin == 'no') {
+                        res.redirect('client.html');
+                    }
+                }
+                else {
+                    res.redirect("login1.html");
+                }
+            }
+            else {
                 res.redirect("login.html");
             }
         }

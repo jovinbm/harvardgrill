@@ -31,6 +31,20 @@ module.exports = {
         });
     },
 
+
+    deleteUser: function (theUser, error_neg_1, error_0, success) {
+        User.
+            find({uniqueCuid: theUser.uniqueCuid})
+            .remove()
+            .exec(function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            })
+    },
+
     updateCuCls: function (openId, customUsername, customLoggedInStatus, error_neg_1, error_0, success) {
         User.update({openId: openId}, {
                 $set: {

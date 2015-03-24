@@ -1,7 +1,5 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
-var statsDB = require('../db/stats_db.js');
-var componentDB = require('../db/component_db.js');
 var orderDB = require('../db/order_db.js');
 
 module.exports = {

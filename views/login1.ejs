@@ -98,11 +98,11 @@
 
         <!--Username field-->
         <div class="form-group">
-            <label for="customUsername">Name:(Used for orders, can be changed later) </label>
+            <label for="customUsername">Name</label>
             <input type="text"
                    class="form-control"
                    id="customUsername"
-                   placeholder="Enter your name here"
+                   placeholder="This will appear on your orders"
                    name="customUsername"
                    data-bv-message="The name is not valid"
                    data-bv-notempty="true"
@@ -116,25 +116,25 @@
                    data-bv-stringlength-message="The name must be at least 4 and at most 15 characters long"/>
         </div>
 
-        <!--coupon code field-->
-        <div class="form-group">
-            <label for="couponCode">Coupon code: (Increase order priority)</label>
-            <input type="text"
-                   class="form-control"
-                   id="couponCode"
-                   placeholder="Enter coupon code here"
-                   name="couponCode"
-                   data-bv-message="The coupon code is not valid"
-                   data-bv-notempty="true"
-                   data-bv-notempty-message="The coupon code is required and cannot be empty"
-                   data-bv-regexp="true"
-                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
-                   data-bv-regexp-message="The coupon code can only consist of alphabetical, number, dot and underscore"
-                   data-bv-stringlength="true"
-                   data-bv-stringlength-min="5"
-                   data-bv-stringlength-max="10"
-                   data-bv-stringlength-message="The coupon code must be at least 5 and at most 10 characters long"/>
-        </div>
+        <!--&lt;!&ndash;coupon code field&ndash;&gt;-->
+        <!--<div class="form-group">-->
+        <!--<label for="couponCode">Coupon code: (Increase order priority)</label>-->
+        <!--<input type="text"-->
+        <!--class="form-control"-->
+        <!--id="couponCode"-->
+        <!--placeholder="Enter coupon code here"-->
+        <!--name="couponCode"-->
+        <!--data-bv-message="The coupon code is not valid"-->
+        <!--data-bv-notempty="true"-->
+        <!--data-bv-notempty-message="The coupon code is required and cannot be empty"-->
+        <!--data-bv-regexp="true"-->
+        <!--data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"-->
+        <!--data-bv-regexp-message="The coupon code can only consist of alphabetical, number, dot and underscore"-->
+        <!--data-bv-stringlength="true"-->
+        <!--data-bv-stringlength-min="5"-->
+        <!--data-bv-stringlength-max="10"-->
+        <!--data-bv-stringlength-message="The coupon code must be at least 5 and at most 10 characters long"/>-->
+        <!--</div>-->
 
         <div class="form-group">
             <button type="submit" class="btn btn-default btn-block">SUBMIT</button>

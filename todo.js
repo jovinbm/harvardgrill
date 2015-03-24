@@ -47,4 +47,6 @@
 
 //inbox float
 
-//close grill first before editind the available stuff (on edit page and on home available card)
+//close grill first before editing the available stuff (on edit page and on home available card)
+
+//handle 404 errors plus passport errors e.g put banners on admin login page etc

@@ -59,19 +59,25 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
     passport.use(new LocalStrategy(
         function (username, password, done) {
-            if (username == password) {
+            if (username.length > 0 && password.length > 0 && password == 'hgadmin') {
                 var openId = cuid();
+                var isAdmin = 'yes';
                 var uniqueCuid = cuid();
-                var socketRoom = cuid();
-                var displayName = username;
-                var email = cuid() + '@harvardclass.com';
+                var socketRoom = 'adminSocketRoom';
+                var displayName = 'Admin';
+                var customUsername = 'Admin';
+                var email = 'admin@harvardclass.com';
+                var customLoggedInStatus = 1;
 
                 var user = new User({
                     openId: openId,
+                    isAdmin: isAdmin,
                     uniqueCuid: uniqueCuid,
                     socketRoom: socketRoom,
                     displayName: displayName,
-                    email: email
+                    customUsername: customUsername,
+                    email: email,
+                    customLoggedInStatus: customLoggedInStatus
                 });
 
                 function saveError(status, err) {
@@ -88,7 +94,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 userDB.saveUser(user, saveError, saveError, saveSuccess);
 
             } else {
-                done(new Error("ERROR: app.js: passport.use: Incorrect Password"));
+                done(new Error("ERROR: app.js: passport.use: Incorrect Username or Password"));
             }
         }
     ));

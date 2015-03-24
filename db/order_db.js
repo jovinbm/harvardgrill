@@ -38,6 +38,24 @@ module.exports = {
         Order
             .find({clientUniqueCuid: theUser.uniqueCuid, timeUniqueCuid: currentGrillStatus.timeUniqueCuid})
             .sort({componentIndex: sort})
+            .limit(amount)
+            .exec(function (err, orders) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else if (orders == null || orders == undefined || orders.length == 0) {
+                    orders = [];
+                    success(orders);
+                } else {
+                    success(orders);
+                }
+            });
+    },
+
+    getAdminClientOrders: function (theUser, currentGrillStatus, amount, sort, error_neg_1, error_0, success) {
+        Order
+            .find({timeUniqueCuid: currentGrillStatus.timeUniqueCuid})
+            .sort({componentIndex: sort})
+            .limit(amount)
             .exec(function (err, orders) {
                 if (err) {
                     error_neg_1(-1, err);

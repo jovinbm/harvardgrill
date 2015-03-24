@@ -97,11 +97,18 @@ io.on('connection', function (socket) {
 
 
 app.post('/harvardId/login', passport.authenticate('openid'));
-app.post('/loginNew',
+//admin login
+app.post('/adminLogin',
     passport.authenticate('local', {
+
+        //the login1 in router will figure out if this user is an admin or not
         successRedirect: '/login1.html',
-        failureRedirect: '/loginNew.html'
+
+        //return the user to the admin login page
+        failureRedirect: '/views/admin_login.html'
     }));
+
+//client login
 app.get('/harvardId',
     passport.authenticate('openid', {
         successRedirect: '/login1.html',
@@ -128,6 +135,8 @@ app.post('/api/clientStartUp', authenticate.ensureAuthenticated, basicAPI.client
 app.get('/api/openGrill', authenticate.ensureAuthenticated, grillStatusAPI.openGrill);
 app.get('/api/closeGrill', authenticate.ensureAuthenticated, grillStatusAPI.closeGrill);
 app.post('/api/getCurrentGrillStatus', authenticate.ensureAuthenticated, grillStatusAPI.getCurrentGrillStatus);
+app.post('/api/getAllComponentsIndexNames', authenticate.ensureAuthenticated, grillStatusAPI.getAllComponentsIndexNames);
+app.post('/api/getAdminClientOrders', authenticate.ensureAuthenticated, grillStatusAPI.getAdminClientOrders);
 app.post('/api/updateAvailableComponents', authenticate.ensureAuthenticated, grillStatusAPI.updateAvailableComponents);
 
 app.post('/api/addComponent', authenticate.ensureAuthenticated, componentAPI.addComponent);
@@ -150,6 +159,7 @@ app.post('/api/newClientOrder', authenticate.ensureAuthenticated, orderAPI.newCl
 app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
 app.post('/api/logoutCustomOrder', authenticate.ensureAuthenticated, logoutAPI.logoutCustomOrder);
 app.post('/api/logoutHarvardOrder', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardOrder);
+app.post('/api/adminLogout', authenticate.ensureAuthenticated, logoutAPI.adminLogout);
 
 server.listen(port, function () {
     consoleLogger("Server listening at port " + port);

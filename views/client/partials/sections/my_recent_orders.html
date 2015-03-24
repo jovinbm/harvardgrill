@@ -9,7 +9,7 @@
 
             <div class="card-content">
                 <h2>{{recentOrder.momentJsTime}}<br/>
-                    <small>{{recentOrder.orderTime | timeago}}</small>
+                    <small>{{recentOrder.theTimeAgo}}</small>
                 </h2>
 
                 <ul class="list-unstyled"
@@ -30,6 +30,11 @@
                 <div class="alert alert-success"
                      ng-if="recentOrder.status == 'done'">
                     <strong>Order status:</strong> This order is ready
+                </div>
+
+                <div class="alert alert-warning"
+                     ng-if="recentOrder.status == 'declined'">
+                    <strong>Order status:</strong> This order has been declined
                 </div>
 
                 <small>This order is subject to changes depending on the current available components from the grill, or

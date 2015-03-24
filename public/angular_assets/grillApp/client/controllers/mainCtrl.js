@@ -1,6 +1,6 @@
 angular.module('grillApp')
-    .controller('MainController', ['$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'ComponentService',
-        function ($log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, ComponentService) {
+    .controller('MainController', ['$filter', '$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'ComponentService',
+        function ($filter, $log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, ComponentService) {
 
             //gets user's details
             $scope.customUsername = globals.customUsername();
@@ -284,8 +284,16 @@ angular.module('grillApp')
 
             //functions for getting my recent orders
 
-            //end of functions concerned with getting my recent orders
+
             $scope.myRecentOrders = [];
+
+            function updateTimeAgo() {
+                $scope.myRecentOrders.forEach(function (order) {
+                    order.theTimeAgo = $filter('timeago')(order.orderTime);
+                });
+            }
+
+            $interval(updateTimeAgo, 60000, 0, true);
 
             function getMyRecentOrders() {
                 ComponentService.getMyRecentOrders()
@@ -295,6 +303,7 @@ angular.module('grillApp')
 
                         $scope.myRecentOrders.forEach(function (component) {
                             component.momentJsTime = moment(component.orderTime).format("ddd, MMM D, H:mm");
+                            component.theTimeAgo = $filter('timeago')(component.orderTime);
                         });
                     })
                     .error(function (errResponse) {
@@ -307,6 +316,8 @@ angular.module('grillApp')
             }
 
             getMyRecentOrders();
+
+            //end of functions concerned with getting my recent orders
 
 
             $rootScope.$on('reconnectSuccess', function () {

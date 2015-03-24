@@ -54,7 +54,31 @@ module.exports = {
                 logout_handler.logoutHarvardOrder(req, res, theUser);
             }
 
-            //userDB.toggleCls(req.user.openId, 0, error, error, toggled);
+            userDB.toggleCls(req.user.openId, 0, error, error, toggled);
+        }
+
+        userDB.findUser(req.user.openId, error, error, success);
+    },
+
+
+    adminLogout: function (req, res) {
+        basic.consoleLogger('logout_api: adminLogout  event received');
+        /*no need to complete the ajax request -- user will be redirected to login which has it's
+         own js file*/
+        //retrieve the user
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'ERROR: logout_api: adminLogout:Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: logout_api: adminLogout: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theUser) {
+            //toggle the user's customLoggedInStatus
+            function toggled() {
+                logout_handler.adminLogout(req, res, theUser);
+            }
+
             toggled();
         }
 

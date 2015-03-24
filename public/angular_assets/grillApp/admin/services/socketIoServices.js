@@ -58,6 +58,17 @@ angular.module('grillApp')
                     return $http.post('/api/getCurrentGrillStatus');
                 },
 
+                getAdminClientOrders: function (amount) {
+                    return $http.post('/api/getAdminClientOrders', {
+                        amount: amount
+                    });
+                },
+
+
+                getAllComponentsIndexNames: function () {
+                    return $http.post('/api/getAllComponentsIndexNames');
+                },
+
                 reconnect: function (currentPage) {
                     return $http.post('/api/adminReconnect', {
                         "page": currentPage
@@ -70,16 +81,8 @@ angular.module('grillApp')
     .factory('logoutService', ['$http',
         function ($http) {
             return {
-                logoutCustomOrder: function () {
-                    return $http.post('/api/logoutCustomOrder');
-                },
-
-                logoutHarvardOrder: function () {
-                    return $http.post('/api/logoutHarvardOrder');
-                },
-
-                logoutHarvardLogin: function () {
-                    return $http.post('/api/logoutHarvardLogin');
+                adminLogout: function () {
+                    return $http.post('/api/adminLogout');
                 }
             }
         }]);

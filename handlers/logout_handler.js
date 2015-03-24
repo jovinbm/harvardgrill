@@ -1,5 +1,6 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
+var userDB = require('../db/user_db.js');
 
 module.exports = {
 
@@ -18,6 +19,7 @@ module.exports = {
         consoleLogger('LOGOUT CUSTOM ORDER event handler called');
         //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
         res.status(200).send({msg: 'LogoutCustomOrder success'});
+        consoleLogger('logoutCustomOrder: Success');
     },
 
 
@@ -28,6 +30,29 @@ module.exports = {
         //send a success so that the user will be logged out and redirected to login
         res.status(200).send({msg: 'LogoutHarvardOrder success'});
         consoleLogger('logoutHarvardOrder: Success');
+    },
+
+
+    adminLogout: function (req, res, theUser) {
+        consoleLogger('ADMIN LOGOUT event handler called');
+        //log the admin user out
+        req.logout();
+
+        //delete the admin
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'ERROR: logout_handler: adminLogout:Could not delete', err: err});
+                basic.consoleLogger("ERROR: logout_handler: adminLogout: Could not delete: err = " + err);
+            }
+        }
+
+        function success() {
+            //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
+            res.status(200).send({msg: 'LogoutCustomOrder success'});
+            consoleLogger('adminLogout: Success');
+        }
+
+        userDB.deleteUser(theUser, error, error, success)
     }
 
 

@@ -73,10 +73,6 @@ angular.module('grillApp')
 
                 logoutHarvardOrder: function () {
                     return $http.post('/api/logoutHarvardOrder');
-                },
-
-                logoutHarvardLogin: function () {
-                    return $http.post('/api/logoutHarvardLogin');
                 }
             }
         }]);

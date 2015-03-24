@@ -1,20 +1,28 @@
-<section class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
+<div class="col-lg-8 col-md-8 col-sm-7 col-xs-12"
+     ng-controller="IncomingController">
     <h1 class="column-heading"><i class="fa fa-list-alt"></i> INCOMING ORDERS
     </h1>
 
     <ul class="list-unstyled animated fadeIn">
-        <li class="list-unstyled clearfix">
+
+        <li class="list-unstyled clearfix"
+            ng-repeat="order in currentIncomingOrders">
+
             <div class="card">
 
                 <div class="card-content">
-                    <h2>Sat March 7, 6:30 PM <br/>
-                        <small>10 mins ago</small>
+                    <h2>{{order.momentJsTime}}<br/>
+                        <small>{{order.theTimeAgo}}</small>
                     </h2>
 
                     <ul class="list-unstyled">
-                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Chicken Breast</li>
-                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hamburger</li>
-                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Weekly Special</li>
+
+                        <li class="list-unstyled clearfix"
+                            ng-repeat="component in order.orderComponents">
+                            <i class="fa fa-spoon"></i>
+                            {{allComponentsIndexNames[component]}}
+                        </li>
+
                     </ul>
 
                 </div>
@@ -30,35 +38,8 @@
                     </div>
                 </div>
             </div>
+
         </li>
 
-        <li class="list-unstyled clearfix">
-            <div class="card">
-                <div class="card-content">
-                    <h2>Sat March 7, 5:30 PM
-                        <span class="glyphicon glyphicon-heart" aria-hidden="true"></span><br/>
-                        <small>1 hr ago</small>
-                    </h2>
-
-                    <ul class="list-unstyled">
-                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Chicken Breast</li>
-                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hotdog</li>
-                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i> Halal Hamburger</li>
-                    </ul>
-
-                </div>
-
-                <div class="card-action clearfix">
-                    <div class="pull-right">
-                        <a href="#" class="btn btn-warning btn-md">
-                            <i class="fa fa-times"></i> Decline
-                        </a>
-                        <a href="#" class="btn btn-success btn-md">
-                            <i class="fa fa-check"></i> Done
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </li>
     </ul>
-</section>
+</div>

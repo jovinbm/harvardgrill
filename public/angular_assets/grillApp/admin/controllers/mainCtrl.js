@@ -1,6 +1,6 @@
 angular.module('grillApp')
-    .controller('MainController', ['$window', '$location', '$log', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals',
-        function ($window, $location, $log, $scope, $rootScope, socket, mainService, socketService, globals) {
+    .controller('MainController', ['$filter', '$window', '$location', '$log', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals',
+        function ($filter, $window, $location, $log, $scope, $rootScope, socket, mainService, socketService, globals) {
 
             //gets user's details
             $scope.customUsername = globals.customUsername();
@@ -71,6 +71,25 @@ angular.module('grillApp')
                 .error(function (errResponse) {
                     $window.location.href = "/error/500.html";
                 });
+
+
+            //allComponentsIndexNames is a variable that caries all references to the names of all component index
+            //the key is the componentIndex, and value is it's name. It is updated by the function 'getAllComponentsIndexNames'
+            $scope.allComponentsIndexNames = {};
+
+            function getAllComponentsIndexNames() {
+                socketService.getAllComponentsIndexNames()
+                    .success(function (resp) {
+                        resp.allComponentsIndexNames.forEach(function (componentReference) {
+                            $scope.allComponentsIndexNames[componentReference.componentIndex] = componentReference.name;
+                        });
+                    })
+                    .error(function (errResponse) {
+                        $scope.showToast('error', 'A fatal error has occurred. Please reload this page')
+                    })
+            }
+
+            getAllComponentsIndexNames();
 
 
             $log.info('MainController booted successfully');
