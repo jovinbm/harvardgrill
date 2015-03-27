@@ -8,7 +8,7 @@ angular.module('grillApp')
                         $window.location.href = "/views/admin_login.html";
                     })
                     .error(function (errResponse) {
-                        $scope.showToast("error", "A fatal error has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             };
 

@@ -24,6 +24,7 @@ angular.module('grillApp', [
         $http.get('views/admin/partials/dashboard/grill_status_card.html', {cache: $templateCache});
         //partials->modals
         $http.get('views/admin/partials/modals/confirm_available.html', {cache: $templateCache});
+        $http.get('views/admin/partials/modals/confirm_close_grill.html', {cache: $templateCache});
     })
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

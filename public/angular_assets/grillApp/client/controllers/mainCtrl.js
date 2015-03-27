@@ -2,6 +2,40 @@ angular.module('grillApp')
     .controller('MainController', ['$filter', '$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'ComponentService',
         function ($filter, $log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, ComponentService) {
 
+            //*************request error handler****************
+
+            //universalDisable variable is used to disable everything crucial in case an error
+            //occurs.This is sometimes needed if a reload did not work
+            $scope.universalDisable = false;
+            $scope.universalDisableTrue = function () {
+                $scope.universalDisable = true;
+            };
+            $scope.universalDisableFalse = function () {
+                $scope.universalDisable = false;
+            };
+
+            $scope.requestErrorHandler = function (errResponse) {
+                if (errResponse) {
+                    if (errResponse.redirectToError == true) {
+                        $window.location.href = errResponse.redirectPage;
+                    }
+                    if (errResponse.disable == true) {
+                        $scope.universalDisableFalse();
+                    }
+                    $scope.showToast(errResponse.type, errResponse.msg);
+                    $log.error(errResponse.reason);
+                } else {
+                    $scope.showToast('warning', 'Connection lost, please try again')
+                }
+            };
+
+            $rootScope.$on('requestErrorHandler', function (event, errResponse) {
+                $scope.requestErrorHandler(errResponse);
+            });
+
+
+            //***************end of request error handler**************
+
             //gets user's details
             $scope.customUsername = globals.customUsername();
             $scope.uniqueCuid = globals.uniqueCuid();
@@ -61,7 +95,7 @@ angular.module('grillApp')
                     //a success emit is picked up by "mainService" in mainFactory.js
                 })
                 .error(function (errResponse) {
-                    $window.location.href = "/error/500.html";
+                    $scope.requestErrorHandler(errResponse);
                 });
 
             //toastr show functions
@@ -143,9 +177,7 @@ angular.module('grillApp')
                         }
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.isLoadingTrue();
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -165,9 +197,7 @@ angular.module('grillApp')
                         }
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.isLoadingTrue();
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -188,9 +218,7 @@ angular.module('grillApp')
                         }
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.isLoadingTrue();
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -210,9 +238,7 @@ angular.module('grillApp')
                         }
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.isLoadingTrue();
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -265,14 +291,10 @@ angular.module('grillApp')
                             $scope.mainCurrentGrillStatus = globals.currentGrillStatus(null, true, true);
                             getMyRecentOrders();
                             $scope.isLoadingFalse();
+                            $scope.showToast('success', 'Your order has been placed')
                         }).error(function (errResponse) {
-                            if (errResponse.msg) {
-                                $scope.showToast('error', errResponse.msg);
-                                $scope.isLoadingFalse();
-                            } else {
-                                $scope.showToast('error', 'An error occurred while placing your order. Please try again or reload this page');
-                                $scope.isLoadingFalse();
-                            }
+                            $scope.requestErrorHandler(errResponse);
+                            $scope.isLoadingFalse();
                         })
                 } else {
                     $scope.showToast('warning', 'At least one component has to be selected')
@@ -307,11 +329,7 @@ angular.module('grillApp')
                         });
                     })
                     .error(function (errResponse) {
-                        if (errResponse.msg) {
-                            $scope.showToast('error', errResponse.msg);
-                        } else {
-                            $scope.showToast('error', 'An error has occurred while loading your page. Please reload this page');
-                        }
+                        $scope.requestErrorHandler(errResponse);
                     })
             }
 
@@ -319,6 +337,19 @@ angular.module('grillApp')
 
             //end of functions concerned with getting my recent orders
 
+
+            //**********************socket listeners
+            socket.on('orderStatusChange', function (data) {
+                $log.info("'orderStatusChange' event received");
+                $rootScope.$broadcast('orderStatusChange');
+            });
+
+            //refresh everything on orderStatusChange
+            $rootScope.$on('orderStatusChange', function () {
+                getMyRecentOrders();
+                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                getAllAvailable(true);
+            });
 
             $rootScope.$on('reconnectSuccess', function () {
                 getMyRecentOrders();

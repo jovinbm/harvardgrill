@@ -1,10 +1,28 @@
 var path = require('path');
 var basic = require('../functions/basic.js');
+var consoleLogger = require('../functions/basic.js').consoleLogger;
 var userDB = require('../db/user_db.js');
+
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('router', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('router', module, text);
+};
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('router', module, text, err);
+};
 
 
 module.exports = {
     loginHtml: function (req, res) {
+        var module = 'loginHtml';
+        receivedLogger(module);
+
         if (req.user) {
             res.redirect("login1.html");
         } else {
@@ -14,10 +32,13 @@ module.exports = {
 
 
     login_1_Html: function (req, res) {
+        var module = 'login_1_Html';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.login_1_Html: getting customLoggedInStatus: " + err);
                 res.redirect("login.html");
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -41,25 +62,38 @@ module.exports = {
 
 
     infoLogin: function (req, res) {
+        var module = 'infoLogin';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.login_1_Html: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
                 res.redirect("login.html");
             }
         }
 
         function success(theUser) {
+
+            function errorCuCls(status, err) {
+                if (status == -1 || status == 0) {
+                    if (status == -1 || status == 0) {
+                        res.redirect("login.html");
+                        consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
+                    }
+                }
+            }
+
             function successUpdate() {
                 if (theUser.isAdmin == 'yes') {
                     res.redirect('admin.html');
                 } else if (theUser.isAdmin == 'no') {
                     res.redirect('client.html');
                 } else {
-                    error();
+                    errorCuCls();
                 }
             }
 
-            userDB.updateCuCls(req.user.openId, req.body.customUsername, 1, error, error, successUpdate)
+            userDB.updateCuCls(req.user.openId, req.body.customUsername, 1, errorCuCls, errorCuCls, successUpdate)
         }
 
         if (!req.user) {
@@ -71,10 +105,13 @@ module.exports = {
 
 
     client_Html: function (req, res) {
+        var module = 'client_Html';
+        receivedLogger(module);
+
         //get the customUsername
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.client_Html: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
                 res.redirect("login.html");
             }
         }
@@ -101,10 +138,13 @@ module.exports = {
     },
 
     admin_Html: function (req, res) {
+        var module = 'admin_Html';
+        receivedLogger(module);
+
         //get the customUsername
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.adminHtml: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
                 res.redirect("login.html");
             }
         }

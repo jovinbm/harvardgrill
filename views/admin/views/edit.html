@@ -51,7 +51,7 @@
         <span class="input-group-addon"
               id="AddOrderComponentButton">
             <button class="btn btn-primary btn-md"
-                    ng-disabled='!orderComponentModel.inputText || editViewReference.isInEditingMode'
+                    ng-disabled='!orderComponentModel.inputText || editViewReference.isInEditingMode || universalDisable'
                     ng-click="addOrderComponent()">ADD TO ORDERS
             </button>
         </span>
@@ -76,12 +76,12 @@
                         <div class="pull-right">
                             <button ng-class="editViewReference[orderComponent.componentIndex].editButtonClass"
                                     ng-click="editComponent(orderComponent.componentIndex)"
-                                    ng-disabled="editViewReference.isInEditingMode">
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable">
                                 <i class="fa fa-pencil"></i> EDIT
                             </button>
                             <button ng-class="editViewReference[orderComponent.componentIndex].deleteButtonClass"
                                     ng-click="deleteComponent(orderComponent.componentIndex, 'oc')"
-                                    ng-disabled="editViewReference.isInEditingMode">
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable">
                                 <i class="fa fa-times"></i> DELETE
                             </button>
                         </div>
@@ -105,7 +105,7 @@
                                 </button>
 
                                 <button ng-class="editViewReference[orderComponent.componentIndex].saveButtonClass"
-                                        ng-disabled='!orderComponent.name'
+                                        ng-disabled='!orderComponent.name || universalDisable'
                                         ng-click="saveEditedOrderComponent(orderComponent.componentIndex,orderComponent.name, 'oc');">
                                     SAVE
                                 </button>
@@ -141,7 +141,7 @@
         <span class="input-group-addon"
               id="AddOmeletButton">
             <button class="btn btn-primary btn-md"
-                    ng-disabled="!omeletModel.inputText || editViewReference.isInEditingMode"
+                    ng-disabled="!omeletModel.inputText || editViewReference.isInEditingMode || universalDisable"
                     ng-click="addOmelet()">ADD TO OMELETS
             </button>
         </span>
@@ -168,11 +168,11 @@
                         <div class="pull-right">
                             <button ng-class="editViewReference[omelet.componentIndex].editButtonClass"
                                     ng-click="editComponent(omelet.componentIndex)"
-                                    ng-disabled="editViewReference.isInEditingMode">
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable">
                                 <i class="fa fa-pencil"></i> EDIT
                             </button>
                             <button ng-class="editViewReference[omelet.componentIndex].deleteButtonClass"
-                                    ng-disabled="editViewReference.isInEditingMode"
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable"
                                     ng-click="deleteComponent(omelet.componentIndex, 'oo')">
                                 <i class="fa fa-times"></i> DELETE
                             </button>
@@ -195,7 +195,7 @@
                                  </button>
 
                                 <button ng-class="editViewReference[omelet.componentIndex].saveButtonClass"
-                                        ng-disabled='!omelet.name'
+                                        ng-disabled='!omelet.name || universalDisable'
                                         ng-click="saveEditedOrderComponent(omelet.componentIndex,omelet.name, 'oo');">
                                     SAVE
                                 </button>
@@ -252,12 +252,12 @@
                         <div class="pull-right">
                             <button ng-class="editViewReference[weeklySpecial.componentIndex].editButtonClass"
                                     ng-click="editComponent(weeklySpecial.componentIndex)"
-                                    ng-disabled="editViewReference.isInEditingMode">
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable">
                                 <i class="fa fa-pencil"></i> EDIT
                             </button>
                             <button ng-class="editViewReference[weeklySpecial.componentIndex].deleteButtonClass"
                                     ng-click="deleteComponent(weeklySpecial.componentIndex, 'ws')"
-                                    ng-disabled="editViewReference.isInEditingMode">
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable">
                                 <i class="fa fa-times"></i> DELETE
                             </button>
                         </div>
@@ -279,7 +279,7 @@
                                  </button>
 
                                 <button ng-class="editViewReference[weeklySpecial.componentIndex].saveButtonClass"
-                                        ng-disabled='!weeklySpecial.name'
+                                        ng-disabled='!weeklySpecial.name || universalDisable'
                                         ng-click="saveEditedOrderComponent(weeklySpecial.componentIndex,weeklySpecial.name, 'ws');">
                                     SAVE
                                 </button>
@@ -344,12 +344,12 @@
                         <div class="pull-right">
                             <button ng-class="editViewReference[extra.componentIndex].editButtonClass"
                                     ng-click="editComponent(extra.componentIndex)"
-                                    ng-disabled="editViewReference.isInEditingMode">
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable">
                                 <i class="fa fa-pencil"></i> EDIT
                             </button>
                             <button ng-class="editViewReference[extra.componentIndex].deleteButtonClass"
                                     ng-click="deleteComponent(extra.componentIndex, 'oe')"
-                                    ng-disabled="editViewReference.isInEditingMode">
+                                    ng-disabled="editViewReference.isInEditingMode || universalDisable">
                                 <i class="fa fa-times"></i> DELETE
                             </button>
                         </div>
@@ -371,7 +371,7 @@
                                  </button>
 
                                 <button ng-class="editViewReference[extra.componentIndex].saveButtonClass"
-                                        ng-disabled='!extra.name'
+                                        ng-disabled='!extra.name || universalDisable'
                                         ng-click="saveEditedOrderComponent(extra.componentIndex,extra.name, 'oe');">
                                     SAVE
                                 </button>

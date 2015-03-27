@@ -1,103 +1,102 @@
 <div>
-    <script type="text/ng-template" id="AvailableModalContent.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Please confirm the available below</h3>
+    <div class="modal-header">
+        <h3 class="modal-title">Please confirm the available below</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <p>To update what's available, please check/un-check the items below and click UPDATE</p>
         </div>
-        <div class="modal-body">
 
-            <div class="alert alert-dismissible alert-info">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <p>To update what's available, please check/un-check the items below and click UPDATE</p>
-            </div>
-
-            <div>
-                <h6>Order Components</h6>
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"
-                        ng-repeat="component in allOrderComponents">
-                        <input type="checkbox"
-                               ng-disabled="isLoading"
-                               ng-model="component.available"
-                               ng-true-value="'yes'"
-                               ng-false-value="'no'"
-                               ng-click="makeConfirmModalDirty()"> {{component.name}}
-                    </li>
-                </ul>
-            </div>
-
-            <div>
-                <h6>Omelets</h6>
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"
-                        ng-repeat="component in allOmelets">
-                        <input type="checkbox"
-                               ng-disabled="isLoading"
-                               ng-model="component.available"
-                               ng-true-value="'yes'"
-                               ng-false-value="'no'"
-                               ng-click="makeConfirmModalDirty()"> {{component.name}}
-                    </li>
-                </ul>
-            </div>
-
-            <div>
-                <h6>Extras</h6>
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"
-                        ng-repeat="component in allExtras">
-                        <input type="checkbox"
-                               ng-disabled="isLoading"
-                               ng-model="component.available"
-                               ng-true-value="'yes'"
-                               ng-false-value="'no'"
-                               ng-click="makeConfirmModalDirty()"> {{component.name}}
-                    </li>
-                </ul>
-            </div>
-
-            <div>
-                <h6>Weekly Specials</h6>
-
-                <div class="pull-right">
-                    <a href ng-click="unSelectAllWeeklySpecials()"
-                       class="btn btn-default btn-sm">Unselect All
-                    </a>
-                </div>
-                <ul class="list-unstyled">
-                    <li class="list-unstyled clearfix"
-                        ng-repeat="component in allWeeklySpecials">
-                        <input type="checkbox"
-                               ng-disabled="isLoading"
-                               ng-model="component.available"
-                               ng-true-value="'yes'"
-                               ng-false-value="'no'"
-                               ng-click="weeklySpecialRadioChange(component.componentIndex)"> {{component.name}}
-
-                    </li>
-                </ul>
-            </div>
-
-            <div class="alert alert-warning"
-                 ng-if="confirmModalIsDirty == true">
-                <p>You have made changes to what's available above. Please click UPDATE below to save changes when
-                    done</p>
-            </div>
-
+        <div>
+            <h6>Order Components</h6>
+            <ul class="list-unstyled">
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allOrderComponents">
+                    <input type="checkbox"
+                           ng-disabled="isLoading || universalDisable"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"
+                           ng-click="makeConfirmModalDirty()"> {{component.name}}
+                </li>
+            </ul>
         </div>
+
+        <div>
+            <h6>Omelets</h6>
+            <ul class="list-unstyled">
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allOmelets">
+                    <input type="checkbox"
+                           ng-disabled="isLoading || universalDisable"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"
+                           ng-click="makeConfirmModalDirty()"> {{component.name}}
+                </li>
+            </ul>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-info"
-                    ng-click="updateAvailableComponents()"
-                    ng-disabled="isLoading">UPDATE AVAILABLE
-            </button>
-            <button class="btn btn-warning"
-                    ng-click="cancel()"
-                    ng-disabled="isLoading">Cancel
-            </button>
-            <button class="btn btn-primary"
-                    ng-click="ok()"
-                    ng-disabled="isLoading || confirmModalIsDirty == true">Open Grill
-            </button>
+
+        <div>
+            <h6>Extras</h6>
+            <ul class="list-unstyled">
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allExtras">
+                    <input type="checkbox"
+                           ng-disabled="isLoading || universalDisable"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"
+                           ng-click="makeConfirmModalDirty()"> {{component.name}}
+                </li>
+            </ul>
         </div>
-    </script>
+
+        <div>
+            <h6>Weekly Specials</h6>
+
+            <div class="pull-right">
+                <a href ng-click="unSelectAllWeeklySpecials()"
+                   class="btn btn-default btn-sm">Unselect All
+                </a>
+            </div>
+            <ul class="list-unstyled">
+                <li class="list-unstyled clearfix"
+                    ng-repeat="component in allWeeklySpecials">
+                    <input type="checkbox"
+                           ng-disabled="isLoading || universalDisable"
+                           ng-model="component.available"
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"
+                           ng-click="weeklySpecialRadioChange(component.componentIndex)"> {{component.name}}
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="alert alert-warning"
+             ng-if="confirmModalIsDirty == true">
+            <p>You have made changes to what's available above. Please click UPDATE below to save changes when
+                done</p>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-info"
+                ng-click="updateAvailableComponents()"
+                ng-disabled="isLoading || universalDisable">UPDATE AVAILABLE
+        </button>
+        <button class="btn btn-warning"
+                ng-click="cancel()"
+                ng-disabled="isLoading || universalDisable">Cancel
+        </button>
+        <button class="btn btn-primary"
+                ng-click="ok()"
+                ng-disabled="isLoading || confirmModalIsDirty == true || universalDisable">Open Grill
+        </button>
+    </div>
+
 </div>

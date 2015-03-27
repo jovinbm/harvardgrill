@@ -2,6 +2,60 @@ angular.module('grillApp')
     .controller('MainController', ['$filter', '$window', '$location', '$log', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals',
         function ($filter, $window, $location, $log, $scope, $rootScope, socket, mainService, socketService, globals) {
 
+            //*************request error handler****************
+
+            //universalDisable variable is used to disable everything crucial in case an error
+            //occurs.This is sometimes needed if a reload did not work
+            $scope.universalDisable = false;
+            $scope.universalDisableTrue = function () {
+                $scope.universalDisable = true;
+            };
+            $scope.universalDisableFalse = function () {
+                $scope.universalDisable = false;
+            };
+
+            $scope.requestErrorHandler = function (errResponse) {
+                if (errResponse) {
+                    if (errResponse.redirectToError == true) {
+                        $window.location.href = errResponse.redirectPage;
+                    }
+                    if (errResponse.disable == true) {
+                        $scope.universalDisableTrue();
+                    }
+                    $scope.showToast(errResponse.type, errResponse.msg);
+                    $log.error(errResponse.reason);
+                } else {
+                    $scope.showToast('warning', 'Connection lost, please try again')
+                }
+            };
+
+            $rootScope.$on('requestErrorHandler', function (event, errResponse) {
+                $scope.requestErrorHandler(errResponse);
+            });
+
+
+            //***************end of request error handler**************
+
+            //*******isLoadingFunctions****************
+            $scope.isLoading = false;
+
+            $scope.isLoadingTrue = function () {
+                $scope.isLoading = true;
+            };
+            $scope.isLoadingFalse = function () {
+                $scope.isLoading = false;
+            };
+
+            $rootScope.$on('isLoadingTrue', function () {
+                $scope.isLoading = true;
+            });
+
+            $rootScope.$on('isLoadingFalse', function () {
+                $scope.isLoading = false;
+            });
+
+            //************end of isLoading****************
+
             //gets user's details
             $scope.customUsername = globals.customUsername();
             $scope.uniqueCuid = globals.uniqueCuid();
@@ -69,7 +123,7 @@ angular.module('grillApp')
                     //a success emit is picked up by "mainService" in mainFactory.js
                 })
                 .error(function (errResponse) {
-                    $window.location.href = "/error/500.html";
+                    $scope.requestErrorHandler(errResponse);
                 });
 
 
@@ -77,6 +131,8 @@ angular.module('grillApp')
             //the key is the componentIndex, and value is it's name. It is updated by the function 'getAllComponentsIndexNames'
             $scope.allComponentsIndexNames = {};
 
+
+            //gets the index names of all components
             function getAllComponentsIndexNames() {
                 socketService.getAllComponentsIndexNames()
                     .success(function (resp) {
@@ -85,7 +141,7 @@ angular.module('grillApp')
                         });
                     })
                     .error(function (errResponse) {
-                        $scope.showToast('error', 'A fatal error has occurred. Please reload this page')
+                        $scope.requestErrorHandler(errResponse);
                     })
             }
 

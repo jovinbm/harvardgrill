@@ -2,23 +2,15 @@ angular.module('grillApp')
     .controller('GrillStatusController', ['$window', '$location', '$log', '$scope', '$rootScope', '$interval', '$modal', 'globals', 'grillStatusService', 'ReferenceService', 'EditService',
         function ($window, $location, $log, $scope, $rootScope, $interval, $modal, globals, grillStatusService, ReferenceService, EditService) {
 
-            $scope.isLoading = false;
-
             //variable to keep track if the user made changes to the available card that have not been updated yet
             $scope.availableCardIsDirty = false;
             $scope.makeAvailableCardDirty = function () {
                 $scope.availableCardIsDirty = true;
             };
 
+
+            //************time functions****************
             $scope.currentTime = "";
-
-            if ($scope.stateChanges < 2) {
-                $scope.currentGrillStatus = globals.currentGrillStatus();
-            } else {
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
-            }
-            $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
-
 
             //set current Date
             $scope.currentTime = moment().format("ddd, MMM D, H:mm");
@@ -27,6 +19,18 @@ angular.module('grillApp')
             };
             $interval(updateCurrentTime, 20000, 0, true);
 
+            //***************end time functions***********************
+
+
+            //**************refreshing the current grill status**********
+            //if the state has been changed more than once, then refresh the currentGrillStatus on every
+            //state change
+            if ($scope.stateChanges < 2) {
+                $scope.currentGrillStatus = globals.currentGrillStatus();
+            } else {
+                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+            }
+            $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
 
             //receives grill status
             $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
@@ -34,13 +38,15 @@ angular.module('grillApp')
                 $scope.currentGrillStatus = currentGrillStatus;
             });
 
+            //*****************end of refreshing the current grill status***********
 
-            //what's available modal controller
+
+            //*****************what's available modal controller****************
             //size can be empty==normal; 'lg'==large; 'sm'==small
-            $scope.open = function (size) {
+            $scope.openAvailableModalInstance = function (size) {
 
                 var availableModalInstance = $modal.open({
-                    templateUrl: 'AvailableModalContent.html',
+                    templateUrl: 'views/admin/partials/modals/confirm_available.html',
                     controller: 'AvailableModalController',
                     backdrop: 'static',
                     size: size
@@ -51,48 +57,79 @@ angular.module('grillApp')
             };
 
 
+            //****************end of available modal controller********************
+
+            //*****************confirm_close_grill modal controller****************
+            //size can be empty==normal; 'lg'==large; 'sm'==small
+            $scope.openConfirmCloseModalInstance = function (size) {
+
+                var confirmCloseModalInstance = $modal.open({
+                    templateUrl: 'views/admin/partials/modals/confirm_close_grill.html',
+                    controller: 'ConfirmCloseGrillModalController',
+                    size: size
+                });
+
+                //returns a promise
+                return confirmCloseModalInstance
+            };
+
+
+            //****************end of confirm_close_grill modal controller********************
+
+
+            //****************open/close grill************************
             //function to open grill
             $scope.openCloseGrill = function () {
-                $scope.isLoading = true;
+                $scope.isLoadingTrue();
                 $scope.grillStatusReference.openCloseClass = "btn btn-primary btn-xs disabled";
 
                 if ($scope.currentGrillStatus.grillStatus == "closed") {
-                    var aModalInstance = $scope.open();
+                    var aModalInstance = $scope.openAvailableModalInstance();
                     aModalInstance.result
                         .then(function (result) {
                             grillStatusService.openGrill()
                                 .success(function (resp) {
                                     getAllAll();
                                     globals.currentGrillStatus(resp.newGrillStatus, true);
-                                    $scope.isLoading = false;
+                                    $scope.isLoadingFalse();
                                     $scope.showToast("success", "The Grill is now open");
                                 })
                                 .error(function (errResponse) {
-                                    $scope.isLoading = false;
-                                    console.log(JSON.stringify(errResponse));
-                                    $window.location.href = "/error/500.html";
+                                    $scope.isLoadingFalse();
+                                    $scope.requestErrorHandler(errResponse);
                                 });
                         }, function (error) {
                             getAllAll();
-                            $scope.isLoading = false;
+                            $scope.isLoadingFalse();
                             $scope.grillStatusReference.openCloseClass = "btn btn-success btn-md";
                         });
                 } else if ($scope.currentGrillStatus.grillStatus == "open") {
-                    grillStatusService.closeGrill()
-                        .success(function (resp) {
-                            $scope.isLoading = false;
-                            globals.currentGrillStatus(resp.newGrillStatus, true);
-                            $scope.showToast("success", "The Grill is now closed");
-                        })
-                        .error(function (errResponse) {
-                            $scope.isLoading = false;
-                            console.log(JSON.stringify(errResponse));
-                            $window.location.href = "/error/500.html";
+                    var cModalInstance = $scope.openConfirmCloseModalInstance();
+                    cModalInstance.result
+                        .then(function (result) {
+                            grillStatusService.closeGrill()
+                                .success(function (resp) {
+                                    $scope.isLoadingFalse();
+                                    globals.currentGrillStatus(resp.newGrillStatus, true);
+                                    $scope.showToast("success", "The Grill is now closed");
+                                })
+                                .error(function (errResponse) {
+                                    $scope.isLoadingFalse();
+                                    $scope.requestErrorHandler(errResponse);
+                                });
+                        }, function (error) {
+                            getAllAll();
+                            $scope.isLoadingFalse();
+                            $scope.grillStatusReference.openCloseClass = "btn btn-warning btn-md";
                         });
                 }
             };
 
 
+            //*******************end of open/close grill**************************
+
+
+            //******************order components******************************
             //functions to get all order components
             $scope.allOrderComponents = [];
             $scope.allOmelets = [];
@@ -109,8 +146,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -121,8 +157,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -134,8 +169,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -146,8 +180,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -161,6 +194,10 @@ angular.module('grillApp')
 
             getAllAll();
 
+
+            //this functions enables the use of checkbox as a radio button on the weekly special available/not-available card
+            //it takes in the componentIndex and makes it's available key to yes, which switches on the checkbox(ng-true-value == 'yes
+            //after that, it turns all weekly special available values to 'no' hence checkbox
             $scope.weeklySpecialRadioChange = function (componentIndex) {
                 $scope.availableCardIsDirty = true;
                 //manipulate al weekly specials
@@ -173,6 +210,7 @@ angular.module('grillApp')
                 })
             };
 
+            //this function unselects all weekly specials. It turns their available key values to 'no
             $scope.unSelectAllWeeklySpecials = function () {
                 $scope.availableCardIsDirty = true;
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
@@ -181,8 +219,9 @@ angular.module('grillApp')
             };
 
 
+            //function used to update available components
             $scope.updateAvailableComponents = function () {
-                $scope.isLoading = true;
+                $scope.isLoadingTrue();
                 var allComponents = [];
                 allComponents = allComponents.concat($scope.allOrderComponents);
                 allComponents = allComponents.concat($scope.allOmelets);
@@ -193,13 +232,12 @@ angular.module('grillApp')
                     .success(function (resp) {
                         $scope.showToast("success", "Update successful");
                         getAllAll();
-                        $scope.isLoading = false;
+                        $scope.isLoadingFalse();
                         $scope.availableCardIsDirty = false;
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please try again or reload the page");
-                        $scope.isLoading = false;
+                        $scope.isLoadingFalse();
+                        $scope.requestErrorHandler(errResponse);
                     });
             };
 

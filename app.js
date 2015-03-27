@@ -136,7 +136,6 @@ app.get('/api/openGrill', authenticate.ensureAuthenticated, grillStatusAPI.openG
 app.get('/api/closeGrill', authenticate.ensureAuthenticated, grillStatusAPI.closeGrill);
 app.post('/api/getCurrentGrillStatus', authenticate.ensureAuthenticated, grillStatusAPI.getCurrentGrillStatus);
 app.post('/api/getAllComponentsIndexNames', authenticate.ensureAuthenticated, grillStatusAPI.getAllComponentsIndexNames);
-app.post('/api/getAdminClientOrders', authenticate.ensureAuthenticated, grillStatusAPI.getAdminClientOrders);
 app.post('/api/updateAvailableComponents', authenticate.ensureAuthenticated, grillStatusAPI.updateAvailableComponents);
 
 app.post('/api/addComponent', authenticate.ensureAuthenticated, componentAPI.addComponent);
@@ -153,8 +152,11 @@ app.get('/api/getAvailableOmelets', authenticate.ensureAuthenticated, componentA
 app.get('/api/getAvailableWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAvailableWeeklySpecials);
 app.get('/api/getAvailableExtras', authenticate.ensureAuthenticated, componentAPI.getAvailableExtras);
 
+app.post('/api/getAdminClientOrders', authenticate.ensureAuthenticated, orderAPI.getAdminClientOrders);
 app.get('/api/getMyRecentOrders', authenticate.ensureAuthenticated, orderAPI.getMyRecentOrders);
 app.post('/api/newClientOrder', authenticate.ensureAuthenticated, orderAPI.newClientOrder);
+app.post('/api/markOrderAsDone', authenticate.ensureAuthenticated, orderAPI.markOrderAsDone);
+app.post('/api/markOrderAsDeclined', authenticate.ensureAuthenticated, orderAPI.markOrderAsDeclined);
 
 app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
 app.post('/api/logoutCustomOrder', authenticate.ensureAuthenticated, logoutAPI.logoutCustomOrder);

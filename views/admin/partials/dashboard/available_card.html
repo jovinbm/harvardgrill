@@ -13,7 +13,7 @@
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allOrderComponents">
                     <input type="checkbox"
-                           ng-disabled="isLoading"
+                           ng-disabled="isLoading || universalDisable"
                            ng-model="component.available"
                            ng-true-value="'yes'"
                            ng-false-value="'no'"
@@ -28,7 +28,7 @@
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allOmelets">
                     <input type="checkbox"
-                           ng-disabled="isLoading"
+                           ng-disabled="isLoading || universalDisable"
                            ng-model="component.available"
                            ng-true-value="'yes'"
                            ng-false-value="'no'"
@@ -43,7 +43,7 @@
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allExtras">
                     <input type="checkbox"
-                           ng-disabled="isLoading"
+                           ng-disabled="isLoading || universalDisable"
                            ng-model="component.available"
                            ng-true-value="'yes'"
                            ng-false-value="'no'"
@@ -64,7 +64,7 @@
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allWeeklySpecials">
                     <input type="checkbox"
-                           ng-disabled="isLoading"
+                           ng-disabled="isLoading || universalDisable"
                            ng-model="component.available"
                            ng-true-value="'yes'"
                            ng-false-value="'no'"
@@ -85,7 +85,7 @@
 
         <div class="pull-right">
             <a href ng-click="updateAvailableComponents()"
-               ng-disabled="isLoading"
+               ng-disabled="isLoading || universalDisable"
                class="btn btn-info btn-md">
                 Update
             </a>

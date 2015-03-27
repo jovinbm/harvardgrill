@@ -1,21 +1,42 @@
 var basic = require('../functions/basic.js');
+var ioJs = require('../functions/io.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var statsDB = require('../db/stats_db.js');
 var componentDB = require('../db/component_db.js');
 var orderDB = require('../db/order_db.js');
 
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('grillStatus_handler', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('grillStatus_handler', module, text);
+};
+
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('grillStatus_handler', module, text, err);
+};
+
 module.exports = {
 
     openGrill: function (req, res, theUser) {
-        consoleLogger('grillStatus_handler: OPEN_GRILL event received');
+        var module = 'openGrill';
+        receivedLogger(module);
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                consoleLogger("grillStatus_handler: OPEN_GRILL: Error executing db operations: err = " + err);
                 res.status(500).send({
-                    msg: 'grillStatus_handler: OPEN_GRILL: Error executing db operations',
-                    err: err
+                    type: 'warning',
+                    msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page",
+                    reason: errorLogger(module, 'Could not open grill', err),
+                    disable: false,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
+                consoleLogger(errorLogger(module, 'Failed! Could not open grill', err));
             }
         }
 
@@ -23,22 +44,28 @@ module.exports = {
             res.status(200).send({
                 newGrillStatus: newGrillStatus
             });
-            consoleLogger("grillStatus_handler: OPEN_GRILL success");
+            ioJs.emitToAll('adminChanges', 'changes');
+            consoleLogger(successLogger(module));
         }
 
         statsDB.openGrill("stats", error, error, success);
     },
 
     closeGrill: function (req, res, theUser) {
-        consoleLogger('grillStatus_handler: CLOSE_GRILL event received');
+        var module = 'closeGrill';
+        receivedLogger(module);
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                consoleLogger("grillStatus_handler: CLOSE_GRILL: Error executing db operations: err = " + err);
                 res.status(500).send({
-                    msg: 'grillStatus_handler: CLOSE_GRILL: Error executing db operations',
-                    err: err
+                    type: 'warning',
+                    msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page",
+                    reason: errorLogger(module, 'Could not close grill', err),
+                    disable: false,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
+                consoleLogger(errorLogger(module, 'Failed! Could not close grill', err));
             }
         }
 
@@ -46,25 +73,30 @@ module.exports = {
             res.status(200).send({
                 newGrillStatus: newGrillStatus
             });
-            consoleLogger("grillStatus_handler: CLOSE_GRILL success");
+            ioJs.emitToAll('adminChanges', 'changes');
+            consoleLogger(successLogger(module));
         }
 
         statsDB.closeGrill("stats", error, error, success);
     },
 
     getCurrentGrillStatus: function (req, res, theUser) {
-        consoleLogger('grillStatus_handler: GET_CURRENT_GRILL_STATUS  called');
+        var module = 'getCurrentGrillStatus';
+        receivedLogger(module);
 
         function error(status, err) {
             if (status == -1) {
-                consoleLogger("getCurrentGrillStatus handler: getCurrentGrillStatus: Error while retrieving grill info: err = " + err);
                 res.status(500).send({
-                    msg: 'getCurrentGrillStatus handler: getCurrentGrillStatus: Error while retrieving grill info',
-                    err: err
+                    type: 'error',
+                    msg: 'A problem has occurred. Please reload page',
+                    reason: errorLogger(module, 'Could not retrieve currentGrillStatus', err),
+                    disable: true,
+                    redirectToError: true,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger('getCurrentGrillStatus: failed!');
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve currentGrillStatus', err));
             } else if (status == 0) {
-                consoleLogger("getCurrentGrillStatus: getCurrentGrillStatus: Could not find data, proceeding to create first instance");
+                consoleLogger("**grillStatus_handler: clientStartUp: Could not find currentGrillStatus, proceeding to create first instance");
             }
         }
 
@@ -72,7 +104,7 @@ module.exports = {
             res.status(200).send({
                 currentGrillStatus: currentGrillStatus
             });
-            consoleLogger("getCurrentGrillStatus: getCurrentGrillStatus: Success");
+            consoleLogger(successLogger(module));
         }
 
         statsDB.getCurrentGrillStatus("stats", error, error, success)
@@ -80,45 +112,21 @@ module.exports = {
     },
 
 
-    getAdminClientOrders: function (req, res, theUser, currentGrillStatus, amount) {
-        consoleLogger('grillStatus_handler: getAdminClientOrders  called');
-
-        function error(status, err) {
-            if (status == -1) {
-                consoleLogger("getAdminClientOrders handler: getAdminClientOrders: Error while retrieving grill info: err = " + err);
-                res.status(500).send({
-                    msg: 'getCurrentGrillStatus handler: getAdminClientOrders: Error while retrieving grill info',
-                    err: err
-                });
-                consoleLogger('getAdminClientOrders handler: failed!');
-            } else if (status == 0) {
-                consoleLogger("getAdminClientOrders handler: Could not find data, proceeding to create first instance");
-            }
-        }
-
-        function success(orders) {
-            res.status(200).send({
-                orders: orders
-            });
-            consoleLogger("getAdminClientOrders: getAdminClientOrders: Success");
-        }
-
-        //sort here is 1 to bring the oldest orders first
-        orderDB.getAdminClientOrders(theUser, currentGrillStatus, amount, 1, error, error, success);
-
-    },
-
-
     updateAvailableComponents: function (req, res, theUser, allComponents) {
-        consoleLogger('grillStatus_handler: updateAvailableComponent  called');
+        var module = 'updateAvailableComponents';
+        receivedLogger(module);
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                consoleLogger("grillStatus_handler: updateAvailableComponents: Error executing db operations: err = " + err);
                 res.status(500).send({
-                    msg: 'grillStatus_handler: updateAvailableComponents: Error executing db operations',
-                    err: err
+                    type: 'warning',
+                    msg: 'Update failed, please try again. If problem persists please reload this page',
+                    reason: errorLogger(module, 'Could not update available components', err),
+                    disable: false,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
+                consoleLogger(errorLogger(module, 'Failed! Could not update available components', err));
             }
         }
 
@@ -126,7 +134,8 @@ module.exports = {
             res.status(200).send({
                 msg: "updateAvailableComponents success"
             });
-            consoleLogger("updateAvailableComponents: Success");
+            ioJs.emitToAll('adminChanges', 'changes');
+            consoleLogger(successLogger(module));
         }
 
         componentDB.updateAvailableComponents(allComponents, error, error, success)

@@ -4,6 +4,7 @@ var realmURL = "http://localhost:4000/";
 
 var cuid = require('cuid');
 var basic = require('../functions/basic.js');
+var consoleLogger = require('../functions/basic.js').consoleLogger;
 var userDB = require('../db/user_db.js');
 var User = require("../database/users/user_model.js");
 
@@ -23,7 +24,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
             //defining all callbacks
             function error(status, err) {
-                basic.consoleLogger("**** Passport.use err = " + err);
+                consoleLogger("**** Passport.use err = " + err);
                 if (status == -1 || status == 0) {
                     var user = new User({
                         openId: openId,
@@ -35,7 +36,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
                     function saveError(status, err) {
                         if (status == -1) {
-                            basic.consoleLogger("**** Passport.use: saveError = " + err);
+                            consoleLogger("**** Passport.use: saveError = " + err);
                             done(new Error("ERROR: app.js: passport.use: Error saving/ retrieving info"));
                         }
                     }
@@ -82,7 +83,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
                 function saveError(status, err) {
                     if (status == -1) {
-                        basic.consoleLogger("**** Passport.use: saveError = " + err);
+                        consoleLogger("**** Passport.use: saveError = " + err);
                         done(new Error("ERROR: app.js: passport.use: Error saving/ retrieving info"));
                     }
                 }

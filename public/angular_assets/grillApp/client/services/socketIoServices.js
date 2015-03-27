@@ -1,7 +1,7 @@
 angular.module('grillApp')
 
-    .factory('socket', ['$location', '$rootScope',
-        function ($location, $rootScope) {
+    .factory('socket', ['$log', '$location', '$rootScope',
+        function ($log, $location, $rootScope) {
             var url;
             if ($location.port()) {
                 url = $location.host() + ":" + $location.port();
@@ -43,8 +43,9 @@ angular.module('grillApp')
         }])
 
 
-    .factory('socketService', ['$http', '$rootScope',
-        function ($http, $rootScope) {
+    .factory('socketService', ['$log', '$http', '$rootScope',
+        function ($log, $http, $rootScope) {
+
             return {
                 getSocketRoom: function () {
                     $rootScope.$broadcast('isLoadingTrue');
@@ -61,10 +62,12 @@ angular.module('grillApp')
                     return $http.post('/api/getCurrentGrillStatus');
                 }
             }
-        }])
+        }
+    ])
 
 
-    .factory('logoutService', ['$http',
+    .
+    factory('logoutService', ['$http',
         function ($http) {
             return {
                 logoutCustomOrder: function () {

@@ -15,6 +15,19 @@ angular.module('grillApp')
                     return $http.post('/api/updateAvailableComponents', {
                         allComponents: allComponents
                     })
+                },
+
+                markOrderAsDone: function (orderUniqueCuid, processedOrderComponents) {
+                    return $http.post('/api/markOrderAsDone', {
+                        orderUniqueCuid: orderUniqueCuid,
+                        processedOrderComponents: processedOrderComponents
+                    })
+                },
+
+                markOrderAsDeclined: function (orderUniqueCuid) {
+                    return $http.post('/api/markOrderAsDeclined', {
+                        orderUniqueCuid: orderUniqueCuid
+                    })
                 }
             }
         }]);

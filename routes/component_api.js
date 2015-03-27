@@ -1,5 +1,20 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
+
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('component_api', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('component_api', module, text);
+};
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('component_api', module, text, err);
+};
+
 var userDB = require('../db/user_db.js');
 var statsDB = require('../db/stats_db.js');
 var component_handler = require('../handlers/component_handler.js');
@@ -9,28 +24,38 @@ module.exports = {
 
     addComponent: function (req, res) {
 
+        var module = 'addComponent';
+        receivedLogger(module);
         var theComponent = req.body;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: addOrderComponentAPI: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: addOrderComponentAPI: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
         function success(theUser) {
 
-            if (theUser.customLoggedInStatus == 1) {
-                //get the current Grill Status
+            if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
 
-                function error(status, err) {
+                function errorGrillStatus(status, err) {
                     res.status(500).send({
-                        msg: 'getCurrentGrillStatus in addComponent: Error while retrieving stats info',
-                        err: err
+                        type: 'error',
+                        msg: "A problem has occurred. Please reload the page",
+                        reason: errorLogger(module, 'Error while retrieving stats info', err),
+                        disable: true,
+                        redirectToError: false,
+                        redirectPage: '/error/500.html'
                     });
-                    consoleLogger("getCurrentGrillStatus in addComponent: failed! Error while retrieving stats info: err = " + err);
+                    consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
                 }
 
                 function statsSuccess(currentGrillStatus) {
@@ -38,15 +63,21 @@ module.exports = {
                         component_handler.addComponent(req, res, theUser, currentGrillStatus, theComponent);
                     } else {
                         res.status(500).send({
-                            msg: 'getCurrentGrillStatus in addComponentAPI: GRILL NOT CLOSED'
+                            type: 'error',
+                            msg: "The grill is currently still open. Close the grill to perform this action",
+                            reason: errorLogger(module, 'Grill is not closed'),
+                            disable: false,
+                            redirectToError: false,
+                            redirectPage: '/error/500.html'
                         });
-                        consoleLogger("getCurrentGrillStatus in addComponentAPI: FAILED! GRILL NOT CLOSED");
+                        consoleLogger(errorLogger(module, 'Grill is not closed'));
                     }
                 }
 
-                statsDB.getCurrentGrillStatus("stats", error, error, statsSuccess);
+                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -55,14 +86,21 @@ module.exports = {
 
     saveEditedComponent: function (req, res) {
 
+        var module = 'saveEditedComponent';
+        receivedLogger(module);
         var theComponent = req.body;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: saveEditedComponentAPI: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: saveEditedComponentAPI: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -71,12 +109,16 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 //get the current Grill Status
 
-                function error(status, err) {
+                function errorGrillStatus(status, err) {
                     res.status(500).send({
-                        msg: 'getCurrentGrillStatus in saveEditedComponent: Error while retrieving stats info',
-                        err: err
+                        type: 'error',
+                        msg: "A problem has occurred. Please reload the page",
+                        reason: errorLogger(module, 'Error while retrieving stats info', err),
+                        disable: true,
+                        redirectToError: false,
+                        redirectPage: '/error/500.html'
                     });
-                    consoleLogger("getCurrentGrillStatus in saveEditedComponent: failed! Error while retrieving stats info: err = " + err);
+                    consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
                 }
 
                 function statsSuccess(currentGrillStatus) {
@@ -84,15 +126,21 @@ module.exports = {
                         component_handler.saveEditedComponent(req, res, theUser, currentGrillStatus, theComponent);
                     } else {
                         res.status(500).send({
-                            msg: 'getCurrentGrillStatus in addComponentAPI: GRILL NOT CLOSED'
+                            type: 'error',
+                            msg: "The grill is currently still open. Close the grill to perform this action",
+                            reason: errorLogger(module, 'Grill is not closed'),
+                            disable: false,
+                            redirectToError: false,
+                            redirectPage: '/error/500.html'
                         });
-                        consoleLogger("getCurrentGrillStatus in addComponentAPI: FAILED! GRILL NOT CLOSED");
+                        consoleLogger(errorLogger(module, 'Grill is not closed'));
                     }
                 }
 
-                statsDB.getCurrentGrillStatus("stats", error, error, statsSuccess);
+                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -101,14 +149,21 @@ module.exports = {
 
     deleteComponent: function (req, res) {
 
+        var module = 'deleteComponent';
+        receivedLogger(module);
         var componentIndex = req.body.componentIndex;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: deleteComponentAPI: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: deleteComponentAPI: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -117,12 +172,16 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 //get the current Grill Status
 
-                function error(status, err) {
+                function errorGrillStatus(status, err) {
                     res.status(500).send({
-                        msg: 'getCurrentGrillStatus in deleteComponent: Error while retrieving stats info',
-                        err: err
+                        type: 'error',
+                        msg: "A problem has occurred. Please reload the page",
+                        reason: errorLogger(module, 'Error while retrieving stats info', err),
+                        disable: true,
+                        redirectToError: false,
+                        redirectPage: '/error/500.html'
                     });
-                    consoleLogger("getCurrentGrillStatus in deleteComponent: failed! Error while retrieving stats info: err = " + err);
+                    consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
                 }
 
                 function statsSuccess(currentGrillStatus) {
@@ -130,27 +189,41 @@ module.exports = {
                         component_handler.deleteComponent(req, res, theUser, currentGrillStatus, componentIndex);
                     } else {
                         res.status(500).send({
-                            msg: 'getCurrentGrillStatus in deleteComponentAPI: GRILL NOT CLOSED'
+                            type: 'error',
+                            msg: "The grill is currently still open. Close the grill to perform this action",
+                            reason: errorLogger(module, 'Grill is not closed'),
+                            disable: false,
+                            redirectToError: false,
+                            redirectPage: '/error/500.html'
                         });
-                        consoleLogger("getCurrentGrillStatus in deleteComponentAPI: FAILED! GRILL NOT CLOSED");
+                        consoleLogger(errorLogger(module, 'Grill is not closed'));
                     }
                 }
 
-                statsDB.getCurrentGrillStatus("stats", error, error, statsSuccess);
+                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
     },
 
     getAllOrderComponents: function (req, res) {
+        var module = 'getAllOrderComponents';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAllOrderComponentsAPI: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAllOrderComponentsAPI: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -158,20 +231,29 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllOrderComponents(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
     },
 
     getAllOmelets: function (req, res) {
+        var module = 'getAllOmelets';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAllOmeletsAPI: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAllOmeletsAPI: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -179,8 +261,9 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllOmelets(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -188,12 +271,20 @@ module.exports = {
 
 
     getAllWeeklySpecials: function (req, res) {
+        var module = 'getAllWeeklySpecials';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAllWeeklySpecials: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAllWeeklySpecials: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -201,8 +292,9 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllWeeklySpecials(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -210,12 +302,20 @@ module.exports = {
 
 
     getAllExtras: function (req, res) {
+        var module = 'getAllExtras';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAllExtras: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAllExtras: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -223,8 +323,9 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllExtras(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -232,12 +333,20 @@ module.exports = {
 
 
     getAvailableOrderComponents: function (req, res) {
+        var module = 'getAvailableOrderComponents';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAvailableOrderComponentsAPI: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAvailableOrderComponentsAPI: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -245,20 +354,29 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableOrderComponents(req, res, theUser);
+            } else {
+                res.redirect('login.html')
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
     },
 
     getAvailableOmelets: function (req, res) {
+        var module = 'getAvailableOmelets';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAvailableOmeletsAPI: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAvailableOmeletsAPI: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -266,8 +384,9 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableOmelets(req, res, theUser);
+            } else {
+                res.redirect('login.html')
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -275,12 +394,20 @@ module.exports = {
 
 
     getAvailableWeeklySpecials: function (req, res) {
+        var module = 'getAvailableWeeklySpecials';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAvailableWeeklySpecials: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAvailableWeeklySpecials: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -288,8 +415,9 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableWeeklySpecials(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -297,12 +425,20 @@ module.exports = {
 
 
     getAvailableExtras: function (req, res) {
+        var module = 'getAvailableExtras';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
-                    msg: "ERROR: getAvailableExtras: Could not retrieve user:"
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
-                consoleLogger("ERROR: getAvailableExtras: Could not retrieve user: " + err);
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -310,12 +446,12 @@ module.exports = {
 
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableExtras(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
     }
-    
-    
+
 };

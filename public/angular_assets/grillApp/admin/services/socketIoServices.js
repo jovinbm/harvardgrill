@@ -58,9 +58,10 @@ angular.module('grillApp')
                     return $http.post('/api/getCurrentGrillStatus');
                 },
 
-                getAdminClientOrders: function (amount) {
+                getAdminClientOrders: function (amount, currentOrdersToBeSkipped) {
                     return $http.post('/api/getAdminClientOrders', {
-                        amount: amount
+                        amount: amount,
+                        currentOrdersToBeSkipped: currentOrdersToBeSkipped
                     });
                 },
 

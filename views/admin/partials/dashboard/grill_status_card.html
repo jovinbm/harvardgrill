@@ -29,7 +29,7 @@
         <div class="pull-right">
             <a href="#"
                ng-class="grillStatusReference.openCloseClass"
-               ng-disabled="$scope.isLoading"
+               ng-disabled="isLoading || universalDisable"
                ng-click="openCloseGrill()">{{grillStatusReference.openCloseText}}
             </a>
         </div>

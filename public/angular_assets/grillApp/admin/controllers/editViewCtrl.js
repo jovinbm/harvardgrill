@@ -2,7 +2,40 @@ angular.module('grillApp')
     .controller('EditViewController', ['$window', '$location', '$log', '$scope', '$rootScope', '$interval', '$modal', 'globals', 'grillStatusService', 'ReferenceService', 'EditService',
         function ($window, $location, $log, $scope, $rootScope, $interval, $modal, globals, grillStatusService, ReferenceService, EditService) {
 
-            //ng-models for the input groups
+            //************time functions****************
+            $scope.currentTime = "";
+
+            //set current Date
+            $scope.currentTime = moment().format("ddd, MMM D, H:mm");
+            var updateCurrentTime = function () {
+                $scope.currentTime = moment().format("ddd, MMM D, H:mm");
+            };
+            $interval(updateCurrentTime, 20000, 0, true);
+
+            //***************end time functions***********************
+
+
+            //**************refreshing the current grill status**********
+            //if the state has been changed more than once, then refresh the currentGrillStatus on every
+            //state change
+            if ($scope.stateChanges < 2) {
+                $scope.currentGrillStatus = globals.currentGrillStatus();
+            } else {
+                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+            }
+            $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
+
+            //receives grill status
+            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
+                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard(currentGrillStatus);
+                $scope.currentGrillStatus = currentGrillStatus;
+            });
+
+            //*****************end of refreshing the current grill status***********
+
+
+            //******************order components******************************
+            //ng-models for the input groups in edit view
             $scope.orderComponentModel = {};
             $scope.omeletModel = {};
             $scope.weeklySpecialModel = {};
@@ -24,8 +57,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -36,8 +68,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -49,8 +80,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -61,8 +91,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $scope.requestErrorHandler(errResponse);
                     });
             }
 
@@ -79,37 +108,13 @@ angular.module('grillApp')
             }
 
 
-            $scope.currentTime = "";
-            if ($scope.stateChanges < 2) {
-                $scope.currentGrillStatus = globals.currentGrillStatus();
-            } else {
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
-            }
-            $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
-
-            //set current Date
-            $scope.currentTime = moment().format("ddd, MMM D, H:mm");
-            var updateCurrentTime = function () {
-                $scope.currentTime = moment().format("ddd, MMM D, H:mm");
-            };
-            $interval(updateCurrentTime, 20000, 0, true);
-
-
-            //receives grill status
-            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
-                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard(currentGrillStatus);
-                $scope.currentGrillStatus = currentGrillStatus;
-            });
-
-
-            //what's available modal controller
+            //*****************what's available modal controller****************
             //size can be empty==normal; 'lg'==large; 'sm'==small
-            $scope.open = function (size) {
+            $scope.openAvailableModalInstance = function (size) {
 
                 var availableModalInstance = $modal.open({
-                    templateUrl: 'AvailableModalContent.html',
+                    templateUrl: 'views/admin/partials/modals/confirm_available.html',
                     controller: 'AvailableModalController',
-                    scope: $scope,
                     backdrop: 'static',
                     size: size
                 });
@@ -119,12 +124,33 @@ angular.module('grillApp')
             };
 
 
+            //****************end of available modal controller********************
+
+            //*****************confirm_close_grill modal controller****************
+            //size can be empty==normal; 'lg'==large; 'sm'==small
+            $scope.openConfirmCloseModalInstance = function (size) {
+
+                var confirmCloseModalInstance = $modal.open({
+                    templateUrl: 'views/admin/partials/modals/confirm_close_grill.html',
+                    controller: 'ConfirmCloseGrillModalController',
+                    size: size
+                });
+
+                //returns a promise
+                return confirmCloseModalInstance
+            };
+
+
+            //****************end of confirm_close_grill modal controller********************
+
+
+            //****************open/close grill************************
             //function to open grill
             $scope.openCloseGrill = function () {
                 $scope.grillStatusReference.openCloseClass = "btn btn-primary btn-xs disabled";
 
                 if ($scope.currentGrillStatus.grillStatus == "closed") {
-                    var aModalInstance = $scope.open();
+                    var aModalInstance = $scope.openAvailableModalInstance();
                     aModalInstance.result
                         .then(function (result) {
                             console.log(result);
@@ -134,27 +160,38 @@ angular.module('grillApp')
                                     $scope.showToast("success", "The Grill is now open");
                                 })
                                 .error(function (errResponse) {
-                                    console.log(JSON.stringify(errResponse));
-                                    $scope.showToast("error", "Please try again or reload this page");
+                                    $scope.requestErrorHandler(errResponse);
                                 });
                         }, function (error) {
                             $scope.grillStatusReference.openCloseClass = "btn btn-default btn-xs";
                             console.log(error);
                         });
                 } else if ($scope.currentGrillStatus.grillStatus == "open") {
-                    grillStatusService.closeGrill()
-                        .success(function (resp) {
-                            globals.currentGrillStatus(resp.newGrillStatus, true);
-                            $scope.showToast("success", "The grill is now closed");
-                        })
-                        .error(function (errResponse) {
-                            console.log(JSON.stringify(errResponse));
-                            $scope.showToast("error", "Please try again or reload this page");
+                    var cModalInstance = $scope.openConfirmCloseModalInstance();
+                    cModalInstance.result
+                        .then(function (result) {
+                            grillStatusService.closeGrill()
+                                .success(function (resp) {
+                                    $scope.isLoadingFalse();
+                                    globals.currentGrillStatus(resp.newGrillStatus, true);
+                                    $scope.showToast("success", "The Grill is now closed");
+                                })
+                                .error(function (errResponse) {
+                                    $scope.isLoadingFalse();
+                                    $scope.requestErrorHandler(errResponse);
+                                });
+                        }, function (error) {
+                            getAllAll();
+                            $scope.isLoadingFalse();
+                            $scope.grillStatusReference.openCloseClass = "btn btn-warning btn-md";
                         });
                 }
             };
 
+            //*******************end of open/close grill**************************
 
+
+            //****************functions for manipulating components == add,edit,delete
             //functions to add and delete components
             $scope.addOrderComponent = function () {
                 var component = {
@@ -169,8 +206,7 @@ angular.module('grillApp')
                         $scope.showToast("success", "Saved");
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "Please try again or reload this page");
+                        $scope.requestErrorHandler(errResponse);
                     });
 
             };
@@ -188,8 +224,7 @@ angular.module('grillApp')
                         $scope.showToast("success", "Saved");
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "Please try again or reload this page");
+                        $scope.requestErrorHandler(errResponse);
                     });
 
             };
@@ -207,8 +242,7 @@ angular.module('grillApp')
                         $scope.showToast("success", "Saved");
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "Please try again or reload this page");
+                        $scope.requestErrorHandler(errResponse);
                     });
 
             };
@@ -226,39 +260,7 @@ angular.module('grillApp')
                         $scope.showToast("success", "Saved");
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "Please try again or reload this page");
-                    });
-
-            };
-
-
-            $scope.saveEditedOrderComponent = function (componentIndex, name, componentGroup) {
-
-                EditService.saveEditedOrderComponent(componentIndex, name)
-                    .success(function () {
-                        switch (componentGroup) {
-                            case "oc":
-                                getAllOrderComponents();
-                                break;
-                            case "oo":
-                                getAllOmelets();
-                                break;
-                            case "ws":
-                                getAllWeeklySpecials();
-                                break;
-                            case "oe":
-                                getAllExtras();
-                                break;
-                            default:
-                                getAllAll();
-                        }
-
-                        $scope.showToast("success", "All changes saved");
-                    })
-                    .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "Please try again or reload this page");
+                        $scope.requestErrorHandler(errResponse);
                     });
 
             };
@@ -292,6 +294,7 @@ angular.module('grillApp')
                 }
             };
 
+
             $scope.deleteComponent = function (componentIndex, componentGroup) {
 
                 EditService.deleteComponent(componentIndex)
@@ -316,11 +319,43 @@ angular.module('grillApp')
                         $scope.showToast("success", "All changes saved");
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "Please try again or reload this page");
+                        $scope.requestErrorHandler(errResponse);
                     });
 
             };
+
+
+            $scope.saveEditedOrderComponent = function (componentIndex, name, componentGroup) {
+
+                EditService.saveEditedOrderComponent(componentIndex, name)
+                    .success(function () {
+                        switch (componentGroup) {
+                            case "oc":
+                                getAllOrderComponents();
+                                break;
+                            case "oo":
+                                getAllOmelets();
+                                break;
+                            case "ws":
+                                getAllWeeklySpecials();
+                                break;
+                            case "oe":
+                                getAllExtras();
+                                break;
+                            default:
+                                getAllAll();
+                        }
+
+                        $scope.showToast("success", "All changes saved");
+                    })
+                    .error(function (errResponse) {
+                        $scope.requestErrorHandler(errResponse);
+                    });
+
+            };
+
+            //**************** end of functions for manipulating components == add,edit,delete
+
 
             $rootScope.$on('reconnectSuccess', function () {
                 getAllAll();

@@ -9,7 +9,7 @@ angular.module('grillApp')
                         globals.currentGrillStatus(resp.currentGrillStatus, true);
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/error/500.html";
+                        $rootScope.$broadcast('requestErrorHandler', errResponse);
                     });
             });
 

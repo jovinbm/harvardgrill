@@ -12,8 +12,27 @@
                     <small>{{recentOrder.theTimeAgo}}</small>
                 </h2>
 
+                <h3>Processed items</h3>
+
                 <ul class="list-unstyled"
+                    ng-if="recentOrder.status == 'processing'"
                     ng-repeat="componentIndex in recentOrder.orderComponents">
+                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
+                        {{allAvailableCombinedObject[componentIndex].name}}
+                    </li>
+                </ul>
+
+                <ul class="list-unstyled"
+                    ng-if="recentOrder.status == 'declined'"
+                    ng-repeat="componentIndex in recentOrder.orderComponents">
+                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
+                        {{allAvailableCombinedObject[componentIndex].name}}
+                    </li>
+                </ul>
+
+                <ul class="list-unstyled"
+                    ng-if="recentOrder.status == 'done'"
+                    ng-repeat="componentIndex in recentOrder.processedOrderComponents">
                     <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
                         {{allAvailableCombinedObject[componentIndex].name}}
                     </li>
@@ -36,6 +55,11 @@
                      ng-if="recentOrder.status == 'declined'">
                     <strong>Order status:</strong> This order has been declined
                 </div>
+
+                <h6 ng-if="recentOrder.status != 'declined'">
+                    <strong>Order ID:</strong> {{recentOrder.orderUniqueCuid}}<br/>
+                    <strong>Name on order:</strong> {{recentOrder.clientName}}
+                </h6>
 
                 <small>This order is subject to changes depending on the current available components from the grill, or
                     decline

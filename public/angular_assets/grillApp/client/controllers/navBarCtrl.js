@@ -8,7 +8,7 @@ angular.module('grillApp')
                         $window.location.href = "/login1.html";
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/error/500.html";
+                        $scope.requestErrorHandler(errResponse);
                     });
             };
 
@@ -18,7 +18,7 @@ angular.module('grillApp')
                         $window.location.href = "/login.html";
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/error/500.html";
+                        $scope.requestErrorHandler(errResponse);
                     });
             };
 

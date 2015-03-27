@@ -45,7 +45,7 @@ angular.module('grillApp')
                                 }
                             })
                             .error(function (errResponse) {
-                                toastr.error("A fatal error has occurred. Please reload the page", 'Error');
+                                $rootScope.$broadcast('requestErrorHandler', errResponse);
                             });
                     } else {
 
@@ -62,18 +62,28 @@ angular.module('grillApp')
                 },
 
 
-                adminClientOrders: function (amount, broadcast, refresh) {
-                    if (refresh) {
-                        socketService.getAdminClientOrders(amount)
+                adminClientOrders: function (amount, broadcast, getFromServer, refresh, currentOrdersToBeSkipped) {
+                    if (getFromServer) {
+                        socketService.getAdminClientOrders(amount, currentOrdersToBeSkipped)
                             .success(function (resp) {
                                 adminClientOrders = resp.orders;
 
-                                if (broadcast) {
-                                    $rootScope.$broadcast('adminClientOrders', adminClientOrders);
+                                if (refresh) {
+                                    //a true of refresh causes a broadcast an event which refreshes the currentIncomingOrders
+                                    if (broadcast) {
+                                        $rootScope.$broadcast('adminClientOrdersRefresh', adminClientOrders);
+                                    }
+                                } else {
+                                    //no refresh
+                                    //just broadcast the one new order, this does not cause a refresh of the current
+                                    // incoming orders
+                                    if (broadcast) {
+                                        $rootScope.$broadcast('adminClientOrdersRefreshNoRefresh', adminClientOrders);
+                                    }
                                 }
                             })
                             .error(function (errResponse) {
-                                toastr.error("A fatal error has occurred. Please reload the page", 'Error');
+                                $rootScope.$broadcast('requestErrorHandler', errResponse);
                             });
                     } else if (broadcast) {
                         $rootScope.$broadcast('adminClientOrders', adminClientOrders);

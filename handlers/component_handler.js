@@ -1,20 +1,41 @@
 var basic = require('../functions/basic.js');
+var ioJs = require('../functions/io.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var componentDB = require('../db/component_db.js');
 var cuid = require('cuid');
 
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('component_handler', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('component_handler', module, text);
+};
+
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('component_handler', module, text, err);
+};
+
 module.exports = {
 
     addComponent: function (req, res, theUser, currentGrillStatus, theComponent) {
-        basic.consoleLogger('component_handler: ADD_COMPONENT event received');
+        var module = 'addComponent';
+        receivedLogger(module);
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("component_handler: ADD_COMPONENT: Error executing db operations: err = " + err);
                 res.status(500).send({
-                    msg: 'component: ADD_COMPONENT: Error executing db operations',
-                    err: err
+                    type: 'warning',
+                    msg: 'Failed to add, please try again. If problem persists, please reload this page',
+                    reason: errorLogger(module, 'Could not add component', err),
+                    disable: false,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
+                consoleLogger(errorLogger(module, 'Failed! Could not add component', err));
             }
         }
 
@@ -22,7 +43,8 @@ module.exports = {
             res.status(200).send({
                 savedComponent: theSavedComponent
             });
-            consoleLogger("component_handler: ADD_COMPONENT success");
+            ioJs.emitToAll('adminChanges', 'changes');
+            consoleLogger(successLogger(module));
         }
 
         var newComponent = {
@@ -41,15 +63,20 @@ module.exports = {
 
 
     saveEditedComponent: function (req, res, theUser, currentGrillStatus, theComponent) {
-        basic.consoleLogger('component_handler: SAVE_EDITED_COMPONENT event received');
+        var module = 'saveEditedComponent';
+        receivedLogger(module);
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("component_handler: SAVE_EDITED_COMPONENT: Error executing db operations: err = " + err);
                 res.status(500).send({
-                    msg: 'component: SAVE_EDITED_COMPONENT: Error executing db operations',
-                    err: err
+                    type: 'warning',
+                    msg: 'Failed to save, please try again. If problem persists, please reload this page',
+                    reason: errorLogger(module, 'Could not save component', err),
+                    disable: false,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
+                consoleLogger(errorLogger(module, 'Failed! Could not save component', err));
             }
         }
 
@@ -57,7 +84,8 @@ module.exports = {
             res.status(200).send({
                 msg: "Component successfully edited"
             });
-            consoleLogger("component_handler: SAVE_EDITED_COMPONENT success");
+            ioJs.emitToAll('adminChanges', 'changes');
+            consoleLogger(successLogger(module));
         }
 
         componentDB.saveEditedComponent(theComponent.componentIndex, theComponent.name, error, error, success);
@@ -65,15 +93,20 @@ module.exports = {
 
 
     deleteComponent: function (req, res, theUser, currentGrillStatus, componentIndex) {
-        basic.consoleLogger('component_handler: DELETE_COMPONENT event received');
+        var module = 'deleteComponent';
+        receivedLogger(module);
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                basic.consoleLogger("component_handler: DELETE_COMPONENT: Error executing db operations: err = " + err);
                 res.status(500).send({
-                    msg: 'component: DELETE_COMPONENT: Error executing db operations',
-                    err: err
+                    type: 'warning',
+                    msg: 'Failed to delete, please try again. If problem persists, please reload this page',
+                    reason: errorLogger(module, 'Could not delete component', err),
+                    disable: false,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
                 });
+                consoleLogger(errorLogger(module, 'Failed! Could not delete component', err));
             }
         }
 
@@ -81,7 +114,8 @@ module.exports = {
             res.status(200).send({
                 msg: 'Delete SuccessFull'
             });
-            consoleLogger("component_handler: DELETE_COMPONENT success");
+            ioJs.emitToAll('adminChanges', 'changes');
+            consoleLogger(successLogger(module));
         }
 
         componentDB.deleteComponent(componentIndex, error, error, success);
@@ -89,21 +123,28 @@ module.exports = {
 
 
     getAllOrderComponents: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAllOrderComponents event received');
+        var module = 'getAllOrderComponents';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAllOrderComponents: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component: getAllOrderComponents: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(allOrderComponents) {
             res.status(200).send({
                 allComponents: allOrderComponents
             });
-            consoleLogger("component_handler: getAllOrderComponents success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found
@@ -112,21 +153,28 @@ module.exports = {
 
 
     getAllOmelets: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAllOmelets event received');
+        var module = 'getAllOmelets';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAllOmelets: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component: getAllOmelets: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(allOmelets) {
             res.status(200).send({
                 allComponents: allOmelets
             });
-            consoleLogger("component_handler: getAllOmelets success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found
@@ -135,21 +183,28 @@ module.exports = {
 
 
     getAllWeeklySpecials: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAllWeeklySpecials event received');
+        var module = 'getAllWeeklySpecials';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAllWeeklySpecials: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component:getAllWeeklySpecials: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(allWeeklySpecials) {
             res.status(200).send({
                 allComponents: allWeeklySpecials
             });
-            consoleLogger("component_handler: getAllWeeklySpecials success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found
@@ -158,21 +213,28 @@ module.exports = {
 
 
     getAllExtras: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAllExtras event received');
+        var module = 'getAllExtras';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAllExtras: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component: getAllExtras: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(allExtras) {
             res.status(200).send({
                 allComponents: allExtras
             });
-            consoleLogger("component_handler: getAllExtras success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found
@@ -181,21 +243,28 @@ module.exports = {
 
 
     getAvailableOrderComponents: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAvailableOrderComponents event received');
+        var module = 'getAvailableOrderComponents';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAvailableOrderComponents: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component: getAvailableOrderComponents: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(availableOrderComponents) {
             res.status(200).send({
                 availableComponents: availableOrderComponents
             });
-            consoleLogger("component_handler: getAvailableOrderComponents success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found
@@ -204,21 +273,28 @@ module.exports = {
 
 
     getAvailableOmelets: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAvailableOmelets event received');
+        var module = 'getAvailableOmelets';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAvailableOmelets: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component: getAvailableOmelets: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(availableOmelets) {
             res.status(200).send({
                 availableComponents: availableOmelets
             });
-            consoleLogger("component_handler: getAvailableOmelets success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found
@@ -227,21 +303,28 @@ module.exports = {
 
 
     getAvailableWeeklySpecials: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAvailableWeeklySpecials event received');
+        var module = 'getAvailableWeeklySpecials';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAvailableWeeklySpecials: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component:getAvailableWeeklySpecials: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(availableWeeklySpecials) {
             res.status(200).send({
                 availableComponents: availableWeeklySpecials
             });
-            consoleLogger("component_handler: getAvailableWeeklySpecials success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found
@@ -250,21 +333,28 @@ module.exports = {
 
 
     getAvailableExtras: function (req, res, theUser) {
-        basic.consoleLogger('component_handler: getAvailableExtras event received');
+        var module = 'getAvailableExtras';
+        receivedLogger(module);
 
         function error(status, err) {
-            basic.consoleLogger("component_handler: getAvailableExtras: Error executing db operations: err = " + err);
-            res.status(500).send({
-                msg: 'component: getAvailableExtras: Error executing db operations',
-                err: err
-            })
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page:",
+                    reason: errorLogger(module, 'Could not retrieve components', err),
+                    disable: true,
+                    redirectToError: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
+            }
         }
 
         function success(availableExtras) {
             res.status(200).send({
                 availableComponents: availableExtras
             });
-            consoleLogger("component_handler: getAvailableExtras success");
+            consoleLogger(successLogger(module));
         }
 
         //calls success with all the components of specified group or empty when not found

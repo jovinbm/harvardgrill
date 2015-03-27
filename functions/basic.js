@@ -5,28 +5,23 @@ module.exports = {
         console.log(data);
     },
 
+    receivedLogger: function (filename, module) {
+        console.log(filename + ": " + module + " RECEIVED");
+    },
 
-    indexArrayObject: function (myArray, property, value) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === value) return i;
+    successLogger: function (filename, module, text) {
+        if (text) {
+            return "SUCCESS: " + filename + ": " + module + ": " + text;
+        } else {
+            return "SUCCESS: " + filename + ": " + module;
         }
-        return -1;
     },
 
-
-    searchArrayIfExists: function (name, theArray, success) {
-        return (theArray.indexOf(name) > -1)
-    },
-
-
-    filterArray: function(theArray, regexExp, success){
-        var temp = [];
-        theArray.forEach(function (elem) {
-            if(regexExp.test(elem)){
-                temp.push(elem);
-            }
-        });
-
-        success(temp)
+    errorLogger: function (filename, module, text, err) {
+        if (text) {
+            return "ERROR: " + filename + ": " + module + ": " + text + ": err = " + err;
+        } else {
+            return "ERROR: " + filename + ": " + module + ": err = " + err;
+        }
     }
 };

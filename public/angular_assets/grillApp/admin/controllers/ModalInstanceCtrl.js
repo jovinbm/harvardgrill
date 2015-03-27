@@ -2,8 +2,6 @@ angular.module('grillApp')
     .controller('AvailableModalController', ['$window', '$location', '$log', '$scope', '$rootScope', '$interval', '$modalInstance', 'globals', 'grillStatusService', 'ReferenceService', 'EditService',
         function ($window, $location, $log, $scope, $rootScope, $interval, $modalInstance, globals, grillStatusService, ReferenceService, EditService) {
 
-            $scope.isLoading = false;
-
             //variable to keep track if the user made changes to the confirm card that have not been updated yet
             $scope.confirmModalIsDirty = false;
             $scope.makeConfirmModalDirty = function () {
@@ -46,8 +44,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $rootScope.$broadcast('requestErrorHandler', errResponse);
                     });
             }
 
@@ -58,8 +55,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $rootScope.$broadcast('requestErrorHandler', errResponse);
                     });
             }
 
@@ -71,8 +67,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $rootScope.$broadcast('requestErrorHandler', errResponse);
                     });
             }
 
@@ -83,8 +78,7 @@ angular.module('grillApp')
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $scope.showToast("error", "A problem has occurred. Please reload the page");
+                        $rootScope.$broadcast('requestErrorHandler', errResponse);
                     });
             }
 
@@ -119,7 +113,7 @@ angular.module('grillApp')
 
 
             $scope.updateAvailableComponents = function () {
-                $scope.isLoading = true;
+                $scope.isLoadingTrue();
                 var allComponents = [];
                 allComponents = allComponents.concat($scope.allOrderComponents);
                 allComponents = allComponents.concat($scope.allOmelets);
@@ -133,16 +127,12 @@ angular.module('grillApp')
                             text: 'Update successful'
                         });
                         getAllAll();
-                        $scope.isLoading = false;
+                        $scope.isLoadingFalse();
                         $scope.confirmModalIsDirty = false;
                     })
                     .error(function (errResponse) {
-                        console.log(JSON.stringify(errResponse));
-                        $rootScope.$broadcast("showToast", {
-                            toastType: 'error',
-                            text: 'A problem has occurred. Please try again or reload the page'
-                        });
-                        $scope.isLoading = false;
+                        $rootScope.$broadcast('requestErrorHandler', errResponse);
+                        $scope.isLoadingFalse();
                     });
             };
 
@@ -154,4 +144,18 @@ angular.module('grillApp')
             });
 
             $log.info('AvailableModalController booted successfully');
+        }])
+
+    .controller('ConfirmCloseGrillModalController', ['$window', '$location', '$log', '$scope', '$rootScope', '$interval', '$modalInstance',
+        function ($window, $location, $log, $scope, $rootScope, $interval, $modalInstance) {
+
+            $scope.ok = function () {
+                $modalInstance.close("ok");
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss("cancel");
+            };
+
+            $log.info('ConfirmCloseGrillModalController booted successfully');
         }]);

@@ -1,0 +1,33 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">You are about to close the grill!</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="alert alert-danger">
+            <strong>Heads up!</strong></br>
+            <p>Before you do that, note the following</p>
+            <ul>
+                <li>YOU CAN CLOSE THE GRILL BUT THE NEXT REOPEN RESULT INTO LOSS OF ALL CURRENT ORDERS</li>
+                <li>If you just want to update what's available (not adding or deleting), use the card on the
+                    right
+                </li>
+                <li>You can't change delete or add items after the grill is opened. Please attend all orders first,
+                    then close the grill in order to add, edit or delete items
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning"
+                ng-click="cancel()"
+                ng-disabled="isLoading || universalDisable">Cancel
+        </button>
+        <button class="btn btn-primary"
+                ng-click="ok()"
+                ng-disabled="isLoading || universalDisable">I UNDERSTAND
+        </button>
+    </div>
+</div>

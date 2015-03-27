@@ -7,12 +7,29 @@ var mailServer = email.server.connect({
 });
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
-var basic_handlers = require('../handlers/basic_handlers.js');
+
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('basic_api', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('basic_api', module, text);
+};
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('basic_api', module, text, err);
+};
+
+var basic_handler = require('../handlers/basic_handler.js');
 var userDB = require('../db/user_db.js');
 
 
 module.exports = {
     sendEmail: function (req, res) {
+        var module = 'sendEmail';
+        receivedLogger(module);
         res.redirect('login.html');
         var message = {
             text: "Name: " + req.body.name + ", Email: " + req.body.email + ", Message: " + req.body.message,
@@ -21,16 +38,26 @@ module.exports = {
             subject: "HARVARD-GRILL WEBSITE"
         };
         mailServer.send(message, function (err) {
-            consoleLogger(err || "EMAIL: Message sent to jovinbeda@gmail.com");
+            consoleLogger(err || successLogger(module, 'Message sent to jovinbeda@gmail.com'));
         });
     },
 
 
     getSocketRoom: function (req, res) {
+        var module = 'getSocketRoom';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
-                res.status(500).send({msg: "ERROR: getMyRoomGET: Could not retrieve user:"});
-                consoleLogger("ERROR: getMyRoomGET: Could not retrieve user: " + err);
+                res.status(500).send({
+                    type: 'error',
+                    msg: 'Error when trying to start the app. Please reload page',
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: true,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
@@ -41,10 +68,11 @@ module.exports = {
                     customUsername: theUser.customUsername,
                     uniqueCuid: theUser.uniqueCuid
                 });
-            }
+                consoleLogger(successLogger(module));
 
-            consoleLogger("getMyRoomGET success");
-            //TODO -- redirect to custom login
+            } else {
+                res.redirect('login.html');
+            }
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -52,38 +80,58 @@ module.exports = {
 
 
     adminStartUp: function (req, res) {
-        consoleLogger('ADMIN_STARTUP event received');
+        var module = 'adminStartUp';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
-                res.status(500).send({msg: 'adminStartUpAPI: Could not retrieve admin user', err: err});
-                consoleLogger("ERROR: adminStartUpAPI: Could not retrieve admin user: " + err);
+                res.status(500).send({
+                    type: 'error',
+                    msg: 'Error when trying to start the app. Please reload page',
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: true,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
         function success(theUser) {
             if (theUser.customLoggedInStatus == 1) {
-                basic_handlers.adminStartUp(req, res, theUser);
+                basic_handler.adminStartUp(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);
     },
 
     clientStartUp: function (req, res) {
-        consoleLogger('basic_api: CLIENT_STARTUP event received');
+        var module = 'clientStartUp';
+        receivedLogger(module);
+
         function error(status, err) {
             if (status == -1 || status == 0) {
-                res.status(500).send({msg: 'basic_api: clientStartUpAPI: Could not retrieve admin user', err: err});
-                consoleLogger("ERROR: basic_api: clientStartUpAPI: Could not retrieve admin user: " + err);
+                res.status(500).send({
+                    type: 'error',
+                    msg: 'Error when trying to start the app. Please reload page',
+                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    disable: true,
+                    redirectToError: true,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
             }
         }
 
         function success(theUser) {
             if (theUser.customLoggedInStatus == 1) {
-                basic_handlers.clientStartUp(req, res, theUser);
+                basic_handler.clientStartUp(req, res, theUser);
+            } else {
+                res.redirect('login.html');
             }
-            //TODO -- redirect to custom login
         }
 
         userDB.findUser(req.user.openId, error, error, success);

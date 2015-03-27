@@ -41,7 +41,7 @@ angular.module('grillApp')
                             $rootScope.$broadcast('isLoadingFalse');
                         })
                         .error(function (errResponse) {
-                            toastr.error("A fatal error has occurred. Please reload the page", 'Error');
+                            $rootScope.$broadcast('requestErrorHandler', errResponse);
                         });
                 }
 

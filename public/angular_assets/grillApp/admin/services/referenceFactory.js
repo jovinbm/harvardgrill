@@ -54,6 +54,8 @@ angular.module('grillApp')
 
 
             //this function can take in an array and makes an edit reference out of it
+            //this reference is used in the edit page to hold the button classess, and put's the default isInEditingMode to false
+            //isInEditing mode means that there is a content that is being edited in the edit view page
             function editViewReference(componentArray) {
                 if (componentArray.length != 0) {
                     componentArray.forEach(function (component) {
@@ -90,15 +92,6 @@ angular.module('grillApp')
 
                 refreshEditViewReference: function (componentArray) {
                     return editViewReference(componentArray);
-                },
-
-
-                updateGrillStatusCard: function (whatToUpdate, value, broadcast) {
-                    GrillStatusCard[whatToUpdate] = value;
-                    if (broadcast) {
-                        $rootScope.broadcast('newGrillStatusCard', GrillStatusCard);
-                    }
-                    return GrillStatusCard;
                 }
             }
         }]);
