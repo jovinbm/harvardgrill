@@ -105,7 +105,6 @@ module.exports = {
                 myRecentOrders: myRecentOrders
             });
             consoleLogger(successLogger(module));
-
         }
 
         orderDB.getMyRecentOrders(theUser, currentGrillStatus, 10, -1, error, error, success);

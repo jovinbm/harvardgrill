@@ -1,6 +1,6 @@
-var dbURL = 'mongodb://localhost:27017/grill';
-var dbURL = 'mongodb://jovinbm:paka1995@ds049171.mongolab.com:49171/grill';
-//var dbURL = 'mongodb://jovinbm:paka1995@dbh55.mongolab.com:27557/grilldev';
+//var dbURL = 'mongodb://localhost:27017/grill';
+//var dbURL = 'mongodb://jovinbm:paka1995@ds049171.mongolab.com:49171/grill';
+var dbURL = 'mongodb://jovinbm:paka1995@dbh55.mongolab.com:27557/grilldev';
 
 
 //THE APP
