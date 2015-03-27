@@ -1,4 +1,6 @@
 //harvard openId config
+//var returnURL = "https://harvardgrill.herokuapp.com/harvardId";
+//var realmURL = "https://harvardgrill.herokuapp.com";
 var returnURL = "http://localhost:4000/harvardId";
 var realmURL = "http://localhost:4000/";
 
