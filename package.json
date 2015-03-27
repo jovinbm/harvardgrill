@@ -2,8 +2,8 @@
   "name": "grill",
   "version": "1.0.0",
   "engines": {
-    "node": "0.11.15",
-    "npm": "2.5.x"
+    "node": "0.10.x",
+    "npm": "2.1.x"
   },
   "scripts": {
     "start": "node app.js",
