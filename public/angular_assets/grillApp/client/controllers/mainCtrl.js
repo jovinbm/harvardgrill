@@ -352,20 +352,20 @@ angular.module('grillApp')
             //refresh everything on orderStatusChange
             $rootScope.$on('orderStatusChange', function () {
                 getMyRecentOrders();
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                globals.currentGrillStatus(null, true, true);
                 getAllAvailable(true);
             });
 
             //refresh everything on orderStatusChange
             $rootScope.$on('adminChanges', function () {
                 getMyRecentOrders();
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                globals.currentGrillStatus(null, true, true);
                 getAllAvailable(true);
             });
 
             $rootScope.$on('reconnectSuccess', function () {
                 getMyRecentOrders();
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                globals.currentGrillStatus(null, true, true);
                 getAllAvailable(true);
             });
 

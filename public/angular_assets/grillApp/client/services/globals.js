@@ -39,6 +39,10 @@ angular.module('grillApp')
                         .success(function (resp) {
                             currentGrillStatus = resp.currentGrillStatus;
                             $rootScope.$broadcast('isLoadingFalse');
+
+                            if (broadcast) {
+                                $rootScope.$broadcast('currentGrillStatus', currentGrillStatus);
+                            }
                         })
                         .error(function (errResponse) {
                             $rootScope.$broadcast('requestErrorHandler', errResponse);
