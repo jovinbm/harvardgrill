@@ -3,7 +3,7 @@
     <div class="card-content clearfix"
          ng-if="myRecentOrders[0].status != 'processing'">
 
-        <div>
+        <div class="ng-cloak">
             <h1><strong>{{currentTime}}</strong></h1>
 
             <h4><strong>Grill order //</strong>
@@ -14,7 +14,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Order Components</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableOrderComponents">
                 <div>
                     <label>
@@ -32,7 +32,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Omelets</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableOmelets">
                 <div>
                     <label>
@@ -49,7 +49,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Extras</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableExtras">
                 <div>
                     <label>
@@ -66,7 +66,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h6>Weekly Special</h6>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableWeeklySpecials">
                 <div>
                     <label>
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <div class="pull-right">
+        <div class="pull-right ng-cloak">
             <a type="button"
                class="btn btn-primary btn-md"
                ng-disabled="isLoading || universalDisable"
@@ -91,7 +91,7 @@
 
     </div>
 
-    <div class="card-content clearfix"
+    <div class="card-content clearfix ng-cloak"
          ng-if="myRecentOrders[0].status == 'processing'">
         <div class="alert alert-warning">
             <strong>You are allowed to have only one order at a processing stage. Please wait until your current order

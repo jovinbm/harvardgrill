@@ -1,6 +1,6 @@
 <div class="card ng-cloak">
 
-    <div class="card-content">
+    <div class="card-content ng-cloak">
         <h2>{{currentTime}}</h2>
 
         <ul class="list-unstyled"
@@ -26,7 +26,7 @@
             <strong>Grill status:</strong> {{grillStatusReference.grillStatusAlertText}}
         </div>
 
-        <div class="pull-right">
+        <div class="pull-right ng-cloak">
             <a href="#"
                ng-class="grillStatusReference.openCloseClass"
                ng-disabled="isLoading || universalDisable"

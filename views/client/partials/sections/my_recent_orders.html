@@ -7,7 +7,7 @@
         ng-repeat="recentOrder in myRecentOrders">
         <div class="card">
 
-            <div class="card-content">
+            <div class="card-content ng-cloak">
                 <h2>{{recentOrder.momentJsTime}}<br/>
                     <small>{{recentOrder.theTimeAgo}}</small>
                 </h2>
@@ -40,18 +40,18 @@
 
             </div>
 
-            <div class="card-action clearfix">
-                <div class="alert alert-info"
+            <div class="card-action clearfix ng-cloak">
+                <div class="alert alert-info ng-cloak"
                      ng-if="recentOrder.status == 'processing'">
                     <strong>Order status:</strong> Processing
                 </div>
 
-                <div class="alert alert-success"
+                <div class="alert alert-success ng-cloak"
                      ng-if="recentOrder.status == 'done'">
                     <strong>Order status:</strong> This order is ready
                 </div>
 
-                <div class="alert alert-warning"
+                <div class="alert alert-warning ng-cloak"
                      ng-if="recentOrder.status == 'declined'">
                     <strong>Order status:</strong> This order has been declined
                 </div>

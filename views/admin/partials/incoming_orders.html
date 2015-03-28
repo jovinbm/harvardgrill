@@ -3,7 +3,7 @@
     <h1 class="column-heading"><i class="fa fa-list-alt"></i> INCOMING ORDERS
     </h1>
 
-    <!--spinner banner that awaits new orders-->
+    <!--pregress banner that awaits new orders-->
     <div class="alert alert-info ng-cloak"
          ng-if="currentIncomingOrders.length == 0">
         <strong>Awaiting new orders</strong><br/>
@@ -13,7 +13,7 @@
             <div class="progress-bar" style="width: 100%"></div>
         </div>
     </div>
-    <!--end of spinner banner-->
+    <!--end of progress banner-->
 
 
     <ul class="list-unstyled animated fadeIn">
@@ -23,7 +23,7 @@
 
             <div class="card">
 
-                <div class="card-content">
+                <div class="card-content ng-cloak">
                     <h2>{{order.momentJsTime}}<br/>
                         <small>{{order.theTimeAgo}}</small>
                     </h2>
@@ -43,7 +43,7 @@
 
                 </div>
 
-                <div class="card-action clearfix">
+                <div class="card-action clearfix ng-cloak">
                     <div class="pull-right">
                         <a href ng-click="markOrderAsDeclined(order.orderUniqueCuid, order.orderIndex)"
                            ng-disabled="isLoading || universalDisable"
