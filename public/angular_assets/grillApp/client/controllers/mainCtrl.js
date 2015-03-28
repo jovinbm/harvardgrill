@@ -40,8 +40,8 @@ angular.module('grillApp')
             $scope.customUsername = globals.customUsername();
             $scope.uniqueCuid = globals.uniqueCuid();
 
-            //isLoading functions to disable elements while content is loading or processing
-            $scope.isLoading = true;
+            //*****************************isLoading functions to disable elements while content is loading or processing
+            $scope.isLoading = false;
 
             $scope.isLoadingTrue = function () {
                 $scope.isLoading = true;
@@ -58,9 +58,10 @@ angular.module('grillApp')
                 $scope.isLoading = false;
             });
 
-            //end of isLoading functions
+            //**********************************end of isLoading functions
 
 
+            //***********time functions*****************
             $scope.currentTime = "";
 
             //set current Date
@@ -70,15 +71,7 @@ angular.module('grillApp')
             };
             $interval(updateCurrentTime, 20000, 0, true);
 
-            //back navigation functionality -- saves previous urls
-            var history = [];
-            $rootScope.$on('$routeChangeSuccess', function () {
-                history.push($location.$$path);
-            });
-            $rootScope.back = function () {
-                var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
-                $location.path(prevUrl);
-            };
+            //***************end of time functions******************
 
             //initial requests
             socketService.getSocketRoom()
@@ -86,7 +79,6 @@ angular.module('grillApp')
                     globals.socketRoom(data.socketRoom);
                     $scope.customUsername = globals.customUsername(data.customUsername);
                     $scope.uniqueCuid = globals.uniqueCuid(data["uniqueCuid"]);
-                    $rootScope.$broadcast('isLoadingFalse');
                     socket.emit('joinRoom', {
                         room: data.socketRoom,
                         customUsername: data.customUsername
@@ -98,7 +90,7 @@ angular.module('grillApp')
                     $scope.requestErrorHandler(errResponse);
                 });
 
-            //toastr show functions
+            //********************toastr show functions
             $scope.showToast = function (toastType, text) {
                 switch (toastType) {
                     case "success":
@@ -131,12 +123,7 @@ angular.module('grillApp')
                 $scope.showToast(toastType, text);
             });
 
-            //end of toastr show functions
-
-            //receives grill status
-            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
-                $scope.mainCurrentGrillStatus = currentGrillStatus;
-            });
+            //****************************end of toastr show functions
 
 
             //******************loads the available components and deals with order**************
@@ -262,10 +249,10 @@ angular.module('grillApp')
 
             getAllAvailable(true);
 
-            //end of functions that deal with available components
+            //************************end of functions that deal with available components
 
 
-            //functions that deal with sending new orders
+            //***************************functions that deal with sending new orders
             $scope.placeMyNewOrderOrder = function () {
                 $scope.isLoadingTrue();
                 var orderComponentIndexArray = [];
@@ -287,26 +274,27 @@ angular.module('grillApp')
                 if (orderComponentIndexArray.length > 0) {
                     ComponentService.placeMyNewOrder(orderComponentIndexArray)
                         .success(function (resp) {
+                            $scope.myNewOrder = {};
                             getAllAvailable(true);
-                            $scope.mainCurrentGrillStatus = globals.currentGrillStatus(null, true, true);
+                            globals.currentGrillStatus(null, true, true);
                             getMyRecentOrders();
+                            $scope.showToast('success', 'Your order has been placed');
                             $scope.isLoadingFalse();
-                            $scope.showToast('success', 'Your order has been placed')
                         }).error(function (errResponse) {
                             $scope.requestErrorHandler(errResponse);
                             $scope.isLoadingFalse();
                         })
                 } else {
-                    $scope.showToast('warning', 'At least one component has to be selected')
+                    $scope.showToast('warning', 'At least one component has to be selected');
+                    $scope.isLoadingFalse();
                 }
 
             };
 
-            //end of functions for sending in new orders
-
-            //functions for getting my recent orders
+            //**********************end of functions for sending in new orders
 
 
+            //*******************************functions for getting my recent orders
             $scope.myRecentOrders = [];
 
             function updateTimeAgo() {
@@ -335,7 +323,39 @@ angular.module('grillApp')
 
             getMyRecentOrders();
 
-            //end of functions concerned with getting my recent orders
+            //*************continue polling if there is order in processing
+            //if there is a order in processing stage, keep polling the server for the recent orders
+            function checkIfProcessing() {
+                var orderInProcessing = false;
+                $scope.myRecentOrders.forEach(function (recentOrder) {
+                    if (recentOrder.status == 'processing') {
+                        orderInProcessing = true;
+                    }
+                });
+
+                return orderInProcessing;
+            }
+
+            //this function polls the real getMyRecentOrders if there is order in processing
+            function ifProcessingGetMyRecentOrders() {
+                var temp = checkIfProcessing();
+                if (temp) {
+                    getMyRecentOrders();
+                }
+            }
+
+            $interval(ifProcessingGetMyRecentOrders, 60000, 0, true);
+
+            //***************end polling
+
+
+            //*********************************end of functions concerned with getting my recent orders
+
+            //*********crucial intervals
+
+            //gets current grill status
+            $interval(globals.currentGrillStatus(null, true, true), 300000, 0, true);
+            //**********end of crucial intervals
 
 
             //**********************socket listeners
@@ -362,6 +382,12 @@ angular.module('grillApp')
                 globals.currentGrillStatus(null, true, true);
                 getAllAvailable(true);
             });
+
+            //receives grill status
+            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
+                $scope.mainCurrentGrillStatus = currentGrillStatus;
+            });
+
 
             $rootScope.$on('reconnectSuccess', function () {
                 getMyRecentOrders();

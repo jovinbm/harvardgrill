@@ -3,6 +3,19 @@
     <h1 class="column-heading"><i class="fa fa-list-alt"></i> INCOMING ORDERS
     </h1>
 
+    <!--spinner banner that awaits new orders-->
+    <div class="alert alert-info ng-cloak"
+         ng-if="currentIncomingOrders.length == 0">
+        <strong>Awaiting new orders</strong><br/>
+        New orders will appear here as soon as they are
+        available
+        <div class="progress progress-striped active">
+            <div class="progress-bar" style="width: 100%"></div>
+        </div>
+    </div>
+    <!--end of spinner banner-->
+
+
     <ul class="list-unstyled animated fadeIn">
 
         <li class="list-unstyled clearfix"

@@ -21,15 +21,10 @@ angular.module('grillApp')
             if ($scope.stateChanges < 2) {
                 $scope.currentGrillStatus = globals.currentGrillStatus();
             } else {
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                globals.currentGrillStatus(null, true, true);
             }
             $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
 
-            //receives grill status
-            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
-                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard(currentGrillStatus);
-                $scope.currentGrillStatus = currentGrillStatus;
-            });
 
             //*****************end of refreshing the current grill status***********
 
@@ -47,6 +42,9 @@ angular.module('grillApp')
             $scope.allWeeklySpecials = [];
             $scope.allExtras = [];
 
+            //the editView reference carries variable classes for the edit, save and cancel
+            //buttons in the editView.
+            //it is updated by the ReferenceService.refreshEditViewReference() function
             $scope.editViewReference = {};
 
             //request all components;
@@ -147,6 +145,9 @@ angular.module('grillApp')
             //****************open/close grill************************
             //function to open grill
             $scope.openCloseGrill = function () {
+                $scope.isLoadingTrue();
+
+                //the openclose class is updated back by either a success, or manually when there is an error
                 $scope.grillStatusReference.openCloseClass = "btn btn-primary btn-xs disabled";
 
                 if ($scope.currentGrillStatus.grillStatus == "closed") {
@@ -156,15 +157,17 @@ angular.module('grillApp')
                             console.log(result);
                             grillStatusService.openGrill()
                                 .success(function (resp) {
+                                    $scope.isLoadingFalse();
                                     globals.currentGrillStatus(resp.newGrillStatus, true);
                                     $scope.showToast("success", "The Grill is now open");
                                 })
                                 .error(function (errResponse) {
+                                    $scope.isLoadingFalse();
                                     $scope.requestErrorHandler(errResponse);
                                 });
                         }, function (error) {
+                            $scope.isLoadingFalse();
                             $scope.grillStatusReference.openCloseClass = "btn btn-default btn-xs";
-                            console.log(error);
                         });
                 } else if ($scope.currentGrillStatus.grillStatus == "open") {
                     var cModalInstance = $scope.openConfirmCloseModalInstance();
@@ -357,11 +360,20 @@ angular.module('grillApp')
             //**************** end of functions for manipulating components == add,edit,delete
 
 
+            //*******************socket listeners
+
+            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
+                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard(currentGrillStatus);
+                $scope.currentGrillStatus = currentGrillStatus;
+            });
+
             $rootScope.$on('reconnectSuccess', function () {
                 getAllAll();
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                globals.currentGrillStatus(null, true, true);
                 $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
             });
+
+            //***********************end of socket listeners
 
             $log.info('EditViewController booted successfully');
         }

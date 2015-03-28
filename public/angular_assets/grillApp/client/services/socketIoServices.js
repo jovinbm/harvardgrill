@@ -48,17 +48,14 @@ angular.module('grillApp')
 
             return {
                 getSocketRoom: function () {
-                    $rootScope.$broadcast('isLoadingTrue');
                     return $http.get('/api/getMyRoom');
                 },
 
                 clientStartUp: function () {
-                    $rootScope.$broadcast('isLoadingTrue');
                     return $http.post('/api/clientStartUp');
                 },
 
                 getCurrentGrillStatus: function () {
-                    $rootScope.$broadcast('isLoadingTrue');
                     return $http.post('/api/getCurrentGrillStatus');
                 }
             }

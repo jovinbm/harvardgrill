@@ -34,11 +34,9 @@ angular.module('grillApp')
 
             currentGrillStatus: function (newGrillStatus, broadcast, refreshGrillStatus) {
                 if (refreshGrillStatus) {
-                    $rootScope.$broadcast('isLoadingTrue');
                     socketService.getCurrentGrillStatus()
                         .success(function (resp) {
                             currentGrillStatus = resp.currentGrillStatus;
-                            $rootScope.$broadcast('isLoadingFalse');
 
                             if (broadcast) {
                                 $rootScope.$broadcast('currentGrillStatus', currentGrillStatus);

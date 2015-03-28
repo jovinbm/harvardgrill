@@ -5,7 +5,7 @@ angular.module('grillApp')
             //array that holds current incoming orders
             $scope.currentIncomingOrders = [];
 
-            //this variables keys are orderIndexes of the currentIncoming orders.
+            //this variables' keys are orderIndexes of the currentIncoming orders.
             //each key carries an object whose keys are the orderComponents indexes that the client ordered (looped from the orderComponent array on the order)
             //the values can either be 'yes' or 'no' depending on what is processed
             //the default value is 'no'
@@ -44,6 +44,15 @@ angular.module('grillApp')
                 }
             }
 
+            //*************continue polling for new orders if admin has no orders on screen
+            //call the socketRefresh function
+
+            $interval(socketRefresh(), 30000, 0, true);
+
+            //***************end polling
+
+
+            //*************function to update timeago on all orders in the currentIncoming
             //updates the timeago on all incoming orders using the timeago filter
             function updateTimeAgo() {
                 $scope.currentIncomingOrders.forEach(function (order) {
@@ -53,45 +62,8 @@ angular.module('grillApp')
 
             $interval(updateTimeAgo, 60000, 0, true);
 
+            //*********end of functions to update timeago
 
-            //receives the adminClientOrders that contains an array of all the current Incoming orders
-            $rootScope.$on('adminClientOrdersRefresh', function (event, data) {
-                data.forEach(function (order) {
-
-                    //updates the processedOrderModels
-                    $scope.processedOrderModels[order.orderIndex] = {};
-                    order.orderComponents.forEach(function (componentIndex) {
-                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'no';
-                    });
-
-                    order.theTimeAgo = $filter('timeago')(order.orderTime);
-                    order.momentJsTime = moment(order.orderTime).format("ddd, MMM D, H:mm");
-                    order.theTimeAgo = $filter('timeago')(order.orderTime);
-                });
-                $scope.currentIncomingOrders = data;
-            });
-
-            //receives the broadcast that contains one order after admin has processed or declines another order
-            $rootScope.$on('adminClientOrdersRefreshNoRefresh', function (event, data) {
-                data.forEach(function (order) {
-
-                    //updates the processedOrderModels
-                    $scope.processedOrderModels[order.orderIndex] = {};
-                    order.orderComponents.forEach(function (componentIndex) {
-                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'no';
-                    });
-
-                    order.theTimeAgo = $filter('timeago')(order.orderTime);
-                    order.momentJsTime = moment(order.orderTime).format("ddd, MMM D, H:mm");
-                    order.theTimeAgo = $filter('timeago')(order.orderTime);
-                });
-
-                //push the one order, which is of course the first element of the array received
-                //only push if the data contains some order, to avoid pushing null
-                if (data.length > 0) {
-                    $scope.currentIncomingOrders.push(data[0]);
-                }
-            });
 
             //*****************admin order actions*********************
 
@@ -200,6 +172,47 @@ angular.module('grillApp')
                 $log.info("'newOrders' event received");
                 socketRefresh();
             });
+
+            //receives the adminClientOrders that contains an array of all the current Incoming orders
+            $rootScope.$on('adminClientOrdersRefresh', function (event, data) {
+                data.forEach(function (order) {
+
+                    //updates the processedOrderModels
+                    $scope.processedOrderModels[order.orderIndex] = {};
+                    order.orderComponents.forEach(function (componentIndex) {
+                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'no';
+                    });
+
+                    order.theTimeAgo = $filter('timeago')(order.orderTime);
+                    order.momentJsTime = moment(order.orderTime).format("ddd, MMM D, H:mm");
+                    order.theTimeAgo = $filter('timeago')(order.orderTime);
+                });
+                $scope.currentIncomingOrders = data;
+            });
+
+            //receives the broadcast that contains one order after admin has processed or declines another order
+            $rootScope.$on('adminClientOrdersRefreshNoRefresh', function (event, data) {
+                data.forEach(function (order) {
+
+                    //updates the processedOrderModels
+                    $scope.processedOrderModels[order.orderIndex] = {};
+                    order.orderComponents.forEach(function (componentIndex) {
+                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'no';
+                    });
+
+                    order.theTimeAgo = $filter('timeago')(order.orderTime);
+                    order.momentJsTime = moment(order.orderTime).format("ddd, MMM D, H:mm");
+                    order.theTimeAgo = $filter('timeago')(order.orderTime);
+                });
+
+                //push the one order, which is of course the first element of the array received
+                //only push if the data contains some order, to avoid pushing null
+                if (data.length > 0) {
+                    $scope.currentIncomingOrders.push(data[0]);
+                }
+            });
+
+            //********************end of socket listeners
 
 
             $log.info('IncomingController booted successfully');

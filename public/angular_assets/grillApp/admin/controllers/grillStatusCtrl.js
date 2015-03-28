@@ -28,15 +28,13 @@ angular.module('grillApp')
             if ($scope.stateChanges < 2) {
                 $scope.currentGrillStatus = globals.currentGrillStatus();
             } else {
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                globals.currentGrillStatus(null, true, true);
             }
-            $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
 
-            //receives grill status
-            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
-                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard(currentGrillStatus);
-                $scope.currentGrillStatus = currentGrillStatus;
-            });
+            //the grillStatus reference holds the grillStatusCard classes such as
+            //openCloseText, openCloseClass, grillStatusAlertText, grillStatusAlertClass
+            //it is updated by the ReferenceService.refreshGrillStatusCard() function
+            $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
 
             //*****************end of refreshing the current grill status***********
 
@@ -58,6 +56,7 @@ angular.module('grillApp')
 
 
             //****************end of available modal controller********************
+
 
             //*****************confirm_close_grill modal controller****************
             //size can be empty==normal; 'lg'==large; 'sm'==small
@@ -81,6 +80,8 @@ angular.module('grillApp')
             //function to open grill
             $scope.openCloseGrill = function () {
                 $scope.isLoadingTrue();
+
+                //the openclose class is updated back by either a success, or manually when there is an error
                 $scope.grillStatusReference.openCloseClass = "btn btn-primary btn-xs disabled";
 
                 if ($scope.currentGrillStatus.grillStatus == "closed") {
@@ -136,14 +137,11 @@ angular.module('grillApp')
             $scope.allWeeklySpecials = [];
             $scope.allExtras = [];
 
-            $scope.editViewReference = {};
-
             //request all components;
             function getAllOrderComponents() {
                 EditService.getAllOrderComponents()
                     .success(function (orderComponents) {
                         $scope.allOrderComponents = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $scope.requestErrorHandler(errResponse);
@@ -154,7 +152,6 @@ angular.module('grillApp')
                 EditService.getAllOmelets()
                     .success(function (orderComponents) {
                         $scope.allOmelets = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $scope.requestErrorHandler(errResponse);
@@ -166,7 +163,6 @@ angular.module('grillApp')
                 EditService.getAllWeeklySpecials()
                     .success(function (orderComponents) {
                         $scope.allWeeklySpecials = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $scope.requestErrorHandler(errResponse);
@@ -177,7 +173,6 @@ angular.module('grillApp')
                 EditService.getAllExtras()
                     .success(function (orderComponents) {
                         $scope.allExtras = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $scope.requestErrorHandler(errResponse);
@@ -210,7 +205,7 @@ angular.module('grillApp')
                 })
             };
 
-            //this function unselects all weekly specials. It turns their available key values to 'no
+            //this function un-selects all weekly specials. It turns their available key values to 'no
             $scope.unSelectAllWeeklySpecials = function () {
                 $scope.availableCardIsDirty = true;
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
@@ -242,11 +237,21 @@ angular.module('grillApp')
             };
 
 
+            //***********************socket listeners
+
+            //receives grill status
+            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
+                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard(currentGrillStatus);
+                $scope.currentGrillStatus = currentGrillStatus;
+            });
+
             $rootScope.$on('reconnectSuccess', function () {
                 $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
                 $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
                 getAllAll();
             });
+
+            //************************end of socket listeners
 
             $log.info('GrillStatusController booted successfully');
         }

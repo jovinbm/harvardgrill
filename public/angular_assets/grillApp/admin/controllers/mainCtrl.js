@@ -36,6 +36,7 @@ angular.module('grillApp')
 
             //***************end of request error handler**************
 
+
             //*******isLoadingFunctions****************
             $scope.isLoading = false;
 
@@ -60,6 +61,7 @@ angular.module('grillApp')
             $scope.customUsername = globals.customUsername();
             $scope.uniqueCuid = globals.uniqueCuid();
 
+            //****************toastr functions
             $scope.showToast = function (toastType, text) {
                 switch (toastType) {
                     case "success":
@@ -92,6 +94,9 @@ angular.module('grillApp')
                 $scope.showToast(toastType, text);
             });
 
+            //*****************end of toastr functions
+
+
             //keeping track of how many times the state has changed (useful for refreshing controllers if the state has changed once)
             $scope.stateChanges = 0;
             $rootScope.$on('$stateChangeSuccess',
@@ -99,15 +104,6 @@ angular.module('grillApp')
                     $scope.stateChanges++;
                 });
 
-            //back navigation functionality -- saves previous urls
-            var history = [];
-            $rootScope.$on('$routeChangeSuccess', function () {
-                history.push($location.$$path);
-            });
-            $rootScope.back = function () {
-                var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
-                $location.path(prevUrl);
-            };
 
             //initial requests
             socketService.getSocketRoom()
@@ -126,6 +122,9 @@ angular.module('grillApp')
                     $scope.requestErrorHandler(errResponse);
                 });
 
+
+
+            //***************functions to deal with all key component indexes
 
             //allComponentsIndexNames is a variable that caries all references to the names of all component index
             //the key is the componentIndex, and value is it's name. It is updated by the function 'getAllComponentsIndexNames'
@@ -146,6 +145,8 @@ angular.module('grillApp')
             }
 
             getAllComponentsIndexNames();
+
+            //*******************end of functions concrned with allComponent indexes
 
 
             $log.info('MainController booted successfully');

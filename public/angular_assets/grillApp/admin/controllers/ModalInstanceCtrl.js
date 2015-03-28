@@ -2,46 +2,26 @@ angular.module('grillApp')
     .controller('AvailableModalController', ['$window', '$location', '$log', '$scope', '$rootScope', '$interval', '$modalInstance', 'globals', 'grillStatusService', 'ReferenceService', 'EditService',
         function ($window, $location, $log, $scope, $rootScope, $interval, $modalInstance, globals, grillStatusService, ReferenceService, EditService) {
 
+            globals.currentGrillStatus(null, true, true);
+
             //variable to keep track if the user made changes to the confirm card that have not been updated yet
             $scope.confirmModalIsDirty = false;
             $scope.makeConfirmModalDirty = function () {
                 $scope.confirmModalIsDirty = true;
             };
 
-            $scope.ok = function () {
-                $modalInstance.close("ok");
-            };
 
-            $scope.cancel = function () {
-                $modalInstance.dismiss("cancel");
-            };
-
-
-            $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
-            $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
-
-
-            //receives grill status
-            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
-                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard(currentGrillStatus);
-                $scope.currentGrillStatus = currentGrillStatus;
-            });
-
-
+            //******************order components******************************
             //functions to get all order components
             $scope.allOrderComponents = [];
             $scope.allOmelets = [];
             $scope.allWeeklySpecials = [];
             $scope.allExtras = [];
 
-            $scope.editViewReference = {};
-
-            //request all components;
             function getAllOrderComponents() {
                 EditService.getAllOrderComponents()
                     .success(function (orderComponents) {
                         $scope.allOrderComponents = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $rootScope.$broadcast('requestErrorHandler', errResponse);
@@ -52,7 +32,6 @@ angular.module('grillApp')
                 EditService.getAllOmelets()
                     .success(function (orderComponents) {
                         $scope.allOmelets = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $rootScope.$broadcast('requestErrorHandler', errResponse);
@@ -64,7 +43,6 @@ angular.module('grillApp')
                 EditService.getAllWeeklySpecials()
                     .success(function (orderComponents) {
                         $scope.allWeeklySpecials = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $rootScope.$broadcast('requestErrorHandler', errResponse);
@@ -75,7 +53,6 @@ angular.module('grillApp')
                 EditService.getAllExtras()
                     .success(function (orderComponents) {
                         $scope.allExtras = orderComponents.allComponents;
-                        $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
                     })
                     .error(function (errResponse) {
                         $rootScope.$broadcast('requestErrorHandler', errResponse);
@@ -90,8 +67,12 @@ angular.module('grillApp')
                 getAllExtras();
             }
 
+            //get all components
             getAllAll();
 
+            //this functions enables the use of checkbox as a radio button on the weekly special available/not-available card
+            //it takes in the componentIndex and makes it's available key to yes, which switches on the checkbox(ng-true-value == 'yes
+            //after that, it turns all weekly special available values to 'no' hence checkbox
             $scope.weeklySpecialRadioChange = function (componentIndex) {
                 $scope.confirmModalIsDirty = true;
                 //manipulate al weekly specials
@@ -104,6 +85,7 @@ angular.module('grillApp')
                 })
             };
 
+            //this function unselects all weekly specials. It turns their available key values to 'no
             $scope.unSelectAllWeeklySpecials = function () {
                 $scope.confirmModalIsDirty = true;
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
@@ -112,6 +94,7 @@ angular.module('grillApp')
             };
 
 
+            //function used to update available components
             $scope.updateAvailableComponents = function () {
                 $scope.isLoadingTrue();
                 var allComponents = [];
@@ -137,11 +120,31 @@ angular.module('grillApp')
             };
 
 
+            //******************socket listeners
+
+            //receives grill status
+            $rootScope.$on('currentGrillStatus', function (event, currentGrillStatus) {
+                $scope.currentGrillStatus = currentGrillStatus;
+            });
+
             $rootScope.$on('reconnectSuccess', function () {
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
-                $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
+                globals.currentGrillStatus(null, true, true);
                 getAllAll();
             });
+
+            //***********************end of socket listeners
+
+
+            //********************modal actions
+            $scope.ok = function () {
+                $modalInstance.close("ok");
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss("cancel");
+            };
+            //end of modal actions
+
 
             $log.info('AvailableModalController booted successfully');
         }])
