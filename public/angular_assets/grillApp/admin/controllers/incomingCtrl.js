@@ -47,7 +47,7 @@ angular.module('grillApp')
             //*************continue polling for new orders if admin has no orders on screen
             //call the socketRefresh function
 
-            $interval(socketRefresh(), 30000, 0, true);
+            $interval(socketRefresh, 30000, 0, true);
 
             //***************end polling
 

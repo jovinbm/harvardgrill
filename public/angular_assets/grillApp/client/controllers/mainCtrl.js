@@ -353,8 +353,12 @@ angular.module('grillApp')
 
             //*********crucial intervals
 
-            //gets current grill status
-            $interval(globals.currentGrillStatus(null, true, true), 300000, 0, true);
+            //polls current grill status
+            function pollCurrentGrillStatus() {
+                globals.currentGrillStatus(null, true, true);
+            }
+
+            $interval(pollCurrentGrillStatus, 300000, 0, true);
             //**********end of crucial intervals
 
 
