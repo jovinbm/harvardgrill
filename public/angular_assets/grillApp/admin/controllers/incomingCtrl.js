@@ -180,7 +180,10 @@ angular.module('grillApp')
                     //updates the processedOrderModels
                     $scope.processedOrderModels[order.orderIndex] = {};
                     order.orderComponents.forEach(function (componentIndex) {
-                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'no';
+
+                        //set the default to yes, as this makes it easy for thr admin to uncheck unavailable
+                        //than available
+                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'yes';
                     });
 
                     order.theTimeAgo = $filter('timeago')(order.orderTime);
@@ -197,7 +200,10 @@ angular.module('grillApp')
                     //updates the processedOrderModels
                     $scope.processedOrderModels[order.orderIndex] = {};
                     order.orderComponents.forEach(function (componentIndex) {
-                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'no';
+
+                        //set the default to yes, as this makes it easy for thr admin to uncheck unavailable
+                        //than available
+                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'yes';
                     });
 
                     order.theTimeAgo = $filter('timeago')(order.orderTime);
