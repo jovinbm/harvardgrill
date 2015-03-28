@@ -33,6 +33,22 @@ var componentAPI = require('./routes/component_api');
 var orderAPI = require('./routes/order_api');
 var logoutAPI = require('./routes/logout_api.js');
 
+var receivedLogger = function (module) {
+    var rL = require('./functions/basic.js').receivedLogger;
+    rL('app.js', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('./functions/basic.js').successLogger;
+    return sL('app.js', module, text);
+};
+
+var errorLogger = function (module, text, err) {
+    var eL = require('./functions/basic.js').errorLogger;
+    return eL('app.js', module, text, err);
+};
+
+
 //version1 of connect
 mongoose.connect(dbURL);
 var db = mongoose.connection;
@@ -86,6 +102,7 @@ app.use(passport.session());
 //configure passport
 require('./passport/passport.js')(passport, OpenIDStrategy, LocalStrategy);
 
+
 //insert any new client into a unique room == to his socketID
 io.on('connection', function (socket) {
     socket.on('joinRoom', function (data) {
@@ -95,29 +112,83 @@ io.on('connection', function (socket) {
     });
 });
 
-
+//harvard login
 app.post('/harvardId/login', passport.authenticate('openid'));
+
+
 //admin login
-app.post('/adminLogin',
-    passport.authenticate('local', {
+app.post('/adminUserLogin', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        var module = 'app.post /adminUserLogin';
 
-        //the login1 in router will figure out if this user is an admin or not
-        successRedirect: '/login1.html',
-
-        //return the user to the admin login page
-        failureRedirect: '/views/admin_login.html'
-    }));
+        if (err) {
+            errorLogger(module, err, err);
+            return res.render("admin_login", {
+                errorCode: 1,
+                errorMessage: err
+            });
+        }
+        if (!user) {
+            errorLogger(module, info, info);
+            return res.render("admin_login", {
+                errorCode: 1,
+                errorMessage: info
+            });
+        }
+        req.logIn(user, function (err) {
+            if (err) {
+                errorLogger(module, err, err);
+                return res.render("admin_login", {
+                    errorCode: 1,
+                    errorMessage: "A problem occurred when trying to log you in. Please try again"
+                });
+            }
+            return res.redirect('login1.html');
+        });
+    })(req, res, next);
+});
 
 //client login
-app.get('/harvardId',
-    passport.authenticate('openid', {
-        successRedirect: '/login1.html',
-        failureRedirect: '/login.html'
-    }));
+app.get('/harvardId', function (req, res, next) {
+    passport.authenticate('openid', function (err, user, info) {
+        var module = 'app.post /harvardId';
+
+        if (err) {
+            errorLogger(module, err, err);
+            return res.render('login', {
+                errorCode: 1,
+                errorMessage: "Authentication failed. Please try again"
+            })
+        }
+        if (!user) {
+            errorLogger(module, "Authentication failed. Please try again", err);
+            return res.render('login', {
+                errorCode: 1,
+                errorMessage: "Authentication failed. Please try again"
+            })
+        }
+        req.logIn(user, function (err) {
+            if (err) {
+                errorLogger(module, err, err);
+                return res.render('login', {
+                    errorCode: 1,
+                    errorMessage: "Authentication failed. Please try again"
+                })
+            }
+            return res.redirect('login1.html');
+        });
+    })(req, res, next);
+});
+//app.get('/harvardId',
+//    passport.authenticate('openid', {
+//        successRedirect: '/login1.html',
+//        failureRedirect: '/login.html'
+//    }));
 
 
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
+app.get('/adminLogin.html', routes.admin_login_Html);
 app.get('/login1.html', authenticate.ensureAuthenticated, routes.login_1_Html);
 app.get('/admin.html', authenticate.ensureAuthenticated, routes.admin_Html);
 app.get('/client.html', authenticate.ensureAuthenticated, routes.client_Html);
@@ -162,6 +233,22 @@ app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.
 app.post('/api/logoutCustomOrder', authenticate.ensureAuthenticated, logoutAPI.logoutCustomOrder);
 app.post('/api/logoutHarvardOrder', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardOrder);
 app.post('/api/adminLogout', authenticate.ensureAuthenticated, logoutAPI.adminLogout);
+
+//error handlers
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// error handlers
+app.use(function (err, req, res, next) {
+    res.status(err.status);
+    res.sendFile(path.join(__dirname, './public/error/', '404.html'));
+    errorLogger('404 Handler', 'New 404 DEVELOPMENT error');
+});
+
 
 server.listen(port, function () {
     consoleLogger("Server listening at port " + port);

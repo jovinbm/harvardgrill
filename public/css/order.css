@@ -9,6 +9,24 @@ body {
     font-size: 12px;
 }
 
+/*****************styling the mobile navigation*****************/
+
+li.mobile_nav_tabs.col-xs-4 {
+    padding: 0;
+    text-align: center;
+}
+
+/******************end of styling the mobile nav*****************/
+
+/****************styling the banners***************/
+
+div.alert.grill_open_or_close_top_banner {
+    /*increase the top margin to make it appear well on mobile, because of second nav*/
+    margin-top: 5px;
+}
+
+/*************end of styling banners*******************/
+
 .text-outputs {
     word-wrap: break-word;
 }

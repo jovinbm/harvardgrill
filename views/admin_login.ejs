@@ -81,8 +81,18 @@
 
 <!--start of admin login form-->
 <div class="container">
+
+    <!--login error banner-->
+    <% if (errorCode == 1 || errorCode == 2) { %>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong><%= errorMessage %></strong>
+    </div>
+    <% } %>
+    <!--end of admin login error banner-->
+
     <!--data-dv attributes for bootstrap validator plugin-->
-    <form action="/adminLogin"
+    <form action="/adminUserLogin"
           method="post"
           id="adminLoginForm"
           data-bv-message="This value is not valid"

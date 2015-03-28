@@ -5,7 +5,7 @@ angular.module('grillApp')
             $scope.adminLogout = function () {
                 logoutService.adminLogout()
                     .success(function (response) {
-                        $window.location.href = "/views/admin_login.html";
+                        $window.location.href = "/adminLogin.html";
                     })
                     .error(function (errResponse) {
                         $scope.requestErrorHandler(errResponse);

@@ -1,3 +1,19 @@
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('passport.js', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('passport.js', module, text);
+};
+
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('passport.js', module, text, err);
+};
+
+
 //harvard openId config
 //var returnURL = "https://harvardgrill.herokuapp.com/harvardId";
 //var realmURL = "https://harvardgrill.herokuapp.com";
@@ -18,6 +34,8 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             profile: true
         },
         function (identifier, profile, done) {
+            var module = 'OpenIDStrategy';
+
             var openId = identifier;
             var uniqueCuid = cuid();
             var socketRoom = cuid();
@@ -26,29 +44,24 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
             //defining all callbacks
             function error(status, err) {
-                consoleLogger("**** Passport.use err = " + err);
-                if (status == -1 || status == 0) {
-                    var user = new User({
-                        openId: openId,
-                        uniqueCuid: uniqueCuid,
-                        socketRoom: socketRoom,
-                        displayName: displayName,
-                        email: email
-                    });
+                var user = new User({
+                    openId: openId,
+                    uniqueCuid: uniqueCuid,
+                    socketRoom: socketRoom,
+                    displayName: displayName,
+                    email: email
+                });
 
-                    function saveError(status, err) {
-                        if (status == -1) {
-                            consoleLogger("**** Passport.use: saveError = " + err);
-                            done(new Error("ERROR: app.js: passport.use: Error saving/ retrieving info"));
-                        }
-                    }
-
-                    function saveSuccess(theSavedUser) {
-                        done(null, theSavedUser)
-                    }
-
-                    userDB.saveUser(user, saveError, saveError, saveSuccess);
+                function saveError(status, err) {
+                    errorLogger(module, 'Error saving user', err);
+                    done("Authentication failed. Please try again", false);
                 }
+
+                function saveSuccess(theSavedUser) {
+                    done(null, theSavedUser)
+                }
+
+                userDB.saveUser(user, saveError, saveError, saveSuccess);
             }
 
             function success(theUser) {
@@ -62,6 +75,8 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
     passport.use(new LocalStrategy(
         function (username, password, done) {
+            var module = 'LocalStrategy';
+
             if (username.length > 0 && password.length > 0 && password == 'hgadmin') {
                 var openId = cuid();
                 var isAdmin = 'yes';
@@ -84,10 +99,8 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 });
 
                 function saveError(status, err) {
-                    if (status == -1) {
-                        consoleLogger("**** Passport.use: saveError = " + err);
-                        done(new Error("ERROR: app.js: passport.use: Error saving/ retrieving info"));
-                    }
+                    errorLogger(module, 'Error saving user', err);
+                    done("A problem occurred while trying to log you in. Please try again", false);
                 }
 
                 function saveSuccess(theSavedUser) {
@@ -97,7 +110,8 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 userDB.saveUser(user, saveError, saveError, saveSuccess);
 
             } else {
-                done(new Error("ERROR: app.js: passport.use: Incorrect Username or Password"));
+                errorLogger(module, 'Failed! User local strategy authentication failed');
+                done(null, false, 'You have entered incorrect credentials. Please try again')
             }
         }
     ));
@@ -111,7 +125,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
         //deserialize the saved openId in session and find the user with the userId
         function error(status) {
             if (status == -1 || status == 0) {
-                done(new Error("ERROR: app.js: passport.deserializeUser: Error retrieving info"));
+                next(null, false);
             }
         }
 

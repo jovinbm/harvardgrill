@@ -52,7 +52,7 @@
                 <li><a href="https://my.harvard.edu" target="_blank">my.harvard.edu</a></li>
                 <li><a href="https://canvas.harvard.edu/" target="_blank">Canvas</a></li>
                 <li><a href="#">About</a></li>
-                <li><a href="/views/admin_login.html">Admin Login</a></li>
+                <li><a href="/adminLogin.html">Admin Login</a></li>
             </ul>
         </div>
     </div>
@@ -81,6 +81,16 @@
 
 <!--start of login with Harvard ID-->
 <div class="container text-center">
+
+    <!--login error banner-->
+    <% if (errorCode == 1 || errorCode == 2) { %>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong><%= errorMessage %></strong>
+    </div>
+    <% } %>
+    <!--end of admin login error banner-->
+
     <form action="/harvardId/login"
           method="post"
           id="harvardIdLoginForm">

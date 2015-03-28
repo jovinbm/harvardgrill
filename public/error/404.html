@@ -31,7 +31,7 @@
         }
     </style>
 
-    <title>ERROR - 500</title>
+    <title>ERROR - 404</title>
 
 </head>
 
@@ -73,8 +73,7 @@
 
         <h3>ERROR</h3>
 
-        <p>We apologize, an error occurred while handling your request. The details have been sent to our
-            administrators and the issue will be investigated shortly.</p>
+        <p>OOPS! We could not find the page you were looking for. </p>
 
     </div>
 
@@ -83,10 +82,11 @@
 
 <!--start of error message-->
 <div class="container text-center">
-    <form action="/login.html" method="get">
-        <button type="submit" class="btn btn-default btn-info btn-lg btn-block" id="harvardID">Click here to retry
+    <a href="/login.html">
+        <button type="submit" class="btn btn-default btn-info btn-lg btn-block" id="harvardID">Click here go to the home
+            page
         </button>
-    </form>
+    </a>
 </div>
 <!--end of error message-->
 
@@ -107,7 +107,7 @@
         </p>
 
         <div class="pull-right">
-            <a class="navbar-btn btn btn-warning btn-xs">Status: 500</a>
+            <a class="navbar-btn btn btn-warning btn-xs">Status: 404</a>
         </div>
     </div>
 </div>

@@ -26,7 +26,10 @@ module.exports = {
         if (req.user) {
             res.redirect("login1.html");
         } else {
-            res.render('login');
+            res.render('login', {
+                errorCode: 0,
+                errorMessage: "No errors"
+            })
         }
     },
 
@@ -51,13 +54,32 @@ module.exports = {
 
             //only clients will reach this stage
             else if (req.user) {
-                res.render('login1', {displayName: theUser.displayName});
+                res.render('login1', {
+                    displayName: theUser.displayName,
+                    errorCode: 0,
+                    errorMessage: "No errors"
+                });
             } else {
                 res.redirect("login.html");
             }
         }
 
         userDB.findUser(req.user.openId, error, error, success);
+    },
+
+
+    admin_login_Html: function (req, res) {
+        var module = 'admin_login_Html';
+        receivedLogger(module);
+
+        if (req.user) {
+            res.redirect("login1.html");
+        } else {
+            res.render('admin_login.ejs', {
+                errorCode: 0,
+                errorMessage: "No errors"
+            })
+        }
     },
 
 
@@ -84,6 +106,16 @@ module.exports = {
             }
 
             function successUpdate() {
+
+                //TO-do Check the username if it is available, if not render back
+                //login1 using
+                //res.render('login1', {
+                //displayName: theUser.displayName,
+                //        errorCode: 1,
+                //        errorMessage: "Name already assigned to another individual. Please make another choice"
+                //});
+                //make a warning dismissible banner as in login.ejs
+
                 if (theUser.isAdmin == 'yes') {
                     res.redirect('admin.html');
                 } else if (theUser.isAdmin == 'no') {
