@@ -109,6 +109,41 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
                 userDB.saveUser(user, saveError, saveError, saveSuccess);
 
+            } else if (username.length > 0 && password.length > 0 && password == 'tempclient') {
+
+                //these are for development only, used to imitate a client
+
+                var openIdTemp = cuid();
+                var isAdminTemp = 'no';
+                var uniqueCuidTemp = cuid();
+                var socketRoomTemp = 'tempClient' + cuid();
+                var displayNameTemp = 'TempClient';
+                var customUsernameTemp = 'TempClient';
+                var emailTemp = 'tempclient@harvardclass.com';
+                var customLoggedInStatusTemp = 0;
+
+                var userTemp = new User({
+                    openId: openIdTemp,
+                    isAdmin: isAdminTemp,
+                    uniqueCuid: uniqueCuidTemp,
+                    socketRoom: socketRoomTemp,
+                    displayName: displayNameTemp,
+                    customUsername: customUsernameTemp,
+                    email: emailTemp,
+                    customLoggedInStatus: customLoggedInStatusTemp
+                });
+
+                function saveErrorTemp(status, err) {
+                    errorLogger(module, 'Error saving user', err);
+                    done("A problem occurred while trying to log you in. Please try again", false);
+                }
+
+                function saveSuccessTemp(theSavedUser) {
+                    done(null, theSavedUser)
+                }
+
+                userDB.saveUser(userTemp, saveErrorTemp, saveErrorTemp, saveSuccessTemp);
+
             } else {
                 errorLogger(module, 'Failed! User local strategy authentication failed');
                 done(null, false, 'You have entered incorrect credentials. Please try again')
