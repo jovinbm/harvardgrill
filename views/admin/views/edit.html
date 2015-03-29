@@ -73,7 +73,8 @@
                 <tr ng-repeat="orderComponent in allOrderComponents">
                     <td>{{orderComponent.componentIndex}}</td>
 
-                    <td ng-if="!editViewReference[orderComponent.componentIndex].componentEditingMode">
+                    <td ng-if="!editViewReference[orderComponent.componentIndex].componentEditingMode"
+                        class="text-outputs">
                         {{orderComponent.name}}
                         <div class="pull-right">
                             <button ng-class="editViewReference[orderComponent.componentIndex].editButtonClass"
@@ -165,7 +166,8 @@
 
                     <td>{{omelet.componentIndex}}</td>
 
-                    <td ng-if="!editViewReference[omelet.componentIndex].componentEditingMode">
+                    <td ng-if="!editViewReference[omelet.componentIndex].componentEditingMode"
+                        class="text-outputs">
                         {{omelet.name}}
                         <div class="pull-right">
                             <button ng-class="editViewReference[omelet.componentIndex].editButtonClass"
@@ -249,7 +251,8 @@
 
                     <td>{{weeklySpecial.componentIndex}}</td>
 
-                    <td ng-if="!editViewReference[weeklySpecial.componentIndex].componentEditingMode">
+                    <td ng-if="!editViewReference[weeklySpecial.componentIndex].componentEditingMode"
+                        class="text-outputs">
                         {{weeklySpecial.name}}
                         <div class="pull-right">
                             <button ng-class="editViewReference[weeklySpecial.componentIndex].editButtonClass"
@@ -341,7 +344,8 @@
 
                     <td>{{extra.componentIndex}}</td>
 
-                    <td ng-if="!editViewReference[extra.componentIndex].componentEditingMode">
+                    <td ng-if="!editViewReference[extra.componentIndex].componentEditingMode"
+                        class="text-outputs">
                         {{extra.name}}
                         <div class="pull-right">
                             <button ng-class="editViewReference[extra.componentIndex].editButtonClass"
