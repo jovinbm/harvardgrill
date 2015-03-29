@@ -5,23 +5,23 @@ angular.module('grillApp')
 
             return {
                 getAvailableOrderComponents: function () {
-                    return $http.get('/api/getAvailableOrderComponents')
+                    return $http.post('/api/getAvailableOrderComponents')
                 },
 
                 getAvailableOmelets: function () {
-                    return $http.get('/api/getAvailableOmelets')
+                    return $http.post('/api/getAvailableOmelets')
                 },
 
                 getAvailableWeeklySpecials: function () {
-                    return $http.get('/api/getAvailableWeeklySpecials')
+                    return $http.post('/api/getAvailableWeeklySpecials')
                 },
 
                 getAvailableExtras: function () {
-                    return $http.get('/api/getAvailableExtras')
+                    return $http.post('/api/getAvailableExtras')
                 },
 
                 getMyRecentOrders: function () {
-                    return $http.get('/api/getMyRecentOrders')
+                    return $http.post('/api/getMyRecentOrders')
                 },
 
                 placeMyNewOrder: function (orderComponentIndexArray) {

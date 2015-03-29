@@ -49,6 +49,7 @@ module.exports = {
 
         var newComponent = {
             name: theComponent.name,
+            grillName: theUser.grillName,
             componentGroup: theComponent.componentGroup,
             componentUniqueId: cuid()
         };
@@ -58,7 +59,7 @@ module.exports = {
             newComponent.available = 'no';
         }
 
-        componentDB.addComponent(newComponent, error, error, success);
+        componentDB.addComponent(theUser.grillName, theUser, newComponent, error, error, success);
     },
 
 
@@ -88,7 +89,7 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        componentDB.saveEditedComponent(theComponent.componentIndex, theComponent.name, error, error, success);
+        componentDB.saveEditedComponent(theUser.grillName, theUser, theComponent.componentIndex, theComponent.name, error, error, success);
     },
 
 
@@ -118,7 +119,7 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        componentDB.deleteComponent(componentIndex, error, error, success);
+        componentDB.deleteComponent(theUser.grillName, theUser, componentIndex, error, error, success);
     },
 
 
@@ -148,7 +149,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAllComponents("oc", -1, error, error, success);
+        componentDB.getAllComponents(theUser.grillName, theUser, "oc", -1, error, error, success);
     },
 
 
@@ -178,7 +179,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAllComponents("oo", -1, error, error, success);
+        componentDB.getAllComponents(theUser.grillName, theUser, "oo", -1, error, error, success);
     },
 
 
@@ -208,7 +209,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAllComponents("ws", -1, error, error, success);
+        componentDB.getAllComponents(theUser.grillName, theUser, "ws", -1, error, error, success);
     },
 
 
@@ -238,7 +239,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAllComponents("oe", -1, error, error, success);
+        componentDB.getAllComponents(theUser.grillName, theUser, "oe", -1, error, error, success);
     },
 
 
@@ -268,7 +269,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAvailableComponents("oc", -1, error, error, success);
+        componentDB.getAvailableComponents(theUser.grillName, theUser, "oc", -1, error, error, success);
     },
 
 
@@ -298,7 +299,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAvailableComponents("oo", -1, error, error, success);
+        componentDB.getAvailableComponents(theUser.grillName, theUser, "oo", -1, error, error, success);
     },
 
 
@@ -328,7 +329,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAvailableComponents("ws", -1, error, error, success);
+        componentDB.getAvailableComponents(theUser.grillName, theUser, "ws", -1, error, error, success);
     },
 
 
@@ -358,7 +359,7 @@ module.exports = {
         }
 
         //calls success with all the components of specified group or empty when not found
-        componentDB.getAvailableComponents("oe", -1, error, error, success);
+        componentDB.getAvailableComponents(theUser.grillName, theUser, "oe", -1, error, error, success);
     }
 
 };

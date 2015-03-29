@@ -6,7 +6,9 @@ angular.module('grillApp')
             return {
                 addComponent: function (theComponentObject) {
                     if (globals.currentGrillStatus().grillStatus == "closed") {
-                        return $http.post('/api/addComponent', theComponentObject);
+                        return $http.post('/api/addComponent', {
+                            theComponentObject: theComponentObject
+                        });
                     }
                 },
 
@@ -30,19 +32,19 @@ angular.module('grillApp')
                 },
 
                 getAllOrderComponents: function () {
-                    return $http.get('/api/getAllOrderComponents')
+                    return $http.post('/api/getAllOrderComponents')
                 },
 
                 getAllOmelets: function () {
-                    return $http.get('/api/getAllOmelets')
+                    return $http.post('/api/getAllOmelets')
                 },
 
                 getAllWeeklySpecials: function () {
-                    return $http.get('/api/getAllWeeklySpecials')
+                    return $http.post('/api/getAllWeeklySpecials')
                 },
 
                 getAllExtras: function () {
-                    return $http.get('/api/getAllExtras')
+                    return $http.post('/api/getAllExtras')
                 }
             }
         }])

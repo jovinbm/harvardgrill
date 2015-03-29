@@ -4,11 +4,11 @@ angular.module('grillApp')
         function ($window, $location, $http, $rootScope) {
             return {
                 openGrill: function () {
-                    return $http.get('api/openGrill');
+                    return $http.post('api/openGrill');
                 },
 
                 closeGrill: function () {
-                    return $http.get('api/closeGrill');
+                    return $http.post('api/closeGrill');
                 },
 
                 updateAvailableComponents: function (allComponents) {

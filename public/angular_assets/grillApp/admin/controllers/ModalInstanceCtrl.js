@@ -13,6 +13,7 @@ angular.module('grillApp')
 
             //******************order components******************************
             //functions to get all order components
+            //updated as per every modalInstance therefore no need to store them in factory
             $scope.allOrderComponents = [];
             $scope.allOmelets = [];
             $scope.allWeeklySpecials = [];
@@ -85,7 +86,7 @@ angular.module('grillApp')
                 })
             };
 
-            //this function unselects all weekly specials. It turns their available key values to 'no
+            //this function un-selects all weekly specials. It turns their available key values to 'no
             $scope.unSelectAllWeeklySpecials = function () {
                 $scope.confirmModalIsDirty = true;
                 $scope.allWeeklySpecials.forEach(function (weeklySpecial) {
@@ -96,7 +97,7 @@ angular.module('grillApp')
 
             //function used to update available components
             $scope.updateAvailableComponents = function () {
-                $scope.isLoadingTrue();
+                $rootScope.$broadcast('isLoadingTrue');
                 var allComponents = [];
                 allComponents = allComponents.concat($scope.allOrderComponents);
                 allComponents = allComponents.concat($scope.allOmelets);
@@ -110,12 +111,12 @@ angular.module('grillApp')
                             text: 'Update successful'
                         });
                         getAllAll();
-                        $scope.isLoadingFalse();
+                        $rootScope.$broadcast('isLoadingFalse');
                         $scope.confirmModalIsDirty = false;
                     })
                     .error(function (errResponse) {
+                        $rootScope.$broadcast('isLoadingFalse');
                         $rootScope.$broadcast('requestErrorHandler', errResponse);
-                        $scope.isLoadingFalse();
                     });
             };
 

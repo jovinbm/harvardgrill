@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
     openId: {type: String, required: true, unique: true, index: true},
     isAdmin: {type: String, required: true, default: "no", index: true},
+    grillName: {type: String, required: true, default: "stats", unique: false, index: true},
     uniqueCuid: {type: String, required: true, unique: true, index: true},
     socketRoom: {type: String, required: true, unique: false, index: true},
     displayName: {type: String, default: "jHarvard", required: true, unique: false},

@@ -11,6 +11,11 @@
 
         <div class="ng-cloak">
             <h6>Order Components</h6>
+
+            <div ng-if="allOrderComponents.length == 0">
+                <small>No Order Components added</small>
+            </div>
+
             <ul class="list-unstyled">
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allOrderComponents">
@@ -26,6 +31,11 @@
 
         <div class="ng-cloak">
             <h6>Omelets</h6>
+
+            <div ng-if="allOmelets.length == 0">
+                <small>No Omelets added</small>
+            </div>
+
             <ul class="list-unstyled">
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allOmelets">
@@ -41,6 +51,11 @@
 
         <div class="ng-cloak">
             <h6>Extras</h6>
+
+            <div ng-if="allExtras.length == 0">
+                <small>No Extras added</small>
+            </div>
+
             <ul class="list-unstyled">
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allExtras">
@@ -57,7 +72,12 @@
         <div class="ng-cloak">
             <h6>Weekly Specials</h6>
 
-            <div class="pull-right ng-cloak">
+            <div ng-if="allWeeklySpecials.length == 0">
+                <small>No Weekly Specials added</small>
+            </div>
+
+            <div class="pull-right ng-cloak"
+                 ng-if="allWeeklySpecials.length > 1">
                 <a href ng-click="unSelectAllWeeklySpecials()"
                    class="btn btn-default btn-sm">Unselect All
                 </a>
@@ -82,12 +102,18 @@
                 done</p>
         </div>
 
+        <div class="alert alert-warning ng-cloak"
+             ng-if="allOrderComponents.length < 1 && allOmelets.length < 1 && allWeeklySpecials.length > 1 && allExtras.length > 1">
+            <p>At least one item should be available before opening the grill. Please proceed to the edit page to add
+                items</p>
+        </div>
+
     </div>
 
     <div class="modal-footer ng-cloak">
         <button class="btn btn-info"
                 ng-click="updateAvailableComponents()"
-                ng-disabled="isLoading || universalDisable">UPDATE AVAILABLE
+                ng-disabled="isLoading || confirmModalIsDirty == false || universalDisable">UPDATE AVAILABLE
         </button>
         <button class="btn btn-warning"
                 ng-click="cancel()"
@@ -95,7 +121,8 @@
         </button>
         <button class="btn btn-primary"
                 ng-click="ok()"
-                ng-disabled="isLoading || confirmModalIsDirty == true || universalDisable">Open Grill
+                ng-disabled="isLoading || confirmModalIsDirty == true || universalDisable || (allOrderComponents.length < 1 && allOmelets.length < 1 && allWeeklySpecials.length > 1 && allExtras.length > 1)">
+            Open Grill
         </button>
     </div>
 

@@ -31,6 +31,7 @@ angular.module('grillApp')
 
             //******************order components******************************
             //ng-models for the input groups in edit view
+            //these are updated on every state change by getAllAll function therefore no need to store them in factory
             $scope.orderComponentModel = {};
             $scope.omeletModel = {};
             $scope.weeklySpecialModel = {};
@@ -45,7 +46,7 @@ angular.module('grillApp')
             //the editView reference carries variable classes for the edit, save and cancel
             //buttons in the editView.
             //it is updated by the ReferenceService.refreshEditViewReference() function
-            $scope.editViewReference = {};
+            $scope.editViewReference = ReferenceService.refreshEditViewReference(null);
 
             //request all components;
             function getAllOrderComponents() {
@@ -199,7 +200,8 @@ angular.module('grillApp')
             $scope.addOrderComponent = function () {
                 var component = {
                     name: $scope.orderComponentModel.inputText,
-                    componentGroup: "oc"
+                    componentGroup: "oc",
+                    grillName: globals.grillName()
                 };
 
                 EditService.addComponent(component)
@@ -217,7 +219,8 @@ angular.module('grillApp')
             $scope.addOmelet = function () {
                 var component = {
                     name: $scope.omeletModel.inputText,
-                    componentGroup: "oo"
+                    componentGroup: "oo",
+                    grillName: globals.grillName()
                 };
 
                 EditService.addComponent(component)
@@ -235,7 +238,8 @@ angular.module('grillApp')
             $scope.addWeeklySpecial = function () {
                 var component = {
                     name: $scope.weeklySpecialModel.inputText,
-                    componentGroup: "ws"
+                    componentGroup: "ws",
+                    grillName: globals.grillName()
                 };
 
                 EditService.addComponent(component)
@@ -253,7 +257,8 @@ angular.module('grillApp')
             $scope.addExtra = function () {
                 var component = {
                     name: $scope.extraModel.inputText,
-                    componentGroup: "oe"
+                    componentGroup: "oe",
+                    grillName: globals.grillName()
                 };
 
                 EditService.addComponent(component)

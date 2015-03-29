@@ -1,6 +1,6 @@
 angular.module('grillApp')
-    .controller('MainController', ['$filter', '$window', '$location', '$log', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals',
-        function ($filter, $window, $location, $log, $scope, $rootScope, socket, mainService, socketService, globals) {
+    .controller('MainController', ['$filter', '$interval', '$window', '$location', '$log', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals',
+        function ($filter, $interval, $window, $location, $log, $scope, $rootScope, socket, mainService, socketService, globals) {
 
             //*************request error handler****************
 
@@ -110,6 +110,12 @@ angular.module('grillApp')
                 .success(function (data) {
                     globals.socketRoom(data.socketRoom);
                     $scope.customUsername = globals.customUsername(data.customUsername);
+                    $scope.grillName = globals.grillName(data.grillName);
+
+                    //updates the socket service with the grillName also, since globals
+                    //requires socketService and you can't have socketService require globals
+                    socketService.grillName(data.grillName);
+
                     $scope.uniqueCuid = globals.uniqueCuid(data["uniqueCuid"]);
                     socket.emit('joinRoom', {
                         room: data.socketRoom,
@@ -123,11 +129,11 @@ angular.module('grillApp')
                 });
 
 
-
             //***************functions to deal with all key component indexes
 
             //allComponentsIndexNames is a variable that caries all references to the names of all component index
             //the key is the componentIndex, and value is it's name. It is updated by the function 'getAllComponentsIndexNames'
+            //updated on every state change by the getAllComponentsIndexNames() function when controller restarts
             $scope.allComponentsIndexNames = {};
 
 
@@ -146,7 +152,18 @@ angular.module('grillApp')
 
             getAllComponentsIndexNames();
 
-            //*******************end of functions concrned with allComponent indexes
+            //*******************end of functions concerned with allComponent indexes
+
+
+            //*********crucial intervals
+
+            //polls current grill status
+            function pollCurrentGrillStatus() {
+                globals.currentGrillStatus(null, true, true);
+            }
+
+            $interval(pollCurrentGrillStatus, 30000, 0, true);
+            //**********end of crucial intervals
 
 
             $log.info('MainController booted successfully');

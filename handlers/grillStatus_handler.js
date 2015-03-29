@@ -3,7 +3,6 @@ var ioJs = require('../functions/io.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var statsDB = require('../db/stats_db.js');
 var componentDB = require('../db/component_db.js');
-var orderDB = require('../db/order_db.js');
 
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;
@@ -48,7 +47,7 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        statsDB.openGrill("stats", error, error, success);
+        statsDB.openGrill(theUser.grillName, theUser, error, error, success);
     },
 
     closeGrill: function (req, res, theUser) {
@@ -77,7 +76,7 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        statsDB.closeGrill("stats", error, error, success);
+        statsDB.closeGrill(theUser.grillName, theUser, error, error, success);
     },
 
     getCurrentGrillStatus: function (req, res, theUser) {
@@ -107,7 +106,7 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        statsDB.getCurrentGrillStatus("stats", error, error, success)
+        statsDB.getCurrentGrillStatus(theUser.grillName, theUser, error, error, success)
 
     },
 
@@ -138,7 +137,7 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        componentDB.updateAvailableComponents(allComponents, error, error, success)
+        componentDB.updateAvailableComponents(theUser.grillName, theUser, allComponents, error, error, success)
 
     }
 

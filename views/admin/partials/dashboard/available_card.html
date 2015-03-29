@@ -7,8 +7,12 @@
             <p>To update what's available to order today, please check/un-check the items below and click UPDATE</p>
         </div>
 
+        <hr/>
+
         <div class="ng-cloak">
             <h6>Order Components</h6>
+            <a ui-sref="edit">Add Order Components</a>
+
             <ul class="list-unstyled">
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allOrderComponents">
@@ -22,8 +26,12 @@
             </ul>
         </div>
 
+        <hr/>
+
         <div class="ng-cloak">
             <h6>Omelets</h6>
+            <a ui-sref="edit">Add Omelets</a>
+
             <ul class="list-unstyled">
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allOmelets">
@@ -37,8 +45,12 @@
             </ul>
         </div>
 
+        <hr/>
+
         <div class="ng-cloak">
             <h6>Extras</h6>
+            <a ui-sref="edit">Add Extras</a>
+
             <ul class="list-unstyled">
                 <li class="list-unstyled clearfix"
                     ng-repeat="component in allExtras">
@@ -52,10 +64,14 @@
             </ul>
         </div>
 
+        <hr/>
+
         <div class="ng-cloak">
             <h6>Weekly Specials</h6>
+            <a ui-sref="edit">Add weekly specials</a>
 
-            <div class="pull-right ng-cloak">
+            <div class="pull-right ng-cloak"
+                 ng-if="allWeeklySpecials.length > 1">
                 <a href ng-click="unSelectAllWeeklySpecials()"
                    class="btn btn-default btn-sm">Unselect All
                 </a>
@@ -85,7 +101,7 @@
 
         <div class="pull-right ng-cloak">
             <a href ng-click="updateAvailableComponents()"
-               ng-disabled="isLoading || universalDisable"
+               ng-disabled="isLoading || availableCardIsDirty == false || universalDisable"
                class="btn btn-info btn-md">
                 Update
             </a>

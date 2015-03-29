@@ -65,6 +65,7 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 res.status(200).send({
                     socketRoom: theUser.socketRoom,
+                    grillName: theUser.grillName,
                     customUsername: theUser.customUsername,
                     uniqueCuid: theUser.uniqueCuid
                 });

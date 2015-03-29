@@ -26,7 +26,7 @@ module.exports = {
 
         var module = 'addComponent';
         receivedLogger(module);
-        var theComponent = req.body;
+        var theComponent = req.body.theComponentObject;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
@@ -74,7 +74,7 @@ module.exports = {
                     }
                 }
 
-                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
                 res.redirect('login.html');
             }
@@ -137,7 +137,7 @@ module.exports = {
                     }
                 }
 
-                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
                 res.redirect('login.html');
             }
@@ -200,7 +200,7 @@ module.exports = {
                     }
                 }
 
-                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
                 res.redirect('login.html');
             }

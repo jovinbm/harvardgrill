@@ -45,8 +45,21 @@ angular.module('grillApp')
 
     .factory('socketService', ['$http',
         function ($http) {
+            var grillName;
             return {
+                grillName: function (newGrillName) {
+                    if (newGrillName) {
+                        grillName = newGrillName;
+                        return grillName;
+                    } else {
+                        return grillName;
+                    }
+                },
+
                 getSocketRoom: function () {
+                    //no grillName required here since this is the very first request
+                    //grillName updated in mainController which will call the grillName function above
+                    //on success
                     return $http.get('/api/getMyRoom');
                 },
 

@@ -75,7 +75,7 @@ module.exports = {
                     }
                 }
 
-                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
                 res.redirect('login.html');
             }
@@ -85,7 +85,7 @@ module.exports = {
     },
 
     getAdminClientOrders: function (req, res) {
-        var module = 'getAllComponentsIndexNames';
+        var module = 'getAdminClientOrders';
         receivedLogger(module);
         var amount = req.body.amount;
         var currentOrdersToBeSkipped = req.body.currentOrdersToBeSkipped;
@@ -134,7 +134,7 @@ module.exports = {
                 }
             }
 
-            statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+            statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -180,7 +180,7 @@ module.exports = {
                     order_handler.getMyRecentOrders(req, res, theUser, currentGrillStatus);
                 }
 
-                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
                 res.redirect('login.html');
             }
@@ -232,7 +232,7 @@ module.exports = {
                     order_handler.markOrderAsDone(req, res, theUser, currentGrillStatus, orderUniqueCuid, processedOrderComponents);
                 }
 
-                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
                 res.redirect('login.html');
             }
@@ -284,7 +284,7 @@ module.exports = {
                     order_handler.markOrderAsDeclined(req, res, theUser, currentGrillStatus, orderUniqueCuid);
                 }
 
-                statsDB.getCurrentGrillStatus("stats", errorGrillStatus, errorGrillStatus, statsSuccess);
+                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
                 res.redirect('login.html');
             }

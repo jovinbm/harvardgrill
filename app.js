@@ -179,11 +179,6 @@ app.get('/harvardId', function (req, res, next) {
         });
     })(req, res, next);
 });
-//app.get('/harvardId',
-//    passport.authenticate('openid', {
-//        successRedirect: '/login1.html',
-//        failureRedirect: '/login.html'
-//    }));
 
 
 app.get('/', routes.loginHtml);
@@ -203,8 +198,8 @@ app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRo
 app.post('/api/adminStartUp', authenticate.ensureAuthenticated, basicAPI.adminStartUp);
 app.post('/api/clientStartUp', authenticate.ensureAuthenticated, basicAPI.clientStartUp);
 
-app.get('/api/openGrill', authenticate.ensureAuthenticated, grillStatusAPI.openGrill);
-app.get('/api/closeGrill', authenticate.ensureAuthenticated, grillStatusAPI.closeGrill);
+app.post('/api/openGrill', authenticate.ensureAuthenticated, grillStatusAPI.openGrill);
+app.post('/api/closeGrill', authenticate.ensureAuthenticated, grillStatusAPI.closeGrill);
 app.post('/api/getCurrentGrillStatus', authenticate.ensureAuthenticated, grillStatusAPI.getCurrentGrillStatus);
 app.post('/api/getAllComponentsIndexNames', authenticate.ensureAuthenticated, grillStatusAPI.getAllComponentsIndexNames);
 app.post('/api/updateAvailableComponents', authenticate.ensureAuthenticated, grillStatusAPI.updateAvailableComponents);
@@ -213,18 +208,18 @@ app.post('/api/addComponent', authenticate.ensureAuthenticated, componentAPI.add
 app.post('/api/saveEditedComponent', authenticate.ensureAuthenticated, componentAPI.saveEditedComponent);
 app.post('/api/deleteComponent', authenticate.ensureAuthenticated, componentAPI.deleteComponent);
 
-app.get('/api/getAllOrderComponents', authenticate.ensureAuthenticated, componentAPI.getAllOrderComponents);
-app.get('/api/getAllOmelets', authenticate.ensureAuthenticated, componentAPI.getAllOmelets);
-app.get('/api/getAllWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAllWeeklySpecials);
-app.get('/api/getAllExtras', authenticate.ensureAuthenticated, componentAPI.getAllExtras);
+app.post('/api/getAllOrderComponents', authenticate.ensureAuthenticated, componentAPI.getAllOrderComponents);
+app.post('/api/getAllOmelets', authenticate.ensureAuthenticated, componentAPI.getAllOmelets);
+app.post('/api/getAllWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAllWeeklySpecials);
+app.post('/api/getAllExtras', authenticate.ensureAuthenticated, componentAPI.getAllExtras);
 
-app.get('/api/getAvailableOrderComponents', authenticate.ensureAuthenticated, componentAPI.getAvailableOrderComponents);
-app.get('/api/getAvailableOmelets', authenticate.ensureAuthenticated, componentAPI.getAvailableOmelets);
-app.get('/api/getAvailableWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAvailableWeeklySpecials);
-app.get('/api/getAvailableExtras', authenticate.ensureAuthenticated, componentAPI.getAvailableExtras);
+app.post('/api/getAvailableOrderComponents', authenticate.ensureAuthenticated, componentAPI.getAvailableOrderComponents);
+app.post('/api/getAvailableOmelets', authenticate.ensureAuthenticated, componentAPI.getAvailableOmelets);
+app.post('/api/getAvailableWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAvailableWeeklySpecials);
+app.post('/api/getAvailableExtras', authenticate.ensureAuthenticated, componentAPI.getAvailableExtras);
 
 app.post('/api/getAdminClientOrders', authenticate.ensureAuthenticated, orderAPI.getAdminClientOrders);
-app.get('/api/getMyRecentOrders', authenticate.ensureAuthenticated, orderAPI.getMyRecentOrders);
+app.post('/api/getMyRecentOrders', authenticate.ensureAuthenticated, orderAPI.getMyRecentOrders);
 app.post('/api/newClientOrder', authenticate.ensureAuthenticated, orderAPI.newClientOrder);
 app.post('/api/markOrderAsDone', authenticate.ensureAuthenticated, orderAPI.markOrderAsDone);
 app.post('/api/markOrderAsDeclined', authenticate.ensureAuthenticated, orderAPI.markOrderAsDeclined);

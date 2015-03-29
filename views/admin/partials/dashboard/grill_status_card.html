@@ -12,10 +12,12 @@
                 <strong>Total Processed: </strong>{{currentGrillStatus.totalProcessedOrders}}
             </li>
             <li class="list-unstyled clearfix">
-                <strong>Total Remaining: </strong>{{currentGrillStatus.totalUnattendedOrders}}
+                <strong>Total Declined: </strong>{{currentGrillStatus.totalDeclinedOrders}}
             </li>
             <li class="list-unstyled clearfix">
-                <strong>Total Declined: </strong>{{currentGrillStatus.totalOrderDeclines}}
+                <strong>Total Remaining: </strong>
+                {{currentGrillStatus.totalOrders - currentGrillStatus.totalProcessedOrders -
+                currentGrillStatus.totalDeclinedOrders}}
             </li>
         </ul>
 

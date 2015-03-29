@@ -153,7 +153,7 @@ module.exports = {
                     })
                 }
 
-                componentDB.getAllComponentsIndexNames(-1, errorIndexes, errorIndexes, componentIndexesSuccess)
+                componentDB.getAllComponentsIndexNames(theUser.grillName, theUser, -1, errorIndexes, errorIndexes, componentIndexesSuccess)
             } else {
                 res.redirect('login.html');
             }

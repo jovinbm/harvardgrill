@@ -57,7 +57,7 @@ angular.module('grillApp')
             //this reference is used in the edit page to hold the button classess, and put's the default isInEditingMode to false
             //isInEditing mode means that there is a content that is being edited in the edit view page
             function editViewReference(componentArray) {
-                if (componentArray.length != 0) {
+                if (componentArray) {
                     componentArray.forEach(function (component) {
                         //give the component an editing mode
                         component.componentEditingMode = false;
@@ -76,7 +76,7 @@ angular.module('grillApp')
 
                     return editReference;
                 } else {
-                    return {};
+                    return editReference;
                 }
             }
 

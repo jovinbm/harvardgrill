@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
+    grillName: {type: String, required: true, default: "stats", unique: false, index: true},
     orderUniqueCuid: {type: String, required: true, unique: true, index: true},
     timeUniqueCuid: {type: String, required: true, unique: false, index: true},
     orderIndex: {type: Number, default: 0, required: true, unique: true, index: true},

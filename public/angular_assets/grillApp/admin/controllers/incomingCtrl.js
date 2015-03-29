@@ -3,12 +3,14 @@ angular.module('grillApp')
         function (socket, $filter, $window, $location, $log, $scope, $rootScope, $interval, $modal, globals, grillStatusService, ReferenceService, EditService, socketService) {
 
             //array that holds current incoming orders
+            //updated on every state change by socketRefresh therefore no need to store them in factory
             $scope.currentIncomingOrders = [];
 
             //this variables' keys are orderIndexes of the currentIncoming orders.
             //each key carries an object whose keys are the orderComponents indexes that the client ordered (looped from the orderComponent array on the order)
             //the values can either be 'yes' or 'no' depending on what is processed
             //the default value is 'no'
+            //updated on every state change, therefore no need to store it in factory
             $scope.processedOrderModels = {};
 
             //refresh here replaces all the currentIncoming orders with new ones instead of just pushing
@@ -113,6 +115,8 @@ angular.module('grillApp')
 
 
                         //pull one new order and insert it into the currentIncoming orders
+                        //also pull grill status
+                        globals.currentGrillStatus(null, true, true);
                         getAdminClientOrders(1, false, currentOrdersToBeSkipped);
 
                         $scope.showToast('success', 'Order done');
@@ -153,6 +157,7 @@ angular.module('grillApp')
                         });
 
 
+                        globals.currentGrillStatus(null, true, true);
                         //pull one new order and insert it into the currentIncoming orders
                         getAdminClientOrders(1, false, currentOrdersToBeSkipped);
 

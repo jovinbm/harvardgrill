@@ -81,8 +81,6 @@ angular.module('grillApp')
             $scope.openCloseGrill = function () {
                 $scope.isLoadingTrue();
 
-                //the openclose class is updated back by either a success, or manually when there is an error
-                $scope.grillStatusReference.openCloseClass = "btn btn-primary btn-xs disabled";
 
                 if ($scope.currentGrillStatus.grillStatus == "closed") {
                     var aModalInstance = $scope.openAvailableModalInstance();
@@ -132,6 +130,7 @@ angular.module('grillApp')
 
             //******************order components******************************
             //functions to get all order components
+            //these are updated on every state change when controller restarts therefore no need to store them in factory
             $scope.allOrderComponents = [];
             $scope.allOmelets = [];
             $scope.allWeeklySpecials = [];
@@ -246,7 +245,7 @@ angular.module('grillApp')
             });
 
             $rootScope.$on('reconnectSuccess', function () {
-                $scope.currentGrillStatus = globals.currentGrillStatus(null, null, true);
+                globals.currentGrillStatus(null, true, true);
                 $scope.grillStatusReference = ReferenceService.refreshGrillStatusCard();
                 getAllAll();
             });

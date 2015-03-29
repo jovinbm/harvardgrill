@@ -46,7 +46,10 @@ module.exports = {
     },
 
     updateCuCls: function (openId, customUsername, customLoggedInStatus, error_neg_1, error_0, success) {
-        User.update({openId: openId}, {
+        User
+            .update({
+                openId: openId
+            }, {
                 $set: {
                     customUsername: customUsername,
                     customLoggedInStatus: customLoggedInStatus
@@ -63,14 +66,21 @@ module.exports = {
 
 
     toggleCls: function (openId, newCustomLoggedInStatus, error_neg_1, error_0, success) {
-        User.update({openId: openId}, {$set: {customLoggedInStatus: newCustomLoggedInStatus}}).exec(function (err) {
-            if (err) {
-                error_neg_1(-1, err);
-            } else {
-                success();
+        User
+            .update({
+                openId: openId
+            }, {
+                $set: {
+                    customLoggedInStatus: newCustomLoggedInStatus
+                }
             }
-        });
+        ).exec(function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            });
     }
-
 
 };

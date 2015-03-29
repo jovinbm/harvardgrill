@@ -78,6 +78,12 @@ angular.module('grillApp')
                 .success(function (data) {
                     globals.socketRoom(data.socketRoom);
                     $scope.customUsername = globals.customUsername(data.customUsername);
+                    $scope.grillName = globals.grillName(data.grillName);
+
+                    //updates the socket service with the grillName also, since globals
+                    //requires socketService and you can't have socketService require globals
+                    socketService.grillName(data.grillName);
+
                     $scope.uniqueCuid = globals.uniqueCuid(data["uniqueCuid"]);
                     socket.emit('joinRoom', {
                         room: data.socketRoom,
@@ -127,6 +133,7 @@ angular.module('grillApp')
 
 
             //******************loads the available components and deals with order**************
+            //updated on every state change hence no need to store them in factory
             $scope.availableOrderComponents = [];
             $scope.availableOmelets = [];
             $scope.availableWeeklySpecials = [];
@@ -135,6 +142,7 @@ angular.module('grillApp')
             //this object holds a combination of all the available components. It is used to check the availability
             //of components after a quick refresh and as ng-model in the recent order cards. Can be used for other purposes too. Keys are componentIndexes, and values
             //are the full components
+            //it is updated on every state change therefore no need to store it in factory
             $scope.allAvailableCombinedObject = {};
 
             //this object is updated when all orders are loaded. It's keys are indexes of every order component,
@@ -295,6 +303,7 @@ angular.module('grillApp')
 
 
             //*******************************functions for getting my recent orders
+            //updated on every state change and by polling therefore no need to store them in factory
             $scope.myRecentOrders = [];
 
             function updateTimeAgo() {
@@ -344,7 +353,7 @@ angular.module('grillApp')
                 }
             }
 
-            $interval(ifProcessingGetMyRecentOrders, 60000, 0, true);
+            $interval(ifProcessingGetMyRecentOrders, 30000, 0, true);
 
             //***************end polling
 

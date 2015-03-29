@@ -47,7 +47,7 @@ module.exports = {
 
         }
 
-        orderDB.saveNewOrder(theOrder, theUser, currentGrillStatus, errorSavingOrder, errorSavingOrder, orderSaved);
+        orderDB.saveNewOrder(theUser.grillName, theOrder, theUser, currentGrillStatus, errorSavingOrder, errorSavingOrder, orderSaved);
     },
 
 
@@ -77,7 +77,7 @@ module.exports = {
         }
 
         //sort here is 1 to bring the oldest orders first
-        orderDB.getAdminClientOrders(theUser, currentGrillStatus, amount, 1, skipOrders, currentOrdersToBeSkipped, error, error, success);
+        orderDB.getAdminClientOrders(theUser.grillName, theUser, currentGrillStatus, amount, 1, skipOrders, currentOrdersToBeSkipped, error, error, success);
 
     },
 
@@ -107,7 +107,7 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        orderDB.getMyRecentOrders(theUser, currentGrillStatus, 10, -1, error, error, success);
+        orderDB.getMyRecentOrders(theUser.grillName, theUser, currentGrillStatus, 10, -1, error, error, success);
     },
 
 
@@ -140,7 +140,7 @@ module.exports = {
 
         }
 
-        orderDB.markOrderAsDone(orderUniqueCuid, processedOrderComponents, error, error, success);
+        orderDB.markOrderAsDone(theUser.grillName, theUser, orderUniqueCuid, processedOrderComponents, error, error, success);
     },
 
 
@@ -175,7 +175,7 @@ module.exports = {
 
         consoleLogger(orderUniqueCuid);
 
-        orderDB.markOrderAsDeclined(orderUniqueCuid, error, error, success);
+        orderDB.markOrderAsDeclined(theUser.grillName, theUser, orderUniqueCuid, error, error, success);
     }
 
 };
