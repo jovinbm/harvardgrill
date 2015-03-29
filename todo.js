@@ -52,3 +52,7 @@
 //handle 404 errors plus passport errors e.g put banners on admin login page etc
 
 //implement the redirects to login
+
+//when grill is closed, the incoming stream should contain various stats for the grill such as graphs, ratings etc
+
+//calories

@@ -22,6 +22,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 var moment = require('moment');
+var fs = require('fs');
 
 var basic = require('./functions/basic.js');
 var consoleLogger = require('./functions/basic.js').consoleLogger;
