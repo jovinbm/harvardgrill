@@ -1,12 +1,12 @@
 <section class="row ng-cloak"
          ng-controller="EditViewController">
 
-    <h1>
-        <strong>ADD OR REMOVE ORDERS</strong>
-        <span class="pull-right">
-            {{currentTime}}
-        </span>
+    <h1>{{currentTime}}
     </h1>
+
+    <h4>
+        <strong>ADD OR REMOVE ORDERS</strong>
+    </h4>
 
     <div ng-if="currentGrillStatus.grillStatus == 'open'"
          class="ng-cloak">
@@ -37,11 +37,11 @@
         </div>
 
         <section class="edit-section ng-cloak">
-            <h3>Order Components
+            <h5><strong>Order Components</strong>
             <span>
                 <small>e.g. Chicken Breast</small>
             </span>
-            </h3>
+            </h5>
 
             <!--order add form-->
             <div class="input-group">
@@ -126,11 +126,11 @@
 
         <section class="edit-section">
 
-            <h3>Omelets
+            <h5><strong>Omelets</strong>
             <span>
                 <small>e.g. Ham &amp; Cheese</small>
             </span>
-            </h3>
+            </h5>
 
 
             <!--omelets add form-->
@@ -215,7 +215,7 @@
 
         <section class="edit-section">
 
-            <h3>Weekly Specials</h3>
+            <h5><strong>Weekly Specials</strong></h5>
 
             <!--weekly special add form-->
             <div class="input-group">
@@ -300,11 +300,11 @@
 
         <section class="edit-section">
 
-            <h3>Extras
+            <h5><strong>Extras</strong>
             <span>
                 <small>e.g. Add Cheese</small>
             </span>
-            </h3>
+            </h5>
 
             <!--extras add form-->
             <div class="input-group">
