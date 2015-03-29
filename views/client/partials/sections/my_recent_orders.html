@@ -48,12 +48,12 @@
 
                 <div class="alert alert-success ng-cloak"
                      ng-if="recentOrder.status == 'done'">
-                    <strong>Order status:</strong> This order is ready
+                    <strong>Order status:</strong> This order is ready: {{recentOrder.readyTimeAgo}}
                 </div>
 
                 <div class="alert alert-warning ng-cloak"
                      ng-if="recentOrder.status == 'declined'">
-                    <strong>Order status:</strong> This order has been declined
+                    <strong>Order status:</strong> This order has been declined: {{recentOrder.declineTimeAgo}}
                 </div>
 
                 <h6 ng-if="recentOrder.status != 'declined'">

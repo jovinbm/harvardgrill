@@ -309,6 +309,8 @@ angular.module('grillApp')
             function updateTimeAgo() {
                 $scope.myRecentOrders.forEach(function (order) {
                     order.theTimeAgo = $filter('timeago')(order.orderTime);
+                    order.readyTimeAgo = $filter('timeago')(order.readyTime);
+                    order.declineTimeAgo = $filter('timeago')(order.declineTime);
                 });
             }
 
@@ -321,8 +323,17 @@ angular.module('grillApp')
                         $scope.myRecentOrders = resp.myRecentOrders;
 
                         $scope.myRecentOrders.forEach(function (component) {
+                            //momentJS time is time it was ordered e.g. Sun, Mar 17..
                             component.momentJsTime = moment(component.orderTime).format("ddd, MMM D, H:mm");
+
+                            //theTimeAgo is interval from the time it was ordered eg 10 mins ago
                             component.theTimeAgo = $filter('timeago')(component.orderTime);
+
+                            //readyTimeAgo is the interval from the time the order was processed e.g 5 mins ago
+                            component.readyTimeAgo = $filter('timeago')(component.readyTime);
+
+                            //declineTimeAgo is the interval from the time the order was declined e.g 2 mins ago
+                            component.readyTimeAgo = $filter('timeago')(component.declineTime);
                         });
                     })
                     .error(function (errResponse) {

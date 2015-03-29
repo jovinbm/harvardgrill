@@ -191,8 +191,10 @@ angular.module('grillApp')
                         $scope.processedOrderModels[order.orderIndex][componentIndex] = 'yes';
                     });
 
-                    order.theTimeAgo = $filter('timeago')(order.orderTime);
+                    //momentJS time is time it was ordered e.g. Sun, Mar 17..
                     order.momentJsTime = moment(order.orderTime).format("ddd, MMM D, H:mm");
+
+                    //theTimeAgo is interval from the time it was ordered eg 10 mins ago
                     order.theTimeAgo = $filter('timeago')(order.orderTime);
                 });
                 $scope.currentIncomingOrders = data;
