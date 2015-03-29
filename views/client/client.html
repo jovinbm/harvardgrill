@@ -44,14 +44,14 @@
 <div client-top-nav></div>
 <!--end of nav-->
 
-<section class="container ng-cloak">
+<div class="container increase_margin_for__mobile ng-cloak">
 
-    <div class="alert alert-success grill_open_or_close_top_banner ng-cloak"
+    <div class="alert alert-success ng-cloak"
          ng-if="mainCurrentGrillStatus.grillStatus == 'open'">
         <p><strong>Grill Status: Open and accepting orders</strong></p>
     </div>
 
-    <div class="alert alert-warning grill_open_or_close_top_banner ng-cloak"
+    <div class="alert alert-warning ng-cloak"
          ng-if="mainCurrentGrillStatus.grillStatus == 'closed'">
         <p><strong>Grill Status: Closed!</strong><br/>
             The grill is currently closed, please check in during normal dining hours. This section will be updated once
@@ -62,7 +62,7 @@
     <!--all views loaded here by ui-router-->
     <div ui-view></div>
 
-</section>
+</div>
 
 <!--start of order input modal-->
 <div main-order-modal></div>

@@ -18,6 +18,15 @@ li.mobile_nav_tabs.col-xs-4 {
 
 /******************end of styling the mobile nav*****************/
 
+/****************main div after nav***************/
+
+div.increase_margin_for__mobile {
+    /*increase the top margin to make it appear well on mobile, because of second nav*/
+    margin-top: 5px;
+}
+
+/*************main div after nav*******************/
+
 /****************styling the banners***************/
 
 div.alert.grill_open_or_close_top_banner {
