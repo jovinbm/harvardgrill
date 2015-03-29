@@ -144,8 +144,58 @@
 </div>
 <!--end of custom student login form-->
 
-<!--start of footer-->
-<div class='navbar navbar-default navbar-fixed-bottom'>
+<!--footer 1 for large screens-->
+<div class="text-center navbar navbar-default navbar-fixed-bottom hidden-xs hidden-sm">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <p class="footer_group_heading">Contact Us</p>
+                <ul class="list-unstyled">
+                    <li><a href="mailto:admin@harvardgrill.com">admin@harvardgrill.com</a></li>
+                    <li><a href="mailto:help@harvardgrill.com">help@harvardgrill.com</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <p class="footer_group_heading">Who we are</p>
+                <ul class="list-unstyled">
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <p class="footer_group_heading">Coverage</p>
+                <ul class="list-unstyled">
+                    <li><a href="#">Undergraduate</a></li>
+                    <li><a href="#">Graduate</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <p class="footer_group_heading">Developers</p>
+                <ul class="list-unstyled">
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <ul class="nav nav-pills nav-justified">
+                <li><a href="/">© 2015 HarvardGrill</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="https://www.linkedin.com/in/jovinmwilanga/" target="_blank">
+                        <i class="fa fa-copyright"></i> 2015 jbm Harvard '18</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--end of footer 1 for large screens-->
+
+<!--start of footer 2 for small screens-->
+<div class='navbar navbar-default navbar-fixed-bottom visible-xs visible-sm'>
     <div class="container">
         <p class="navbar-text pull-left">
             <i class="fa fa-copyright"></i> 2015 jbm
@@ -161,46 +211,12 @@
         </p>
 
         <div class="pull-right">
-            <a class="navbar-btn btn btn-warning btn-xs hidden-xs">Status: Development</a>
-            <a href="#myModal" role="button" class="navbar-btn btn btn-primary btn-xs" data-toggle="modal">Feedback</a>
+            <!--<a class="navbar-btn btn btn-warning btn-xs hidden-xs">Status: Development</a>-->
+            <a class="navbar-btn btn btn-primary btn-xs hidden-xs" href="#">Terms of Service</a>
         </div>
     </div>
 </div>
-<!--end of footer-->
-
-<!--email modal-->
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form class="emailForm" method="post" action="/sendEmail">
-                    <div class="form-group"><label>Name</label><input class="form-control required"
-                                                                      placeholder="Your name" data-placement="top"
-                                                                      data-trigger="manual"
-                                                                      data-content="Must be at least 3 characters long, and must only contain letters."
-                                                                      type="text" name="name"></div>
-                    <div class="form-group"><label>Message</label><textarea class="form-control"
-                                                                            placeholder="Your message here.."
-                                                                            rows="5"
-                                                                            data-placement="top"
-                                                                            data-trigger="manual"
-                                                                            name="message"></textarea></div>
-                    <div class="form-group"><label>E-Mail</label><input class="form-control email"
-                                                                        placeholder="you@example.com (so that I can contact you)"
-                                                                        data-placement="top" data-trigger="manual"
-                                                                        data-content="Must be a valid e-mail address (user@gmail.com)"
-                                                                        type="text" name="email"></div>
-                    <div class="form-group">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button type="submit" class="btn btn-success pull-right">Send It!</button>
-                        <p class="help-block pull-left text-danger hide" id="form-error">&nbsp; The form is not
-                            valid. </p></div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!--end of email modal-->
+<!--end of footer 2 for small screens-->
 
 
 <!-- JAVASCRIPT -->

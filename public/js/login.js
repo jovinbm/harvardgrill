@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    //my custom form validator plugin
-    $('.emailForm').goValidate();
-
     //using bootstrap validator for form validation
     $("#studentLoginForm").bootstrapValidator();
 

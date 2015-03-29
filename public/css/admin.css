@@ -14,11 +14,15 @@ body {
     font-size: 12px;
 }
 
-/*****************styling the mobile navigation*****************/
+/*****************styling the mobile navigation --top&bottom footer*****************/
 
 li.mobile_nav_tabs.col-xs-4 {
     padding: 0;
     text-align: center;
+}
+
+.footer_group_heading {
+    text-decoration: underline;
 }
 
 /******************end of styling the mobile nav*****************/

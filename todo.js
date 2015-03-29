@@ -56,3 +56,5 @@
 //when grill is closed, the incoming stream should contain various stats for the grill such as graphs, ratings etc
 
 //calories
+
+//grill status on login screen
