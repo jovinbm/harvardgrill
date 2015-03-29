@@ -334,6 +334,10 @@ angular.module('grillApp')
 
                             //declineTimeAgo is the interval from the time the order was declined e.g 2 mins ago
                             component.readyTimeAgo = $filter('timeago')(component.declineTime);
+
+                            //there is a bug that causes the readyTimeAgo and declineTimeAgo to display 'never' if
+                            //updateTimeAgo is not called immediately here
+                            updateTimeAgo();
                         });
                     })
                     .error(function (errResponse) {
