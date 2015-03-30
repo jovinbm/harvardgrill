@@ -73,10 +73,12 @@ module.exports = {
 
             //only clients will reach this stage
             else if (req.user) {
+                var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
                 res.render('login1', {
                     displayName: theUser.displayName,
                     errorCode: 0,
-                    errorMessage: "No errors"
+                    errorMessage: "No errors",
+                    gAnalyticsUserId: gaUserId
                 });
             } else {
                 res.redirect("login.html");
@@ -173,7 +175,10 @@ module.exports = {
                     if (theUser.isAdmin == 'yes') {
                         res.redirect('admin.html');
                     } else if (theUser.isAdmin == 'no') {
-                        res.sendFile(path.join(__dirname, '../views/client', 'client.html'));
+                        var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
+                        res.render('client/client.ejs', {
+                            gAnalyticsUserId: gaUserId
+                        });
                     }
                 }
                 else {
@@ -204,7 +209,10 @@ module.exports = {
             if (req.user) {
                 if (theUser.customLoggedInStatus == 1) {
                     if (theUser.isAdmin == 'yes') {
-                        res.sendFile(path.join(__dirname, '../views/admin', 'admin.html'));
+                        var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
+                        res.render('admin/admin.ejs', {
+                            gAnalyticsUserId: gaUserId
+                        });
                     } else if (theUser.isAdmin == 'no') {
                         res.redirect('client.html');
                     }

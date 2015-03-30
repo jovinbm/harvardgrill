@@ -33,5 +33,5 @@ $(document).ready(function () {
         });
     }
 
-    getUserUniqueCuid();
+    //getUserUniqueCuid();
 });
