@@ -185,6 +185,10 @@ app.get('/harvardId', function (req, res, next) {
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
 app.get('/adminLogin.html', routes.admin_login_Html);
+
+//get the uniqueCuid for google analytics
+app.get('/api/getUserUniqueCuid', routes.getUserUniqueCuid);
+
 app.get('/login1.html', authenticate.ensureAuthenticated, routes.login_1_Html);
 app.get('/admin.html', authenticate.ensureAuthenticated, routes.admin_Html);
 app.get('/client.html', authenticate.ensureAuthenticated, routes.client_Html);

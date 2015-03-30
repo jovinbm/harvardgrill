@@ -58,3 +58,5 @@
 //calories
 
 //grill status on login screen
+
+//add google analytics agreements to terms of use and privacy

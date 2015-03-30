@@ -34,6 +34,25 @@ module.exports = {
     },
 
 
+    getUserUniqueCuid: function (req, res) {
+        var module = 'getUserUniqueCuid';
+        receivedLogger(module);
+
+        function error(status, err) {
+            //send err message, this is printed on the console window
+            res.status(500).send(err);
+        }
+
+        function success(theUser) {
+            res.status(200).send({
+                userUniqueCuid: theUser.uniqueCuid
+            });
+        }
+
+        userDB.findUser(req.user.openId, error, error, success);
+    },
+
+
     login_1_Html: function (req, res) {
         var module = 'login_1_Html';
         receivedLogger(module);

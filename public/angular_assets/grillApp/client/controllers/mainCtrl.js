@@ -85,6 +85,12 @@ angular.module('grillApp')
                     socketService.grillName(data.grillName);
 
                     $scope.uniqueCuid = globals.uniqueCuid(data["uniqueCuid"]);
+
+                    //send to analytics excluding localhost
+                    if (document.location.hostname.search("harvardgrill") !== -1) {
+                        ga('set', '&uid', data["uniqueCuid"]); // Set the user ID using signed-in user_id.
+                    }
+
                     socket.emit('joinRoom', {
                         room: data.socketRoom,
                         customUsername: data.customUsername

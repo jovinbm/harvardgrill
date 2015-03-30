@@ -24,6 +24,28 @@
     <!-- loads custom css file -->
     <link rel="stylesheet" href="/public/css/login.css">
 
+    <!--google analytics-->
+    <script>
+        //trying to exclude localhost
+        if (document.location.hostname.search("harvardgrill") !== -1) {
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-58209445-2', 'auto');
+            ga('require', 'linkid', 'linkid.js');
+            ga('send', 'pageview');
+        }
+    </script>
+
 
     <title>HarvardGrill - Login</title>
 </head>
@@ -235,10 +257,7 @@
         src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
 
 <!-- customlogin javascript file: should be loaded after jquery-->
-<script type="text/javascript" src="/public/js/login.js"></script>
-
-<!--modal validator plugin-->
-<script type="text/javascript" src="/public/js/custom_plugin.js"></script>
+<script type="text/javascript" src="/public/js/admin/admin_login.js"></script>
 
 </body>
 </html>
