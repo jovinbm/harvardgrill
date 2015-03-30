@@ -60,3 +60,5 @@
 //grill status on login screen
 
 //add google analytics agreements to terms of use and privacy
+
+//see how far your order is from processing -- give a number? difference from the total orders? etc

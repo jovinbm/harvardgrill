@@ -7,14 +7,6 @@ angular.module('grillApp')
             }
         }
     }])
-    .directive('clientFooter', [function () {
-        return {
-            templateUrl: 'views/client/partials/navs/client_footer.html',
-            restrict: 'AEC',
-            link: function ($scope, $element, $attrs) {
-            }
-        }
-    }])
     .directive('mainOrderJumbo', [function () {
         return {
             templateUrl: 'views/client/partials/sections/main_order_card.html',
