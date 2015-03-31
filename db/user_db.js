@@ -64,6 +64,24 @@ module.exports = {
         )
     },
 
+    updategrillName: function (openId, grillName, error_neg_1, error_0, success) {
+        User
+            .update({
+                openId: openId
+            }, {
+                $set: {
+                    grillName: grillName
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
 
     toggleCls: function (openId, newCustomLoggedInStatus, error_neg_1, error_0, success) {
         User

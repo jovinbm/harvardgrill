@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="adminLoginApp" ng-controller="MainController">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,19 +10,25 @@
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/paper/bootstrap.min.css">
 
+    <!--animate.css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css"/>
+
     <!--loads font awesome-->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 
+    <!--angular loading bar css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css"/>
+
     <!--normalize.css-->
     <link rel="stylesheet" href="/bower_components/normalize.css/normalize.css"/>
 
-    <!-- bootstrap validator css -->
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+    <!--toastr-->
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
 
-    <!-- loads custom css file -->
-    <link rel="stylesheet" href="/public/css/login.css">
+    <!-- loads custom css files -->
+    <link rel="stylesheet" href="/public/css/admin/admin_cards.css">
+    <link rel="stylesheet" href="/public/css/admin/admin_login.css">
 
     <!--google analytics-->
     <script>
@@ -51,6 +57,12 @@
 </head>
 
 <body>
+
+<!--toast notifications-->
+<toast></toast>
+<!--end of toast-->
+
+
 <!--start of nav-->
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -102,25 +114,17 @@
 <!--end of jumbotron-->
 
 <!--start of admin login form-->
-<div class="container">
+<div class="container ng-cloak">
 
-    <!--login error banner-->
-    <% if (errorCode == 1 || errorCode == 2) { %>
-    <div class="alert alert-dismissible alert-warning">
+    <div class="alert alert-dismissible alert-warning ng-cloak"
+         ng-if="masterAdminLoginFormErrorBanner">
         <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong><%= errorMessage %></strong>
+        <strong>{{masterAdminLoginFormError}}</strong>
     </div>
-    <% } %>
-    <!--end of admin login error banner-->
 
     <!--data-dv attributes for bootstrap validator plugin-->
-    <form action="/adminUserLogin"
-          method="post"
-          id="adminLoginForm"
-          data-bv-message="This value is not valid"
-          data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
-          data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
-          data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+    <form name="adminLoginForm"
+          id="adminLoginForm">
 
         <!--Username field-->
         <div class="form-group">
@@ -129,37 +133,90 @@
                    class="form-control"
                    id="customUsername"
                    placeholder="Enter your username here"
-                   name="username"
-                   data-bv-message="The username is not valid"
-                   data-bv-notempty="true"
-                   data-bv-notempty-message="The username is required and cannot be empty"
-                   data-bv-regexp="true"
-                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
-                   data-bv-regexp-message="The username can only consist of alphabetical, number, dot and underscore"
-                   data-bv-stringlength="true"
-                   data-bv-stringlength-min="4"
-                   data-bv-stringlength-max="15"
-                   data-bv-stringlength-message="The username must be at least 4 and at most 15 characters long"/>
+                   ng-model="masterAdminLoginForm.username"
+                   ng-minlength="4"
+                   ng-maxlength="15"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable"
+                   name="username">
+            <span ng-show="adminLoginForm.username.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span ng-show="adminLoginForm.username.$error.minlength">
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span ng-show="adminLoginForm.username.$error.maxlength">
+                <small>Minimum length required is 15:</small>
+            </span>
+            <span ng-show="adminLoginForm.username.$error.pattern">
+                <small>Only letters, numbers and underscores allowed:</small>
+            </span>
+        </div>
+
+        <p><strong>Please select one dining</strong></p>
+
+        <div ng-repeat="(grillName, grillStatus) in allGrillStatusesModel"
+             class="form-group clearfix ng-cloak">
+
+            <div class="alert alert-success col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-if="grillStatus.grillStatus == 'open'"
+                 ng-click="selectGrill(grillName)">
+                <input type="checkbox"
+                       ng-disabled="isLoading || universalDisable"
+                       ng-model="grillStatus.isSelected"
+                       ng-true-value="'yes'"
+                       ng-false-value="'no'"
+                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Open
+            </div>
+
+            <div class="alert alert-warning col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-if="grillStatus.grillStatus == 'closed'"
+                 ng-click="selectGrill(grillName)">
+                <input type="checkbox"
+                       ng-disabled="isLoading || universalDisable"
+                       ng-model="grillStatus.isSelected"
+                       ng-true-value="'yes'"
+                       ng-false-value="'no'"
+                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Closed
+            </div>
         </div>
 
         <!--admin password field-->
-        <div class="form-group">
+        <div class="form-group"
+             ng-if="oneGrillIsSelected">
             <label for="adminPassword">Admin Password</label>
             <input type="password"
+                   name="password"
                    class="form-control"
                    id="adminPassword"
                    placeholder="Enter password here"
-                   name="password"
-                   data-bv-message="The password is not valid"
-                   data-bv-notempty="true"
-                   data-bv-notempty-message="The password is required and cannot be empty"
-                   data-bv-regexp="true"
-                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
-                   data-bv-regexp-message="The password can only consist of alphabetical, number, dot and underscore">
+                   ng-model="masterAdminLoginForm.password"
+                   ng-minlength="4"
+                   ng-maxlength="20"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable">
+                    <span ng-show="adminLoginForm.password.$error.required">
+                        <small>This is a required field:</small>
+                    </span>
+                    <span ng-show="adminLoginForm.password.$error.minlength">
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span ng-show="adminLoginForm.password.$error.maxlength">
+                        <small>Minimum length required is 20:</small>
+                    </span>
+                    <span ng-show="adminLoginForm.password.$error.pattern">
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-default btn-danger btn-lg btn-block" id="harvardID">ADMIN LOGIN
+            <button type="submit"
+                    class="btn btn-default btn-danger btn-lg btn-block"
+                    ng-disabled="adminLoginForm.$invalid || !oneGrillIsSelected"
+                    ng-click="submitAdminLoginForm()"
+                    id="harvardID">ADMIN LOGIN
             </button>
         </div>
     </form>
@@ -241,22 +298,65 @@
 
 
 <!-- JAVASCRIPT -->
+
+<!-- socket.io javascript -->
+<script type="text/javascript" src="socket.io/socket.io.js"></script>
+
 <!-- jquery -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!--AngularJS SCRIPTS-->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.9/angular-route.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-animate.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-sanitize.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+
+<!--angular analytics-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics-ga.min.js"></script>
+
 
 <!-- Bootstrap.js -->
 <script type="text/javascript"
         src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
+<!--angular loading bar js-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.js"></script>
+
 <!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 
-<!-- loads jquery for bootstrapvalidator plugin -->
+<!--angular-ui-router-->
 <script type="text/javascript"
-        src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
 
-<!-- customlogin javascript file: should be loaded after jquery-->
+<!--text angular-->
+<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
+
+<!--toastr js-->
+<script src="/bower_components/toastr/toastr.min.js"></script>
+
+<!--moment js-->
+<script type="text/javascript"
+        src="/bower_components/angular-moment/angular-moment.min.js"></script>
+<script type="text/javascript"
+        src="/bower_components/moment/min/moment.min.js"></script>
+
 <script type="text/javascript" src="/public/js/admin/admin_login.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/adminLoginApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/directives.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/filters.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/socketIoService.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/mainFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/globals.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/referenceFactory.js"></script>
 
 </body>
 </html>

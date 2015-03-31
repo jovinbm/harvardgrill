@@ -1,6 +1,10 @@
-/**
- * Created by jovinbm on 3/7/15.
- */
+//next: Main admin page where I can add/remove grills, and other very important admin measures
+//next: student choose grill page, preferably change client_login.ejs to angular like admin_login.ejs
+//next: barring students: make a grill page that can ban users
+
+//server side validation of user login using regex
+
+
 //check that custom username is not available, CUSTOM USERNAME MUST BE UNIQUE
 
 //provide coupon for fast orders
@@ -62,3 +66,5 @@
 //add google analytics agreements to terms of use and privacy
 
 //see how far your order is from processing -- give a number? difference from the total orders? etc
+
+//banner in client for admin changes, "This page has been refreshed to reflect changes by the Admin"

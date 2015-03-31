@@ -32,7 +32,11 @@ var basicAPI = require('./routes/basic_api.js');
 var grillStatusAPI = require('./routes/grillStatus_api');
 var componentAPI = require('./routes/component_api');
 var orderAPI = require('./routes/order_api');
+var loginAPI = require('./routes/login_api.js');
 var logoutAPI = require('./routes/logout_api.js');
+
+//db
+var userDB = require('./db/user_db.js');
 
 var receivedLogger = function (module) {
     var rL = require('./functions/basic.js').receivedLogger;
@@ -107,6 +111,7 @@ require('./passport/passport.js')(passport, OpenIDStrategy, LocalStrategy);
 //insert any new client into a unique room == to his socketID
 io.on('connection', function (socket) {
     socket.on('joinRoom', function (data) {
+        console.log("YES");
         var room = data.room;
         socket.join(room);
         socket.emit('joined');
@@ -119,19 +124,21 @@ app.post('/harvardId/login', passport.authenticate('openid'));
 
 //admin login
 app.post('/adminUserLogin', function (req, res, next) {
+    var grillName = req.body.grillName;
+
     passport.authenticate('local', function (err, user, info) {
         var module = 'app.post /adminUserLogin';
 
         if (err) {
             errorLogger(module, err, err);
-            return res.render("admin_login", {
+            return res.status(200).send({
                 errorCode: 1,
                 errorMessage: err
             });
         }
         if (!user) {
             errorLogger(module, info, info);
-            return res.render("admin_login", {
+            return res.status(200).send({
                 errorCode: 1,
                 errorMessage: info
             });
@@ -139,12 +146,32 @@ app.post('/adminUserLogin', function (req, res, next) {
         req.logIn(user, function (err) {
             if (err) {
                 errorLogger(module, err, err);
-                return res.render("admin_login", {
+                return res.status(200).send({
                     errorCode: 1,
                     errorMessage: "A problem occurred when trying to log you in. Please try again"
                 });
+            } else {
+                //add the grillName to the user
+                userDB.updategrillName(user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, success);
+
+                function errorUpdateGrillName() {
+                    errorLogger(module, err, err);
+                    //log the user out
+                    req.logout();
+
+                    return res.status(200).send({
+                        errorCode: 1,
+                        errorMessage: "A problem occurred when trying to log you in. Please try again"
+                    });
+                }
+
+                function success() {
+                    return res.status(200).send({
+                        errorCode: 0,
+                        msg: "adminLogin success"
+                    });
+                }
             }
-            return res.redirect('login1.html');
         });
     })(req, res, next);
 });
@@ -176,7 +203,7 @@ app.get('/harvardId', function (req, res, next) {
                     errorMessage: "Authentication failed. Please try again"
                 })
             }
-            return res.redirect('login1.html');
+            return res.redirect('clientLogin.html');
         });
     })(req, res, next);
 });
@@ -186,10 +213,7 @@ app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
 app.get('/adminLogin.html', routes.admin_login_Html);
 
-//get the uniqueCuid for google analytics
-app.get('/api/getUserUniqueCuid', routes.getUserUniqueCuid);
-
-app.get('/login1.html', authenticate.ensureAuthenticated, routes.login_1_Html);
+app.get('/clientLogin.html', authenticate.ensureAuthenticated, routes.clientLogin_Html);
 app.get('/admin.html', authenticate.ensureAuthenticated, routes.admin_Html);
 app.get('/client.html', authenticate.ensureAuthenticated, routes.client_Html);
 app.post('/infoLogin', routes.infoLogin);
@@ -198,6 +222,12 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 });
 
 //API
+
+//LOGIN API - NOT AUTHENTICATED
+app.get('/api/getTemporarySocketRoom', loginAPI.getTemporarySocketRoom);
+app.post('/api/adminLoginStartUp', loginAPI.adminLoginStartUp);
+app.post('/api/getAllGrillStatuses', loginAPI.getAllGrillStatuses);
+
 app.post('/sendEmail', basicAPI.sendEmail);
 app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRoom);
 app.post('/api/adminStartUp', authenticate.ensureAuthenticated, basicAPI.adminStartUp);

@@ -24,7 +24,7 @@ module.exports = {
         receivedLogger(module);
 
         if (req.user) {
-            res.redirect("login1.html");
+            res.redirect("clientLogin.html");
         } else {
             res.render('login', {
                 errorCode: 0,
@@ -34,27 +34,8 @@ module.exports = {
     },
 
 
-    getUserUniqueCuid: function (req, res) {
-        var module = 'getUserUniqueCuid';
-        receivedLogger(module);
-
-        function error(status, err) {
-            //send err message, this is printed on the console window
-            res.status(500).send(err);
-        }
-
-        function success(theUser) {
-            res.status(200).send({
-                userUniqueCuid: theUser.uniqueCuid
-            });
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
-    },
-
-
-    login_1_Html: function (req, res) {
-        var module = 'login_1_Html';
+    clientLogin_Html: function (req, res) {
+        var module = 'clientLogin_Html';
         receivedLogger(module);
 
         function error(status, err) {
@@ -74,7 +55,7 @@ module.exports = {
             //only clients will reach this stage
             else if (req.user) {
                 var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
-                res.render('login1', {
+                res.render('client_login', {
                     displayName: theUser.displayName,
                     errorCode: 0,
                     errorMessage: "No errors",
@@ -94,7 +75,7 @@ module.exports = {
         receivedLogger(module);
 
         if (req.user) {
-            res.redirect("login1.html");
+            res.redirect("clientLogin.html");
         } else {
             res.render('admin_login.ejs', {
                 errorCode: 0,
@@ -129,8 +110,8 @@ module.exports = {
             function successUpdate() {
 
                 //TO-do Check the username if it is available, if not render back
-                //login1 using
-                //res.render('login1', {
+                //clientLogin using
+                //res.render('client_login', {
                 //displayName: theUser.displayName,
                 //        errorCode: 1,
                 //        errorMessage: "Name already assigned to another individual. Please make another choice"
@@ -182,7 +163,7 @@ module.exports = {
                     }
                 }
                 else {
-                    res.redirect("login1.html");
+                    res.redirect("clientLogin.html");
                 }
             }
             else {
@@ -218,7 +199,7 @@ module.exports = {
                     }
                 }
                 else {
-                    res.redirect("login1.html");
+                    res.redirect("clientLogin.html");
                 }
             }
             else {

@@ -1,4 +1,5 @@
-angular.module('grillApp')
+angular.module('adminLoginApp')
+
     .controller('NavBarController', ['$log', '$window', '$scope', '$rootScope', 'logoutService',
         function ($log, $window, $scope, $rootScope, logoutService) {
 

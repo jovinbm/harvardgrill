@@ -408,6 +408,7 @@ angular.module('grillApp')
                 getMyRecentOrders();
                 globals.currentGrillStatus(null, true, true);
                 getAllAvailable(true);
+                $scope.showToast('success', 'This page has been refreshed to reflect changes in the system');
             });
 
             //receives grill status

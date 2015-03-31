@@ -44,12 +44,14 @@
                 </div>
 
                 <div class="card-action clearfix ng-cloak">
+
+                    <a href ng-click="markOrderAsDeclined(order.orderUniqueCuid, order.orderIndex)"
+                       ng-disabled="isLoading || universalDisable"
+                       class="btn btn-warning btn-md">
+                        <i class="fa fa-times"></i> Decline
+                    </a>
+
                     <div class="pull-right">
-                        <a href ng-click="markOrderAsDeclined(order.orderUniqueCuid, order.orderIndex)"
-                           ng-disabled="isLoading || universalDisable"
-                           class="btn btn-warning btn-md">
-                            <i class="fa fa-times"></i> Decline
-                        </a>
                         <a href ng-click="markOrderAsDone(order.orderUniqueCuid, order.orderIndex)"
                            ng-disabled="isLoading || universalDisable"
                            class="btn btn-success btn-md">
