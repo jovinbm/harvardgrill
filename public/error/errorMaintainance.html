@@ -10,31 +10,34 @@
 
     <!--google analytics-->
     <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        //trying to exclude localhost
+        if (document.location.hostname.search("harvardgrill") !== -1) {
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-        ga('create', 'UA-58209445-1', 'auto');
-        ga('send', 'pageview');
-
+            ga('create', 'UA-58209445-2', 'auto');
+            ga('require', 'linkid', 'linkid.js');
+            ga('send', 'pageview');
+        }
     </script>
 
-    <!-- loads bootstrap css -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/paper/bootstrap.min.css">
 
     <!--loads font awesome-->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <!--normalize.css-->
+    <link rel="stylesheet" href="/bower_components/normalize.css/normalize.css"/>
 
     <style>
         body {
@@ -43,7 +46,7 @@
         }
     </style>
 
-    <title>HarvardClass - Maintenance</title>
+    <title>HarvardGrill - Maintenance</title>
 </head>
 
 <body>
@@ -59,8 +62,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                HarvardClass
+            <a href="/" class="navbar-brand"><i class="fa fa-spoon"></i>
+                HarvardGrill
             </a>
         </div>
 
@@ -81,15 +84,9 @@
 
     <div class="jumbotron text-center">
 
-        <h1>HARVARD CLASS</h1>
+        <h1>HARVARD GRILL</h1>
 
-        <p class="hidden-xs">"We have enriched the way people ask questions in class. Harvard Class was built with one
-            goal
-            only: To
-            bring a more dynamic Q/A classroom environment between the professor and students"
-        </p>
-
-        <p class="hidden-sm hidden-md hidden-lg">The site is currently
+        <p>The site is currently
             under maintenance. It will be back shortly.
         </p>
 
@@ -108,8 +105,58 @@
 </div>
 <!--end of error message-->
 
-<!--start of footer-->
-<div class='navbar navbar-default navbar-fixed-bottom'>
+<!--footer 1 for large screens-->
+<div class="text-center navbar navbar-default navbar-fixed-bottom hidden-xs hidden-sm">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-3">
+                <p class="footer_group_heading">Contact Us</p>
+                <ul class="list-unstyled">
+                    <li><a href="mailto:admin@harvardgrill.com">admin@harvardgrill.com</a></li>
+                    <li><a href="mailto:help@harvardgrill.com">help@harvardgrill.com</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <p class="footer_group_heading">Who we are</p>
+                <ul class="list-unstyled">
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <p class="footer_group_heading">Coverage</p>
+                <ul class="list-unstyled">
+                    <li><a href="#">Undergraduate</a></li>
+                    <li><a href="#">Graduate</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <p class="footer_group_heading">Developers</p>
+                <ul class="list-unstyled">
+                    <li><a href="#">Product Help</a></li>
+                    <li><a href="#">Developer API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <ul class="nav nav-pills nav-justified">
+                <li><a href="/">© 2015 HarvardGrill</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="https://www.linkedin.com/in/jovinmwilanga/" target="_blank">
+                    <i class="fa fa-copyright"></i> 2015 jbm Harvard '18</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--end of footer 1 for large screens-->
+
+<!--start of footer 2 for small screens-->
+<div class='navbar navbar-default navbar-fixed-bottom visible-xs visible-sm'>
     <div class="container">
         <p class="navbar-text pull-left">
             <i class="fa fa-copyright"></i> 2015 jbm
@@ -125,11 +172,11 @@
         </p>
 
         <div class="pull-right">
-            <a class="navbar-btn btn btn-warning btn-xs">Status: Development</a>
+            <a class="navbar-btn btn btn-primary btn-xs" href="mailto:admin@harvardgrill.com">Contact</a>
         </div>
     </div>
 </div>
-<!--end of footer-->
+<!--end of footer 2 for small screens-->
 
 
 <!-- JAVASCRIPT -->
