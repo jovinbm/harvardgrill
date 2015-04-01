@@ -30,7 +30,7 @@ module.exports = {
                 msg: 'Error when trying to start the app. Please reload page',
                 reason: errorLogger(module, 'Could not updateUserLastActivity', err),
                 disable: true,
-                redirectToError: false,
+                redirect: false,
                 redirectPage: '/error/500.html'
             });
             consoleLogger(errorLogger(module, 'Failed! Could not updateUserLastActivity', err));
@@ -43,7 +43,7 @@ module.exports = {
                     msg: 'Error when trying to start the app. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve startup info', err),
                     disable: true,
-                    redirectToError: true,
+                    redirect: true,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve startup info', err));
@@ -74,7 +74,7 @@ module.exports = {
                     msg: 'Error when trying to start the app. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve startup info', err),
                     disable: true,
-                    redirectToError: true,
+                    redirect: true,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve startup info', err));

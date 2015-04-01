@@ -131,44 +131,77 @@ app.post('/adminUserLogin', function (req, res, next) {
 
         if (err) {
             errorLogger(module, err, err);
-            return res.status(200).send({
-                errorCode: 1,
-                errorMessage: err
+
+            return res.status(401).send({
+                code: 401,
+                notify: false,
+                type: 'warning',
+                msg: "A problem occurred when trying to log you in. Please try again",
+                reason: errorLogger(module, 'There was an error logging the user in', err),
+                disable: false,
+                redirect: false,
+                redirectPage: '/error/500.html'
             });
         }
         if (!user) {
             errorLogger(module, info, info);
-            return res.status(200).send({
-                errorCode: 1,
-                errorMessage: info
+
+            return res.status(401).send({
+                code: 401,
+                notify: false,
+                type: 'warning',
+                msg: info,
+                reason: errorLogger(module, 'There was an error logging the user in', err),
+                disable: false,
+                redirect: false,
+                redirectPage: '/error/500.html'
             });
         }
         req.logIn(user, function (err) {
             if (err) {
                 errorLogger(module, err, err);
-                return res.status(200).send({
-                    errorCode: 1,
-                    errorMessage: "A problem occurred when trying to log you in. Please try again"
+
+                return res.status(500).send({
+                    code: 500,
+                    notify: false,
+                    type: 'error',
+                    msg: "A problem occurred when trying to log you in. Please try again",
+                    reason: errorLogger(module, 'Failed! req.login()', err),
+                    disable: false,
+                    redirect: false,
+                    redirectPage: '/error/500.html'
                 });
             } else {
                 //add the grillName to the user
-                userDB.updategrillName(user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, success);
+                userDB.updateGrillName(user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, success);
 
                 function errorUpdateGrillName() {
                     errorLogger(module, err, err);
                     //log the user out
                     req.logout();
 
-                    return res.status(200).send({
-                        errorCode: 1,
-                        errorMessage: "A problem occurred when trying to log you in. Please try again"
+                    return res.status(500).send({
+                        code: 500,
+                        notify: false,
+                        type: 'error',
+                        msg: "A problem occurred when trying to log you in. Please try again",
+                        reason: errorLogger(module, 'Failed! userDB.updateGrillName', err),
+                        disable: false,
+                        redirect: false,
+                        redirectPage: '/error/500.html'
                     });
                 }
 
                 function success() {
                     return res.status(200).send({
-                        errorCode: 0,
-                        msg: "adminLogin success"
+                        code: 200,
+                        notify: false,
+                        type: 'success',
+                        msg: "You have successfully logged in",
+                        reason: successLogger(module, 'adminLoginSuccess'),
+                        disable: false,
+                        redirect: true,
+                        redirectPage: '/clientLogin.html'
                     });
                 }
             }
@@ -213,9 +246,9 @@ app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
 app.get('/adminLogin.html', routes.admin_login_Html);
 
-app.get('/clientLogin.html', authenticate.ensureAuthenticated, routes.clientLogin_Html);
-app.get('/admin.html', authenticate.ensureAuthenticated, routes.admin_Html);
-app.get('/client.html', authenticate.ensureAuthenticated, routes.client_Html);
+app.get('/clientLogin.html', routes.clientLogin_Html);
+app.get('/admin.html', routes.admin_Html);
+app.get('/client.html', routes.client_Html);
 app.post('/infoLogin', routes.infoLogin);
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
@@ -260,8 +293,8 @@ app.post('/api/markOrderAsDone', authenticate.ensureAuthenticated, orderAPI.mark
 app.post('/api/markOrderAsDeclined', authenticate.ensureAuthenticated, orderAPI.markOrderAsDeclined);
 
 app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
-app.post('/api/logoutCustomOrder', authenticate.ensureAuthenticated, logoutAPI.logoutCustomOrder);
-app.post('/api/logoutHarvardOrder', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardOrder);
+app.post('/api/logoutClientSession', authenticate.ensureAuthenticated, logoutAPI.logoutClientSession);
+app.post('/api/logoutClientFull', authenticate.ensureAuthenticated, logoutAPI.logoutClientFull);
 app.post('/api/adminLogout', authenticate.ensureAuthenticated, logoutAPI.adminLogout);
 
 //error handlers

@@ -64,7 +64,7 @@ module.exports = {
         )
     },
 
-    updategrillName: function (openId, grillName, error_neg_1, error_0, success) {
+    updateGrillName: function (openId, grillName, error_neg_1, error_0, success) {
         User
             .update({
                 openId: openId

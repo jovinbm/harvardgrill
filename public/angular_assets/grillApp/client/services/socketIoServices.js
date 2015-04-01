@@ -78,16 +78,15 @@ angular.module('grillApp')
     ])
 
 
-    .
-    factory('logoutService', ['$http',
+    .factory('logoutService', ['$http',
         function ($http) {
             return {
-                logoutCustomOrder: function () {
-                    return $http.post('/api/logoutCustomOrder');
+                logoutClientSession: function () {
+                    return $http.post('/api/logoutClientSession');
                 },
 
-                logoutHarvardOrder: function () {
-                    return $http.post('/api/logoutHarvardOrder');
+                logoutClientFull: function () {
+                    return $http.post('/api/logoutClientFull');
                 }
             }
         }]);

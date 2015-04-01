@@ -4,11 +4,11 @@ angular.module('grillApp')
 
             $scope.adminLogout = function () {
                 logoutService.adminLogout()
-                    .success(function (response) {
-                        $window.location.href = "/adminLogin.html";
+                    .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             };
 

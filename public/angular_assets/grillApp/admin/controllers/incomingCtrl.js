@@ -119,11 +119,11 @@ angular.module('grillApp')
                         globals.currentGrillStatus(null, true, true);
                         getAdminClientOrders(1, false, currentOrdersToBeSkipped);
 
-                        $scope.showToast('success', 'Order done');
+                        $scope.responseStatusHandler(resp);
                         $scope.isLoadingFalse();
                     }).error(function (errResponse) {
                         $scope.isLoadingFalse();
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     })
             };
 
@@ -161,11 +161,11 @@ angular.module('grillApp')
                         //pull one new order and insert it into the currentIncoming orders
                         getAdminClientOrders(1, false, currentOrdersToBeSkipped);
 
-                        $scope.showToast('success', 'Order declined successfully');
+                        $scope.responseStatusHandler(resp);
                         $scope.isLoadingFalse();
                     }).error(function (errResponse) {
                         $scope.isLoadingFalse();
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     })
             };
 
@@ -186,7 +186,7 @@ angular.module('grillApp')
                     $scope.processedOrderModels[order.orderIndex] = {};
                     order.orderComponents.forEach(function (componentIndex) {
 
-                        //set the default to yes, as this makes it easy for thr admin to uncheck unavailable
+                        //set the default to yes, as this makes it easy for thr admin to un-check unavailable
                         //than available
                         $scope.processedOrderModels[order.orderIndex][componentIndex] = 'yes';
                     });

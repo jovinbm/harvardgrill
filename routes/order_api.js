@@ -30,11 +30,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -49,11 +51,13 @@ module.exports = {
 
                 function errorGrillStatus(status, err) {
                     res.status(500).send({
+                        code: 500,
+                        notify: true,
                         type: 'error',
                         msg: "A problem has occurred. Please reload the page",
                         reason: errorLogger(module, 'Error while retrieving stats info', err),
                         disable: true,
-                        redirectToError: false,
+                        redirect: false,
                         redirectPage: '/error/500.html'
                     });
                     consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
@@ -64,11 +68,13 @@ module.exports = {
                         order_handler.newClientOrder(req, res, theUser, currentGrillStatus, theOrder);
                     } else {
                         res.status(500).send({
+                            code: 500,
+                            notify: true,
                             type: 'error',
                             msg: "The grill is currently still open. Close the grill to perform this action",
                             reason: errorLogger(module, 'Grill is not closed'),
                             disable: false,
-                            redirectToError: false,
+                            redirect: false,
                             redirectPage: '/error/500.html'
                         });
                         consoleLogger(errorLogger(module, 'Grill is not closed'));
@@ -102,11 +108,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -116,11 +124,13 @@ module.exports = {
         function success(theUser) {
             function errorGrillStatus(status, err) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Error while retrieving stats info', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
@@ -147,11 +157,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -166,11 +178,13 @@ module.exports = {
 
                 function errorGrillStatus(status, err) {
                     res.status(500).send({
+                        code: 500,
+                        notify: true,
                         type: 'error',
                         msg: "A problem has occurred. Please reload the page",
                         reason: errorLogger(module, 'Error while retrieving stats info', err),
                         disable: true,
-                        redirectToError: false,
+                        redirect: false,
                         redirectPage: '/error/500.html'
                     });
                     consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
@@ -199,11 +213,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -218,11 +234,13 @@ module.exports = {
 
                 function errorGrillStatus(status, err) {
                     res.status(500).send({
+                        code: 500,
+                        notify: true,
                         type: 'error',
                         msg: "A problem has occurred. Please reload the page",
                         reason: errorLogger(module, 'Error while retrieving stats info', err),
                         disable: true,
-                        redirectToError: false,
+                        redirect: false,
                         redirectPage: '/error/500.html'
                     });
                     consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
@@ -251,11 +269,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -270,11 +290,13 @@ module.exports = {
 
                 function errorGrillStatus(status, err) {
                     res.status(500).send({
+                        code: 500,
+                        notify: true,
                         type: 'error',
                         msg: "A problem has occurred. Please reload the page",
                         reason: errorLogger(module, 'Error while retrieving stats info', err),
                         disable: true,
-                        redirectToError: false,
+                        redirect: false,
                         redirectPage: '/error/500.html'
                     });
                     consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));

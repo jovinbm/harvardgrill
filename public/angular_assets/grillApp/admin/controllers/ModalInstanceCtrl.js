@@ -22,20 +22,22 @@ angular.module('grillApp')
             function getAllOrderComponents() {
                 EditService.getAllOrderComponents()
                     .success(function (orderComponents) {
+                        $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allOrderComponents = orderComponents.allComponents;
                     })
                     .error(function (errResponse) {
-                        $rootScope.$broadcast('requestErrorHandler', errResponse);
+                        $rootScope.$broadcast('responseStatusHandler', errResponse);
                     });
             }
 
             function getAllOmelets() {
                 EditService.getAllOmelets()
                     .success(function (orderComponents) {
+                        $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allOmelets = orderComponents.allComponents;
                     })
                     .error(function (errResponse) {
-                        $rootScope.$broadcast('requestErrorHandler', errResponse);
+                        $rootScope.$broadcast('responseStatusHandler', errResponse);
                     });
             }
 
@@ -43,20 +45,22 @@ angular.module('grillApp')
             function getAllWeeklySpecials() {
                 EditService.getAllWeeklySpecials()
                     .success(function (orderComponents) {
+                        $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allWeeklySpecials = orderComponents.allComponents;
                     })
                     .error(function (errResponse) {
-                        $rootScope.$broadcast('requestErrorHandler', errResponse);
+                        $rootScope.$broadcast('responseStatusHandler', errResponse);
                     });
             }
 
             function getAllExtras() {
                 EditService.getAllExtras()
                     .success(function (orderComponents) {
+                        $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allExtras = orderComponents.allComponents;
                     })
                     .error(function (errResponse) {
-                        $rootScope.$broadcast('requestErrorHandler', errResponse);
+                        $rootScope.$broadcast('responseStatusHandler', errResponse);
                     });
             }
 
@@ -106,17 +110,14 @@ angular.module('grillApp')
 
                 grillStatusService.updateAvailableComponents(allComponents)
                     .success(function (resp) {
-                        $rootScope.$broadcast("showToast", {
-                            toastType: 'success',
-                            text: 'Update successful'
-                        });
+                        $rootScope.$broadcast('responseStatusHandler', resp);
                         getAllAll();
                         $rootScope.$broadcast('isLoadingFalse');
                         $scope.confirmModalIsDirty = false;
                     })
                     .error(function (errResponse) {
                         $rootScope.$broadcast('isLoadingFalse');
-                        $rootScope.$broadcast('requestErrorHandler', errResponse);
+                        $rootScope.$broadcast('responseStatusHandler', errResponse);
                     });
             };
 

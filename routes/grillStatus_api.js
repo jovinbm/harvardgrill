@@ -30,11 +30,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -60,11 +62,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -89,11 +93,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -119,11 +125,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -136,11 +144,13 @@ module.exports = {
                 function errorIndexes(status, err) {
                     if (status == -1 || status == 0) {
                         res.status(500).send({
+                            code: 500,
+                            notify: true,
                             type: 'error',
                             msg: "A problem has occurred. Please reload the page",
                             reason: errorLogger(module, 'Could not retrieve componentIndexesSuccess', err),
                             disable: true,
-                            redirectToError: false,
+                            redirect: false,
                             redirectPage: '/error/500.html'
                         });
                         consoleLogger(errorLogger(module, 'Could not retrieve componentIndexesSuccess', err));
@@ -170,11 +180,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));

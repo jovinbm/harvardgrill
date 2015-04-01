@@ -17,23 +17,33 @@ angular.module('adminLoginApp')
                 $scope.universalDisable = false;
             };
 
-            $scope.requestErrorHandler = function (errResponse) {
-                if (errResponse) {
-                    if (errResponse.redirectToError == true) {
-                        $window.location.href = errResponse.redirectPage;
+            $scope.responseStatusHandler = function (resp) {
+                if (resp) {
+                    if (resp.redirect) {
+                        if (resp.redirect == true) {
+                            $window.location.href = resp.redirectPage;
+                        }
                     }
-                    if (errResponse.disable == true) {
-                        $scope.universalDisableFalse();
+                    if (resp.disable) {
+                        if (resp.disable == true) {
+                            $scope.universalDisableTrue();
+                        }
                     }
-                    $scope.showToast(errResponse.type, errResponse.msg);
-                    $log.error(errResponse.reason);
+                    if (resp.notify) {
+                        if (resp.type && resp.msg) {
+                            $scope.showToast(resp.type, resp.msg);
+                        }
+                    }
+                    if (resp.reason) {
+                        $log.warn(resp.reason);
+                    }
                 } else {
-                    $scope.showToast('warning', 'Connection lost, please try again')
+                    $scope.showToast('warning', 'Connection lost, reconnecting...')
                 }
             };
 
-            $rootScope.$on('requestErrorHandler', function (event, errResponse) {
-                $scope.requestErrorHandler(errResponse);
+            $rootScope.$on('responseStatusHandler', function (event, resp) {
+                $scope.responseStatusHandler(resp);
             });
 
 
@@ -112,18 +122,20 @@ angular.module('adminLoginApp')
 
             //initial requests
             socketService.getMyTemporarySocketRoom()
-                .success(function (data) {
-                    globals.temporarySocketRoom(data.temporarySocketRoom);
+                .success(function (resp) {
+                    globals.temporarySocketRoom(resp.temporarySocketRoom);
 
                     //join the random temporary socketRoom given
                     socket.emit('joinRoom', {
-                        room: data.temporarySocketRoom
+                        room: resp.temporarySocketRoom
                     });
 
                     //a success emit("joined") is picked up by "mainService" in mainFactory.js
+
+                    $scope.responseStatusHandler(resp);
                 })
                 .error(function (errResponse) {
-                    $scope.requestErrorHandler(errResponse);
+                    $scope.responseStatusHandler(errResponse);
                 });
 
 
@@ -154,20 +166,18 @@ angular.module('adminLoginApp')
                     //submit the login
                     socketService.adminUserLogin($scope.masterAdminLoginForm)
                         .success(function (resp) {
-                            if (resp.errorCode == 0) {
-                                $window.location.href = "/clientLogin.html"
-                            } else {
-                                //hide password field since grill selection will be refreshed
-
-                                $scope.oneGrillIsSelected = false;
-                                globals.allGrillStatuses(null, true, true);
-                                $scope.masterAdminLoginForm.password = "";
-                                $scope.masterAdminLoginFormErrorBanner = true;
-                                $scope.masterAdminLoginFormError = resp.errorMessage;
-                            }
+                            //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
+                            $scope.responseStatusHandler(resp);
                         })
                         .error(function (errResponse) {
-                            $scope.showToast('error', 'An error occurred while authenticating. Please try again');
+                            //hide password field since grill selection will be refreshed
+
+                            $scope.oneGrillIsSelected = false;
+                            globals.allGrillStatuses(null, true, true);
+                            $scope.masterAdminLoginForm.password = "";
+                            $scope.masterAdminLoginFormErrorBanner = true;
+                            $scope.masterAdminLoginFormError = errResponse.msg;
+                            $scope.responseStatusHandler(errResponse);
                         })
                 } else {
                     $scope.showToast('warning', 'At least one dining grill should be selected');
@@ -194,8 +204,6 @@ angular.module('adminLoginApp')
                             $scope.allGrillStatusesModel[prop].isSelected = 'no';
                         }
                     }
-
-                    console.log(JSON.stringify($scope.allGrillStatusesModel));
                 }
 
                 checkIfGrillIsSelected();

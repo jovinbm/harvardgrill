@@ -32,7 +32,7 @@ module.exports = {
                     msg: 'Failed to add, please try again. If problem persists, please reload this page',
                     reason: errorLogger(module, 'Could not add component', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not add component', err));
@@ -41,7 +41,11 @@ module.exports = {
 
         function success(theSavedComponent) {
             res.status(200).send({
-                savedComponent: theSavedComponent
+                savedComponent: theSavedComponent,
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'Saved'
             });
             ioJs.emitToAll('adminChanges', 'changes');
             consoleLogger(successLogger(module));
@@ -74,7 +78,7 @@ module.exports = {
                     msg: 'Failed to save, please try again. If problem persists, please reload this page',
                     reason: errorLogger(module, 'Could not save component', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not save component', err));
@@ -83,7 +87,10 @@ module.exports = {
 
         function success() {
             res.status(200).send({
-                msg: "Component successfully edited"
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'Saved'
             });
             ioJs.emitToAll('adminChanges', 'changes');
             consoleLogger(successLogger(module));
@@ -104,7 +111,7 @@ module.exports = {
                     msg: 'Failed to delete, please try again. If problem persists, please reload this page',
                     reason: errorLogger(module, 'Could not delete component', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not delete component', err));
@@ -113,7 +120,10 @@ module.exports = {
 
         function success() {
             res.status(200).send({
-                msg: 'Delete SuccessFull'
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'Successfully removed'
             });
             ioJs.emitToAll('adminChanges', 'changes');
             consoleLogger(successLogger(module));
@@ -134,7 +144,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
@@ -164,7 +174,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
@@ -194,7 +204,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
@@ -224,7 +234,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
@@ -254,7 +264,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
@@ -284,7 +294,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
@@ -314,7 +324,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
@@ -344,7 +354,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));

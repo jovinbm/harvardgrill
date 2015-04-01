@@ -31,7 +31,7 @@ module.exports = {
                     msg: "Your order could not be sent. Please try again. If this problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not save new order', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not save new order', err));
@@ -40,7 +40,11 @@ module.exports = {
 
         function orderSaved(theSavedOrder) {
             res.status(200).send({
-                savedOrder: theSavedOrder
+                savedOrder: theSavedOrder,
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'Your order has been placed'
             });
             ioJs.emitToOne('adminSocketRoom', 'newOrders', 'update now!');
             consoleLogger(successLogger(module));
@@ -62,7 +66,7 @@ module.exports = {
                     msg: 'A problem has occurred. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve client orders', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve client orders', err));
@@ -93,7 +97,7 @@ module.exports = {
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not get recent orders', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not get recent orders', err));
@@ -122,7 +126,7 @@ module.exports = {
                     msg: "Could not mark order as done. Please try again. If problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not mark order as done', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not get recent orders', err));
@@ -131,7 +135,10 @@ module.exports = {
 
         function success(theUpdatedOrder) {
             res.status(200).send({
-                msg: 'markOrderAsDone success'
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'Order done'
             });
             ioJs.emitToOne(theUpdatedOrder.clientSocketRoom, 'orderStatusChange', {
                 status: theUpdatedOrder.status
@@ -155,7 +162,7 @@ module.exports = {
                     msg: "Could not mark order as declined. Please try again. If problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not mark order as declined', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not mark order as declined', err));
@@ -164,7 +171,10 @@ module.exports = {
 
         function success(theUpdatedOrder) {
             res.status(200).send({
-                msg: 'markOrderAsDeclined success'
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'Order declined'
             });
             ioJs.emitToOne(theUpdatedOrder.clientSocketRoom, 'orderStatusChange', {
                 status: theUpdatedOrder.status

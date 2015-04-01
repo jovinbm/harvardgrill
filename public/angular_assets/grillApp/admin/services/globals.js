@@ -49,6 +49,7 @@ angular.module('grillApp')
                     if (refreshGrillStatus) {
                         socketService.getCurrentGrillStatus()
                             .success(function (resp) {
+                                $rootScope.$broadcast('responseStatusHandler', resp);
                                 currentGrillStatus = resp.currentGrillStatus;
 
                                 if (broadcast) {
@@ -56,7 +57,7 @@ angular.module('grillApp')
                                 }
                             })
                             .error(function (errResponse) {
-                                $rootScope.$broadcast('requestErrorHandler', errResponse);
+                                $rootScope.$broadcast('responseStatusHandler', errResponse);
                             });
                     } else {
 
@@ -77,6 +78,7 @@ angular.module('grillApp')
                     if (getFromServer) {
                         socketService.getAdminClientOrders(amount, currentOrdersToBeSkipped)
                             .success(function (resp) {
+                                $rootScope.$broadcast('responseStatusHandler', resp);
                                 adminClientOrders = resp.orders;
 
                                 if (refresh) {
@@ -94,7 +96,7 @@ angular.module('grillApp')
                                 }
                             })
                             .error(function (errResponse) {
-                                $rootScope.$broadcast('requestErrorHandler', errResponse);
+                                $rootScope.$broadcast('responseStatusHandler', errResponse);
                             });
                     } else if (broadcast) {
                         $rootScope.$broadcast('adminClientOrders', adminClientOrders);

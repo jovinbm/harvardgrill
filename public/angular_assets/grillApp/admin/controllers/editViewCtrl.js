@@ -54,9 +54,11 @@ angular.module('grillApp')
                     .success(function (orderComponents) {
                         $scope.allOrderComponents = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
+
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -65,9 +67,11 @@ angular.module('grillApp')
                     .success(function (orderComponents) {
                         $scope.allOmelets = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
+
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -77,9 +81,11 @@ angular.module('grillApp')
                     .success(function (orderComponents) {
                         $scope.allWeeklySpecials = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
+
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -88,9 +94,11 @@ angular.module('grillApp')
                     .success(function (orderComponents) {
                         $scope.allExtras = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
+
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -160,11 +168,11 @@ angular.module('grillApp')
                                 .success(function (resp) {
                                     $scope.isLoadingFalse();
                                     globals.currentGrillStatus(resp.newGrillStatus, true);
-                                    $scope.showToast("success", "The Grill is now open");
+                                    $scope.responseStatusHandler(resp);
                                 })
                                 .error(function (errResponse) {
                                     $scope.isLoadingFalse();
-                                    $scope.requestErrorHandler(errResponse);
+                                    $scope.responseStatusHandler(errResponse);
                                 });
                         }, function (error) {
                             $scope.isLoadingFalse();
@@ -178,11 +186,11 @@ angular.module('grillApp')
                                 .success(function (resp) {
                                     $scope.isLoadingFalse();
                                     globals.currentGrillStatus(resp.newGrillStatus, true);
-                                    $scope.showToast("success", "The Grill is now closed");
+                                    $scope.responseStatusHandler(resp);
                                 })
                                 .error(function (errResponse) {
                                     $scope.isLoadingFalse();
-                                    $scope.requestErrorHandler(errResponse);
+                                    $scope.responseStatusHandler(errResponse);
                                 });
                         }, function (error) {
                             getAllAll();
@@ -208,10 +216,10 @@ angular.module('grillApp')
                     .success(function (savedComponent) {
                         getAllOrderComponents();
                         $scope.orderComponentModel.inputText = "";
-                        $scope.showToast("success", "Saved");
+                        $scope.responseStatusHandler(savedComponent);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
 
             };
@@ -227,10 +235,10 @@ angular.module('grillApp')
                     .success(function (savedComponent) {
                         getAllOmelets();
                         $scope.omeletModel.inputText = "";
-                        $scope.showToast("success", "Saved");
+                        $scope.responseStatusHandler(savedComponent);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
 
             };
@@ -246,10 +254,10 @@ angular.module('grillApp')
                     .success(function (savedComponent) {
                         getAllWeeklySpecials();
                         $scope.weeklySpecialModel.inputText = "";
-                        $scope.showToast("success", "Saved");
+                        $scope.responseStatusHandler(savedComponent);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
 
             };
@@ -265,10 +273,10 @@ angular.module('grillApp')
                     .success(function (savedComponent) {
                         getAllExtras();
                         $scope.extraModel.inputText = "";
-                        $scope.showToast("success", "Saved");
+                        $scope.responseStatusHandler(savedComponent);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
 
             };
@@ -306,7 +314,7 @@ angular.module('grillApp')
             $scope.deleteComponent = function (componentIndex, componentGroup) {
 
                 EditService.deleteComponent(componentIndex)
-                    .success(function () {
+                    .success(function (resp) {
                         switch (componentGroup) {
                             case "oc":
                                 getAllOrderComponents();
@@ -324,10 +332,10 @@ angular.module('grillApp')
                                 getAllAll();
                         }
 
-                        $scope.showToast("success", "All changes saved");
+                        $scope.responseStatusHandler(resp);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
 
             };
@@ -336,7 +344,7 @@ angular.module('grillApp')
             $scope.saveEditedOrderComponent = function (componentIndex, name, componentGroup) {
 
                 EditService.saveEditedOrderComponent(componentIndex, name)
-                    .success(function () {
+                    .success(function (resp) {
                         switch (componentGroup) {
                             case "oc":
                                 getAllOrderComponents();
@@ -354,10 +362,10 @@ angular.module('grillApp')
                                 getAllAll();
                         }
 
-                        $scope.showToast("success", "All changes saved");
+                        $scope.responseStatusHandler(resp);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
 
             };

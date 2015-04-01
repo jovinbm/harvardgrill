@@ -35,20 +35,23 @@ module.exports = {
     },
 
 
-    logoutCustomOrder: function (req, res, theUser) {
-        var module = 'logoutCustomOrder';
+    logoutClientSession: function (req, res, theUser) {
+        var module = 'logoutClientSession';
         receivedLogger(module);
 
         //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
         res.status(200).send({
-            msg: 'LogoutCustomOrder success'
+            code: 200,
+            notify: false,
+            redirect: true,
+            redirectPage: "/clientLogin.html"
         });
         consoleLogger(successLogger(module));
     },
 
 
-    logoutHarvardOrder: function (req, res, theUser) {
-        var module = 'logoutHarvardOrder';
+    logoutClientFull: function (req, res, theUser) {
+        var module = 'logoutClientFull';
         receivedLogger(module);
 
         //delete the harvard cs50 ID session
@@ -56,7 +59,10 @@ module.exports = {
 
         //send a success so that the user will be logged out and redirected to login
         res.status(200).send({
-            msg: 'LogoutHarvardOrder success'
+            code: 200,
+            notify: false,
+            redirect: true,
+            redirectPage: "/login.html"
         });
         consoleLogger(successLogger(module));
     },
@@ -77,7 +83,7 @@ module.exports = {
                     msg: 'Error when trying to log you out. Please reload page',
                     reason: errorLogger(module, 'Could not logout admin', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not logout admin', err));
@@ -87,7 +93,10 @@ module.exports = {
         function success() {
             //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
             res.status(200).send({
-                msg: 'LogoutCustomOrder success'
+                code: 200,
+                notify: false,
+                redirect: true,
+                redirectPage: "/adminLogin.html"
             });
             consoleLogger(successLogger(module));
         }

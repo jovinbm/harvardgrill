@@ -37,19 +37,23 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var module = 'OpenIDStrategy';
 
             var openId = identifier;
+            var isAdmin = 'no';
             var uniqueCuid = cuid();
             var socketRoom = cuid();
             var displayName = profile.displayName || "Harvard Member";
             var email = profile.emails[0].value || cuid() + "@harvardclass.com";
+            var customLoggedInStatus = 0;
 
             //defining all callbacks
             function error(status, err) {
                 var user = new User({
                     openId: openId,
+                    isAdmin: isAdmin,
                     uniqueCuid: uniqueCuid,
                     socketRoom: socketRoom,
                     displayName: displayName,
-                    email: email
+                    email: email,
+                    customLoggedInStatus: customLoggedInStatus
                 });
 
                 function saveError(status, err) {

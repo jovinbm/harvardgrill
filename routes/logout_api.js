@@ -29,8 +29,8 @@ module.exports = {
     },
 
 
-    logoutCustomOrder: function (req, res) {
-        var module = 'logoutCustomOrder';
+    logoutClientSession: function (req, res) {
+        var module = 'logoutClientSession';
         receivedLogger(module);
 
         /*no need to complete the ajax request -- user will be redirected to login which has it's
@@ -39,11 +39,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
+                    msg: "A problem has occurred. Please try again",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -55,11 +57,13 @@ module.exports = {
             function errorToggle(status, err) {
                 if (status == -1 || status == 0) {
                     res.status(500).send({
+                        code: 500,
+                        notify: true,
                         type: 'error',
                         msg: "A problem has occurred. Please reload the page",
                         reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
                         disable: true,
-                        redirectToError: false,
+                        redirect: false,
                         redirectPage: '/error/500.html'
                     });
                     consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
@@ -68,7 +72,7 @@ module.exports = {
 
             //toggle the user's customLoggedInStatus
             function toggled() {
-                logout_handler.logoutCustomOrder(req, res, theUser);
+                logout_handler.logoutClientSession(req, res, theUser);
             }
 
             userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
@@ -78,8 +82,8 @@ module.exports = {
     },
 
 
-    logoutHarvardOrder: function (req, res) {
-        var module = 'logoutHarvardOrder';
+    logoutClientFull: function (req, res) {
+        var module = 'logoutClientFull';
         receivedLogger(module);
 
         /*no need to complete the ajax request -- user will be redirected to login which has it's
@@ -88,11 +92,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -105,11 +111,13 @@ module.exports = {
             function errorToggle(status, err) {
                 if (status == -1 || status == 0) {
                     res.status(500).send({
+                        code: 500,
+                        notify: true,
                         type: 'error',
-                        msg: "A problem has occurred. Please reload the page",
+                        msg: "A problem has occurred. Please try again",
                         reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
                         disable: true,
-                        redirectToError: false,
+                        redirect: false,
                         redirectPage: '/error/500.html'
                     });
                     consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
@@ -117,7 +125,7 @@ module.exports = {
             }
 
             function toggled() {
-                logout_handler.logoutHarvardOrder(req, res, theUser);
+                logout_handler.logoutClientFull(req, res, theUser);
             }
 
             userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
@@ -137,11 +145,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
+                    msg: "A problem has occurred. Please try again",
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));

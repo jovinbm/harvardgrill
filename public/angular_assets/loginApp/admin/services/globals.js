@@ -18,14 +18,16 @@ angular.module('adminLoginApp')
                     if (refreshGrillStatus) {
                         socketService.getAllGrillStatuses()
                             .success(function (resp) {
+                                $rootScope.$broadcast('responseStatusHandler', resp);
                                 allGrillStatuses = resp.allGrillStatuses;
 
                                 if (broadcast) {
                                     $rootScope.$broadcast('allGrillStatuses', allGrillStatuses);
                                 }
+                                $rootScope.$broadcast('responseStatusHandler', resp);
                             })
                             .error(function (errResponse) {
-                                $rootScope.$broadcast('requestErrorHandler', errResponse);
+                                $rootScope.$broadcast('responseStatusHandler', errResponse);
                             });
                     } else {
 

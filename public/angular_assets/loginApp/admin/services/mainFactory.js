@@ -6,10 +6,12 @@ angular.module('adminLoginApp')
                 //clientStartup request seeks the overall status of the grill e.g open, closed, etc(not the orders);
                 socketService.adminLoginStartUp()
                     .success(function (resp) {
-                        $rootScope.$broadcast('allGrillStatuses', resp.allGrillStatus);
+                        $rootScope.$broadcast('responseStatusHandler', resp);
+                        $rootScope.$broadcast('allGrillStatuses', resp.allGrillStatuses);
+                        $rootScope.$broadcast('responseStatusHandler', resp);
                     })
                     .error(function (errResponse) {
-                        $rootScope.$broadcast('requestErrorHandler', errResponse);
+                        $rootScope.$broadcast('responseStatusHandler', errResponse);
                     });
             });
 

@@ -50,11 +50,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'Error when trying to start the app. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: true,
+                    redirect: true,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -87,11 +89,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'Error when trying to start the app. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: true,
+                    redirect: true,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -116,11 +120,13 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'Error when trying to start the app. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve user', err),
                     disable: true,
-                    redirectToError: true,
+                    redirect: true,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));

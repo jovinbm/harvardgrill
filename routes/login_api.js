@@ -79,11 +79,13 @@ module.exports = {
         function errorAllGrillStatus(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'An error occurred. Please reload this page',
                     reason: errorLogger(module, 'Could not retrieve allGrillStatuses', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
@@ -104,11 +106,13 @@ module.exports = {
         function errorAllGrillStatus(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'An error occurred. Please reload this page',
                     reason: errorLogger(module, 'Could not retrieve allGrillStatuses', err),
                     disable: true,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));

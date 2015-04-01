@@ -2,23 +2,23 @@ angular.module('grillApp')
     .controller('NavBarController', ['$log', '$window', '$scope', '$rootScope', 'logoutService',
         function ($log, $window, $scope, $rootScope, logoutService) {
 
-            $scope.logoutCustomOrder = function () {
-                logoutService.logoutCustomOrder()
-                    .success(function (response) {
-                        $window.location.href = "/clientLogin.html";
+            $scope.logoutClientSession = function () {
+                logoutService.logoutClientSession()
+                    .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             };
 
-            $scope.logoutHarvardOrder = function () {
-                logoutService.logoutHarvardOrder()
-                    .success(function (response) {
-                        $window.location.href = "/login.html";
+            $scope.logoutClientFull = function () {
+                logoutService.logoutClientFull()
+                    .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             };
 

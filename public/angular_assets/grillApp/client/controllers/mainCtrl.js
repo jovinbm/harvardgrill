@@ -14,23 +14,33 @@ angular.module('grillApp')
                 $scope.universalDisable = false;
             };
 
-            $scope.requestErrorHandler = function (errResponse) {
-                if (errResponse) {
-                    if (errResponse.redirectToError == true) {
-                        $window.location.href = errResponse.redirectPage;
+            $scope.responseStatusHandler = function (resp) {
+                if (resp) {
+                    if (resp.redirect) {
+                        if (resp.redirect == true) {
+                            $window.location.href = resp.redirectPage;
+                        }
                     }
-                    if (errResponse.disable == true) {
-                        $scope.universalDisableFalse();
+                    if (resp.disable) {
+                        if (resp.disable == true) {
+                            $scope.universalDisableTrue();
+                        }
                     }
-                    $scope.showToast(errResponse.type, errResponse.msg);
-                    $log.error(errResponse.reason);
+                    if (resp.notify) {
+                        if (resp.type && resp.msg) {
+                            $scope.showToast(resp.type, resp.msg);
+                        }
+                    }
+                    if (resp.reason) {
+                        $log.warn(resp.reason);
+                    }
                 } else {
-                    $scope.showToast('warning', 'Connection lost, please try again')
+                    $scope.showToast('warning', 'Connection lost, reconnecting...')
                 }
             };
 
-            $rootScope.$on('requestErrorHandler', function (event, errResponse) {
-                $scope.requestErrorHandler(errResponse);
+            $rootScope.$on('responseStatusHandler', function (event, errResponse) {
+                $scope.responseStatusHandler(errResponse);
             });
 
 
@@ -89,10 +99,12 @@ angular.module('grillApp')
                         customUsername: data.customUsername
                     });
 
+                    $scope.responseStatusHandler(data);
+
                     //a success emit is picked up by "mainService" in mainFactory.js
                 })
                 .error(function (errResponse) {
-                    $scope.requestErrorHandler(errResponse);
+                    $scope.responseStatusHandler(errResponse);
                 });
 
             //********************toastr show functions
@@ -169,9 +181,10 @@ angular.module('grillApp')
                                 $scope.myNewOrder[component.componentIndex] = 'no';
                             });
                         }
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -189,9 +202,11 @@ angular.module('grillApp')
                                 $scope.myNewOrder[component.componentIndex] = 'no';
                             });
                         }
+
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -210,9 +225,10 @@ angular.module('grillApp')
                                 $scope.myNewOrder[component.componentIndex] = 'no';
                             });
                         }
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -230,9 +246,11 @@ angular.module('grillApp')
                                 $scope.myNewOrder[component.componentIndex] = 'no';
                             });
                         }
+
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -285,10 +303,10 @@ angular.module('grillApp')
                             getAllAvailable(true);
                             globals.currentGrillStatus(null, true, true);
                             getMyRecentOrders();
-                            $scope.showToast('success', 'Your order has been placed');
+                            $scope.responseStatusHandler(resp);
                             $scope.isLoadingFalse();
                         }).error(function (errResponse) {
-                            $scope.requestErrorHandler(errResponse);
+                            $scope.responseStatusHandler(errResponse);
                             $scope.isLoadingFalse();
                         })
                 } else {
@@ -337,10 +355,12 @@ angular.module('grillApp')
                             //there is a bug that causes the readyTimeAgo and declineTimeAgo to display 'never' if
                             //updateTimeAgo is not called immediately here
                             updateTimeAgo();
+
+                            $scope.responseStatusHandler(resp);
                         });
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     })
             }
 

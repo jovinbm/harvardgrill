@@ -14,23 +14,33 @@ angular.module('grillApp')
                 $scope.universalDisable = false;
             };
 
-            $scope.requestErrorHandler = function (errResponse) {
-                if (errResponse) {
-                    if (errResponse.redirectToError == true) {
-                        $window.location.href = errResponse.redirectPage;
+            $scope.responseStatusHandler = function (resp) {
+                if (resp) {
+                    if (resp.redirect) {
+                        if (resp.redirect == true) {
+                            $window.location.href = resp.redirectPage;
+                        }
                     }
-                    if (errResponse.disable == true) {
-                        $scope.universalDisableTrue();
+                    if (resp.disable) {
+                        if (resp.disable == true) {
+                            $scope.universalDisableTrue();
+                        }
                     }
-                    $scope.showToast(errResponse.type, errResponse.msg);
-                    $log.error(errResponse.reason);
+                    if (resp.notify) {
+                        if (resp.type && resp.msg) {
+                            $scope.showToast(resp.type, resp.msg);
+                        }
+                    }
+                    if (resp.reason) {
+                        $log.warn(resp.reason);
+                    }
                 } else {
-                    $scope.showToast('warning', 'Connection lost, please try again')
+                    $scope.showToast('warning', 'Connection lost, reconnecting...')
                 }
             };
 
-            $rootScope.$on('requestErrorHandler', function (event, errResponse) {
-                $scope.requestErrorHandler(errResponse);
+            $rootScope.$on('responseStatusHandler', function (event, errResponse) {
+                $scope.responseStatusHandler(errResponse);
             });
 
 
@@ -108,6 +118,7 @@ angular.module('grillApp')
             //initial requests
             socketService.getSocketRoom()
                 .success(function (data) {
+                    $scope.responseStatusHandler(data);
                     globals.socketRoom(data.socketRoom);
                     $scope.customUsername = globals.customUsername(data.customUsername);
                     $scope.grillName = globals.grillName(data.grillName);
@@ -124,7 +135,7 @@ angular.module('grillApp')
                     //a success emit is picked up by "mainService" in mainFactory.js
                 })
                 .error(function (errResponse) {
-                    $scope.requestErrorHandler(errResponse);
+                    $scope.responseStatusHandler(errResponse);
                 });
 
 
@@ -140,12 +151,13 @@ angular.module('grillApp')
             function getAllComponentsIndexNames() {
                 socketService.getAllComponentsIndexNames()
                     .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
                         resp.allComponentsIndexNames.forEach(function (componentReference) {
                             $scope.allComponentsIndexNames[componentReference.componentIndex] = componentReference.name;
                         });
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     })
             }
 

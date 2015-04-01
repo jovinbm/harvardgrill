@@ -46,6 +46,7 @@ angular.module('grillApp')
                 if (refreshGrillStatus) {
                     socketService.getCurrentGrillStatus()
                         .success(function (resp) {
+                            $rootScope.$broadcast('responseStatusHandler', resp);
                             currentGrillStatus = resp.currentGrillStatus;
 
                             if (broadcast) {
@@ -53,7 +54,7 @@ angular.module('grillApp')
                             }
                         })
                         .error(function (errResponse) {
-                            $rootScope.$broadcast('requestErrorHandler', errResponse);
+                            $rootScope.$broadcast('responseStatusHandler', errResponse);
                         });
                 }
 

@@ -91,11 +91,11 @@ angular.module('grillApp')
                                     getAllAll();
                                     globals.currentGrillStatus(resp.newGrillStatus, true);
                                     $scope.isLoadingFalse();
-                                    $scope.showToast("success", "The Grill is now open");
+                                    $scope.responseStatusHandler(resp);
                                 })
                                 .error(function (errResponse) {
                                     $scope.isLoadingFalse();
-                                    $scope.requestErrorHandler(errResponse);
+                                    $scope.responseStatusHandler(errResponse);
                                 });
                         }, function (error) {
                             getAllAll();
@@ -110,11 +110,11 @@ angular.module('grillApp')
                                 .success(function (resp) {
                                     $scope.isLoadingFalse();
                                     globals.currentGrillStatus(resp.newGrillStatus, true);
-                                    $scope.showToast("success", "The Grill is now closed");
+                                    $scope.responseStatusHandler(resp);
                                 })
                                 .error(function (errResponse) {
                                     $scope.isLoadingFalse();
-                                    $scope.requestErrorHandler(errResponse);
+                                    $scope.responseStatusHandler(errResponse);
                                 });
                         }, function (error) {
                             getAllAll();
@@ -141,9 +141,10 @@ angular.module('grillApp')
                 EditService.getAllOrderComponents()
                     .success(function (orderComponents) {
                         $scope.allOrderComponents = orderComponents.allComponents;
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -151,9 +152,10 @@ angular.module('grillApp')
                 EditService.getAllOmelets()
                     .success(function (orderComponents) {
                         $scope.allOmelets = orderComponents.allComponents;
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -162,9 +164,10 @@ angular.module('grillApp')
                 EditService.getAllWeeklySpecials()
                     .success(function (orderComponents) {
                         $scope.allWeeklySpecials = orderComponents.allComponents;
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -172,9 +175,10 @@ angular.module('grillApp')
                 EditService.getAllExtras()
                     .success(function (orderComponents) {
                         $scope.allExtras = orderComponents.allComponents;
+                        $scope.responseStatusHandler(orderComponents);
                     })
                     .error(function (errResponse) {
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             }
 
@@ -224,14 +228,14 @@ angular.module('grillApp')
 
                 grillStatusService.updateAvailableComponents(allComponents)
                     .success(function (resp) {
-                        $scope.showToast("success", "Update successful");
+                        $scope.responseStatusHandler(resp);
                         getAllAll();
                         $scope.isLoadingFalse();
                         $scope.availableCardIsDirty = false;
                     })
                     .error(function (errResponse) {
                         $scope.isLoadingFalse();
-                        $scope.requestErrorHandler(errResponse);
+                        $scope.responseStatusHandler(errResponse);
                     });
             };
 

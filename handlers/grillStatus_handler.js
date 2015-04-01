@@ -32,7 +32,7 @@ module.exports = {
                     msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not open grill', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not open grill', err));
@@ -41,7 +41,11 @@ module.exports = {
 
         function success(newGrillStatus) {
             res.status(200).send({
-                newGrillStatus: newGrillStatus
+                newGrillStatus: newGrillStatus,
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'The grill is now open'
             });
             ioJs.emitToAll('adminChanges', 'changes');
             consoleLogger(successLogger(module));
@@ -61,7 +65,7 @@ module.exports = {
                     msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not close grill', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not close grill', err));
@@ -70,7 +74,11 @@ module.exports = {
 
         function success(newGrillStatus) {
             res.status(200).send({
-                newGrillStatus: newGrillStatus
+                newGrillStatus: newGrillStatus,
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: 'The grill is now closed'
             });
             ioJs.emitToAll('adminChanges', 'changes');
             consoleLogger(successLogger(module));
@@ -90,7 +98,7 @@ module.exports = {
                     msg: 'A problem has occurred. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve currentGrillStatus', err),
                     disable: true,
-                    redirectToError: true,
+                    redirect: true,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not retrieve currentGrillStatus', err));
@@ -122,7 +130,7 @@ module.exports = {
                     msg: 'Update failed, please try again. If problem persists please reload this page',
                     reason: errorLogger(module, 'Could not update available components', err),
                     disable: false,
-                    redirectToError: false,
+                    redirect: false,
                     redirectPage: '/error/500.html'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not update available components', err));
@@ -131,7 +139,10 @@ module.exports = {
 
         function success() {
             res.status(200).send({
-                msg: "updateAvailableComponents success"
+                code: 200,
+                notify: true,
+                type: 'success',
+                msg: "Update successful"
             });
             ioJs.emitToAll('adminChanges', 'changes');
             consoleLogger(successLogger(module));
