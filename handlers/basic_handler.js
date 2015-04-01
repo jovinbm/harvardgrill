@@ -23,22 +23,11 @@ module.exports = {
         var module = 'adminStartup';
         receivedLogger(module);
 
-
-        function errorLastActivity(status, err) {
-            res.status(500).send({
-                type: 'error',
-                msg: 'Error when trying to start the app. Please reload page',
-                reason: errorLogger(module, 'Could not updateUserLastActivity', err),
-                disable: true,
-                redirect: false,
-                redirectPage: '/error/500.html'
-            });
-            consoleLogger(errorLogger(module, 'Failed! Could not updateUserLastActivity', err));
-        }
-
         function errorGrillStatus(status, err) {
             if (status == -1) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'Error when trying to start the app. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve startup info', err),
@@ -70,6 +59,8 @@ module.exports = {
         function errorGrillStatus(status, err) {
             if (status == -1) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'Error when trying to start the app. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve startup info', err),

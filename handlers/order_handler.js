@@ -27,6 +27,8 @@ module.exports = {
         function errorSavingOrder(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: "Your order could not be sent. Please try again. If this problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not save new order', err),
@@ -62,6 +64,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'A problem has occurred. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve client orders', err),
@@ -93,6 +97,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
                     reason: errorLogger(module, 'Could not get recent orders', err),
@@ -122,6 +128,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: "Could not mark order as done. Please try again. If problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not mark order as done', err),
@@ -158,6 +166,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: "Could not mark order as declined. Please try again. If problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not mark order as declined', err),

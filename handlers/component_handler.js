@@ -28,6 +28,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: 'Failed to add, please try again. If problem persists, please reload this page',
                     reason: errorLogger(module, 'Could not add component', err),
@@ -74,6 +76,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: 'Failed to save, please try again. If problem persists, please reload this page',
                     reason: errorLogger(module, 'Could not save component', err),
@@ -107,6 +111,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: 'Failed to delete, please try again. If problem persists, please reload this page',
                     reason: errorLogger(module, 'Could not delete component', err),
@@ -140,6 +146,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
@@ -170,6 +178,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
@@ -200,6 +210,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
@@ -230,6 +242,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
@@ -260,6 +274,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
@@ -290,6 +306,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
@@ -320,6 +338,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),
@@ -350,6 +370,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
                     reason: errorLogger(module, 'Could not retrieve components', err),

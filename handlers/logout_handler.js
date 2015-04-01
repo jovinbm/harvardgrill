@@ -79,8 +79,10 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
-                    msg: 'Error when trying to log you out. Please reload page',
+                    msg: 'Error when trying to log you out. Please try again',
                     reason: errorLogger(module, 'Could not logout admin', err),
                     disable: true,
                     redirect: false,

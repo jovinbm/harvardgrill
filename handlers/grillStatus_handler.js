@@ -28,6 +28,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not open grill', err),
@@ -61,6 +63,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not close grill', err),
@@ -94,6 +98,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'error',
                     msg: 'A problem has occurred. Please reload page',
                     reason: errorLogger(module, 'Could not retrieve currentGrillStatus', err),
@@ -126,6 +132,8 @@ module.exports = {
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
+                    code: 500,
+                    notify: true,
                     type: 'warning',
                     msg: 'Update failed, please try again. If problem persists please reload this page',
                     reason: errorLogger(module, 'Could not update available components', err),

@@ -1,6 +1,8 @@
 //next: Main admin page where I can add/remove grills, and other very important admin measures
 //next: student choose grill page, preferably change client_login.ejs to angular like admin_login.ejs
 //next: barring students: make a grill page that can ban users
+//find a way to combine some functions like getAvailable... getAll...
+//for certain errors, provide empty arrays to be used, instead of asking the user to reload page .eg. in getAvailable....
 
 //server side validation of user login using regex
 
