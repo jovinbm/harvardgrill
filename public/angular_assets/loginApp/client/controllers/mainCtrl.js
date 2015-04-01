@@ -1,8 +1,6 @@
-angular.module('adminLoginApp')
+angular.module('clientLoginApp')
     .controller('MainController', ['$filter', '$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'referenceService',
         function ($filter, $log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, referenceService) {
-
-            $scope.allGrillStatuses = globals.allGrillStatuses(null, true, true);
 
             //*************request error handler****************
 
@@ -49,8 +47,6 @@ angular.module('adminLoginApp')
 
             //***************end of request error handler**************
 
-            //gets temp user's details (NB: THIS USER HAS NOT LOGGED IN, HELL IT MIGHT EVEN BE A HACKER)
-            $scope.temporarySocketRoom = globals.temporarySocketRoom();
 
             //*****************************isLoading functions to disable elements while content is loading or processing
             $scope.isLoading = false;
@@ -120,14 +116,31 @@ angular.module('adminLoginApp')
 
             //***************end of time functions******************
 
+
+            $scope.masterClientLoginForm = {
+                username: "",
+                password: "",
+                //grillName is updated when submitting
+                grillName: ""
+            };
+
+            $scope.allGrillStatuses = globals.allGrillStatuses(null, true, true);
+            $scope.mySocketRoom = globals.socketRoom();
+            $scope.myUsername = globals.username();
+            $scope.myUniqueCuid = globals.uniqueCuid();
+
+
             //initial requests
-            socketService.getMyTemporarySocketRoom()
+            socketService.getSocketRoom()
                 .success(function (resp) {
-                    globals.temporarySocketRoom(resp.temporarySocketRoom);
+                    $scope.mySocketRoom = globals.socketRoom(resp.socketRoom);
+                    $scope.myUsername = globals.username(resp.username);
+                    $scope.masterClientLoginForm.username = resp.username;
+                    $scope.myUniqueCuid = globals.uniqueCuid(resp.uniqueCuid);
 
                     //join the random temporary socketRoom given
                     socket.emit('joinRoom', {
-                        room: resp.temporarySocketRoom
+                        room: resp.socketRoom
                     });
 
                     //a success emit("joined") is picked up by "mainService" in mainFactory.js
@@ -139,19 +152,13 @@ angular.module('adminLoginApp')
                 });
 
 
-            //************THE ADMIN LOGIN FORM*****************
+            //************THE CLIENT INFO LOGIN FORM*****************
 
-            $scope.masterClientLoginForm = {
-                username: "",
-                password: "",
-                //grillName is updated when submitting
-                grillName: ""
-            };
 
-            $scope.masterAdminLoginFormErrorBanner = false;
-            $scope.masterAdminLoginFormError = "";
+            $scope.masterClientLoginFormErrorBanner = false;
+            $scope.masterClientLoginFormError = "";
 
-            $scope.submitAdminLoginForm = function () {
+            $scope.submitClientLoginForm = function () {
                 //check that only one grill is selected
                 checkIfGrillIsSelected();
                 if ($scope.oneGrillIsSelected == true) {
@@ -164,7 +171,7 @@ angular.module('adminLoginApp')
                         }
                     }
                     //submit the login
-                    socketService.adminUserLogin($scope.masterClientLoginForm)
+                    socketService.clientUserLogin($scope.masterClientLoginForm)
                         .success(function (resp) {
                             //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
                             $scope.responseStatusHandler(resp);
@@ -175,8 +182,8 @@ angular.module('adminLoginApp')
                             $scope.oneGrillIsSelected = false;
                             globals.allGrillStatuses(null, true, true);
                             $scope.masterClientLoginForm.password = "";
-                            $scope.masterAdminLoginFormErrorBanner = true;
-                            $scope.masterAdminLoginFormError = errResponse.msg;
+                            $scope.masterClientLoginFormErrorBanner = true;
+                            $scope.masterClientLoginFormError = errResponse.msg;
                             $scope.responseStatusHandler(errResponse);
                         })
                 } else {
@@ -241,7 +248,7 @@ angular.module('adminLoginApp')
                 grillSelectRadioChange(grillName);
             };
 
-            //*************END OF ADMIN LOGIN FORM FUNCTIONS*********
+            //*************END OF CLIENT LOGIN FORM FUNCTIONS*********
 
 
             //*********crucial intervals

@@ -47,7 +47,7 @@ angular.module('grillApp')
             //***************end of request error handler**************
 
             //gets user's details
-            $scope.customUsername = globals.customUsername();
+            $scope.username = globals.username();
             $scope.uniqueCuid = globals.uniqueCuid();
 
             //*****************************isLoading functions to disable elements while content is loading or processing
@@ -87,7 +87,7 @@ angular.module('grillApp')
             socketService.getSocketRoom()
                 .success(function (data) {
                     globals.socketRoom(data.socketRoom);
-                    $scope.customUsername = globals.customUsername(data.customUsername);
+                    $scope.username = globals.username(data.username);
                     $scope.grillName = globals.grillName(data.grillName);
 
                     //updates the socket service with the grillName also, since globals
@@ -96,7 +96,7 @@ angular.module('grillApp')
                     $scope.uniqueCuid = globals.uniqueCuid(data["uniqueCuid"]);
                     socket.emit('joinRoom', {
                         room: data.socketRoom,
-                        customUsername: data.customUsername
+                        username: data.username
                     });
 
                     $scope.responseStatusHandler(data);

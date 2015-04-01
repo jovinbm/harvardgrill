@@ -82,7 +82,17 @@ module.exports = {
 
                 statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not authorized to perform this action. Refresh the page log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -151,7 +161,17 @@ module.exports = {
 
                 statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not authorized to perform this action. Refresh the page log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -220,7 +240,17 @@ module.exports = {
 
                 statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not authorized to perform this action. Refresh the page log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -252,7 +282,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllOrderComponents(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -284,7 +324,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllOmelets(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -317,7 +367,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllWeeklySpecials(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -350,7 +410,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAllExtras(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -383,7 +453,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableOrderComponents(req, res, theUser);
             } else {
-                res.redirect('login.html')
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -415,7 +495,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableOmelets(req, res, theUser);
             } else {
-                res.redirect('login.html')
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -448,7 +538,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableWeeklySpecials(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -481,7 +581,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 component_handler.getAvailableExtras(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 

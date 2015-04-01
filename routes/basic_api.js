@@ -64,18 +64,14 @@ module.exports = {
         }
 
         function success(theUser) {
-            if (theUser.customLoggedInStatus == 1) {
-                res.status(200).send({
-                    socketRoom: theUser.socketRoom,
-                    grillName: theUser.grillName,
-                    customUsername: theUser.customUsername,
-                    uniqueCuid: theUser.uniqueCuid
-                });
-                consoleLogger(successLogger(module));
+            res.status(200).send({
+                socketRoom: theUser.socketRoom,
+                grillName: theUser.grillName,
+                username: theUser.username,
+                uniqueCuid: theUser.uniqueCuid
+            });
+            consoleLogger(successLogger(module));
 
-            } else {
-                res.redirect('login.html');
-            }
         }
 
         userDB.findUser(req.user.openId, error, error, success);
@@ -106,7 +102,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 basic_handler.adminStartUp(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page to do so',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -137,7 +143,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 basic_handler.clientStartUp(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page to do so',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 

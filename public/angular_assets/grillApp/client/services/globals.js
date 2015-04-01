@@ -1,18 +1,18 @@
 angular.module('grillApp')
 
     .factory('globals', ['$rootScope', 'socketService', function ($rootScope, socketService) {
-        var customUsername;
+        var username;
         var myUniqueCuid;
         var grillName;
         var mySocketRoom;
         var currentGrillStatus = {};
         return {
-            customUsername: function (newCustomUsername) {
-                if (newCustomUsername) {
-                    customUsername = newCustomUsername;
-                    return customUsername;
+            username: function (newUsername) {
+                if (newUsername) {
+                    username = newUsername;
+                    return username;
                 } else {
-                    return customUsername;
+                    return username;
                 }
             },
 

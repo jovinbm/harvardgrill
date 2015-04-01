@@ -85,9 +85,13 @@ module.exports = {
     },
 
 
-    infoLogin: function (req, res) {
-        var module = 'infoLogin';
+    clientInfoLogin: function (req, res) {
+        var module = 'clientInfoLogin';
         receivedLogger(module);
+
+        var username = req.body.username;
+        var password = req.body.password;
+        var grillName = req.body.grillName;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
@@ -99,35 +103,88 @@ module.exports = {
         function success(theUser) {
 
             function errorCuCls(status, err) {
-                if (status == -1 || status == 0) {
-                    if (status == -1 || status == 0) {
-                        res.redirect("login.html");
-                        consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'warning',
+                    msg: 'Failed to log you in. Please try again',
+                    reason: errorLogger(module, 'Could not update customLoggedinStatus', err),
+                    disable: false,
+                    redirect: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Could not update customLoggedinStatus', err));
+            }
+
+            function successUpdateCuCls() {
+
+                function errorUpdateGrillName(status, err) {
+                    res.status(401).send({
+                        code: 401,
+                        notify: true,
+                        type: 'warning',
+                        msg: 'Failed to log you in. Please try again',
+                        reason: errorLogger(module, 'Could not update grillName', err),
+                        disable: false,
+                        redirect: false,
+                        redirectPage: '/error/500.html'
+                    });
+                    consoleLogger(errorLogger(module, 'Could not update grillName', err));
+                }
+
+                function successUpdateGrillName() {
+
+                    function errorUpdateUsername(status, err) {
+                        res.status(401).send({
+                            code: 401,
+                            notify: true,
+                            type: 'warning',
+                            msg: 'Failed to log you in. Please try again',
+                            reason: errorLogger(module, 'Could not update username', err),
+                            disable: false,
+                            redirect: false,
+                            redirectPage: '/error/500.html'
+                        });
+                        consoleLogger(errorLogger(module, 'Could not update username', err));
                     }
+
+                    function successUpdateUsername() {
+                        //TO-do Check the username if it is available, if not render back
+                        //clientLogin using
+                        //res.render('client_login', {
+                        //displayName: theUser.displayName,
+                        //        errorCode: 1,
+                        //        errorMessage: "Name already assigned to another individual. Please make another choice"
+                        //});
+                        //make a warning dismissible banner as in login.ejs
+
+                        if (theUser.isAdmin == 'yes') {
+                            res.redirect('admin.html');
+                            res.status(200).send({
+                                code: 200,
+                                redirect: true,
+                                redirectPage: '/admin.html'
+                            });
+                            consoleLogger(errorLogger(module, 'Could not update username', err));
+                        } else if (theUser.isAdmin == 'no') {
+                            res.status(200).send({
+                                code: 200,
+                                redirect: true,
+                                redirectPage: '/client.html'
+                            });
+                        } else {
+                            errorCuCls();
+                        }
+                    }
+
+                    userDB.updateUsername(req.user.openId, username, errorUpdateUsername, errorUpdateUsername, successUpdateUsername);
+
                 }
+
+                userDB.updateGrillName(req.user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, successUpdateGrillName);
             }
 
-            function successUpdate() {
-
-                //TO-do Check the username if it is available, if not render back
-                //clientLogin using
-                //res.render('client_login', {
-                //displayName: theUser.displayName,
-                //        errorCode: 1,
-                //        errorMessage: "Name already assigned to another individual. Please make another choice"
-                //});
-                //make a warning dismissible banner as in login.ejs
-
-                if (theUser.isAdmin == 'yes') {
-                    res.redirect('admin.html');
-                } else if (theUser.isAdmin == 'no') {
-                    res.redirect('client.html');
-                } else {
-                    errorCuCls();
-                }
-            }
-
-            userDB.updateCuCls(req.user.openId, req.body.customUsername, 1, errorCuCls, errorCuCls, successUpdate)
+            userDB.updateCuCls(req.user.openId, req.body.username, 1, errorCuCls, errorCuCls, successUpdateCuCls)
         }
 
         if (!req.user) {
@@ -142,7 +199,7 @@ module.exports = {
         var module = 'client_Html';
         receivedLogger(module);
 
-        //get the customUsername
+        //get the username
         function error(status, err) {
             if (status == -1 || status == 0) {
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));
@@ -178,7 +235,7 @@ module.exports = {
         var module = 'admin_Html';
         receivedLogger(module);
 
-        //get the customUsername
+        //get the username
         function error(status, err) {
             if (status == -1 || status == 0) {
                 consoleLogger(errorLogger(module, 'Could not retrieve user', err));

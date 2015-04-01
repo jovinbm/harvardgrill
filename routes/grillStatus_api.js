@@ -47,7 +47,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 grillStatus_handler.openGrill(req, res, theUser);
             } else {
-                res.redirect('login.html')
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not authorized to perform this action. Refresh the page log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -79,7 +89,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 grillStatus_handler.closeGrill(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not authorized to perform this action. Refresh the page log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -110,7 +130,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 grillStatus_handler.getCurrentGrillStatus(req, res, theUser);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh this page to log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -165,7 +195,17 @@ module.exports = {
 
                 componentDB.getAllComponentsIndexNames(theUser.grillName, theUser, -1, errorIndexes, errorIndexes, componentIndexesSuccess)
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh this page to log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -197,7 +237,17 @@ module.exports = {
             if (theUser.customLoggedInStatus == 1) {
                 grillStatus_handler.updateAvailableComponents(req, res, theUser, allComponents);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh this page to log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 

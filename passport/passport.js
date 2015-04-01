@@ -87,7 +87,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 var uniqueCuid = cuid();
                 var socketRoom = 'adminSocketRoom';
                 var displayName = 'Admin';
-                var customUsername = 'Admin';
+                var tempUsername = 'Admin';
                 var email = 'admin@harvardclass.com';
                 var customLoggedInStatus = 1;
 
@@ -97,7 +97,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                     uniqueCuid: uniqueCuid,
                     socketRoom: socketRoom,
                     displayName: displayName,
-                    customUsername: customUsername,
+                    username: tempUsername,
                     email: email,
                     customLoggedInStatus: customLoggedInStatus
                 });
@@ -122,7 +122,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 var uniqueCuidTemp = cuid();
                 var socketRoomTemp = 'tempClient' + cuid();
                 var displayNameTemp = 'TempClient';
-                var customUsernameTemp = 'TempClient';
+                var usernameTemp = 'TempClient';
                 var emailTemp = 'tempclient@harvardclass.com';
                 var customLoggedInStatusTemp = 0;
 
@@ -132,7 +132,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                     uniqueCuid: uniqueCuidTemp,
                     socketRoom: socketRoomTemp,
                     displayName: displayNameTemp,
-                    customUsername: customUsernameTemp,
+                    username: usernameTemp,
                     email: emailTemp,
                     customLoggedInStatus: customLoggedInStatusTemp
                 });

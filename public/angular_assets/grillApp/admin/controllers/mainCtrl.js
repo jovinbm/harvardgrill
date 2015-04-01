@@ -68,7 +68,7 @@ angular.module('grillApp')
             //************end of isLoading****************
 
             //gets user's details
-            $scope.customUsername = globals.customUsername();
+            $scope.username = globals.username();
             $scope.uniqueCuid = globals.uniqueCuid();
 
             //****************toastr functions
@@ -120,7 +120,7 @@ angular.module('grillApp')
                 .success(function (data) {
                     $scope.responseStatusHandler(data);
                     globals.socketRoom(data.socketRoom);
-                    $scope.customUsername = globals.customUsername(data.customUsername);
+                    $scope.username = globals.username(data.username);
                     $scope.grillName = globals.grillName(data.grillName);
 
                     //updates the socket service with the grillName also, since globals
@@ -129,7 +129,7 @@ angular.module('grillApp')
                     $scope.uniqueCuid = globals.uniqueCuid(data["uniqueCuid"]);
                     socket.emit('joinRoom', {
                         room: data.socketRoom,
-                        customUsername: data.customUsername
+                        username: data.username
                     });
 
                     //a success emit is picked up by "mainService" in mainFactory.js

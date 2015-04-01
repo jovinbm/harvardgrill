@@ -72,8 +72,35 @@ module.exports = {
     },
 
 
-    adminLoginStartUp: function (req, res) {
-        var module = 'adminStartUp';
+    getAllGrillStatuses: function (req, res) {
+        function errorAllGrillStatus(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    code: 500,
+                    notify: true,
+                    type: 'error',
+                    msg: 'An error occurred. Please reload this page',
+                    reason: errorLogger(module, 'Could not retrieve allGrillStatuses', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
+            }
+        }
+
+        function success(allGrillStatuses) {
+            res.status(200).send({
+                allGrillStatuses: allGrillStatuses
+            });
+            consoleLogger(successLogger(module));
+        }
+
+        getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success)
+    },
+
+    clientLoginStartUp: function (req, res) {
+        var module = 'clientLoginStartUp';
         receivedLogger(module);
 
         function errorAllGrillStatus(status, err) {
@@ -102,7 +129,10 @@ module.exports = {
         getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success);
     },
 
-    getAllGrillStatuses: function (req, res) {
+    adminLoginStartUp: function (req, res) {
+        var module = 'adminLoginStartUp';
+        receivedLogger(module);
+
         function errorAllGrillStatus(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
@@ -126,6 +156,6 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success)
+        getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success);
     }
 };

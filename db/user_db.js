@@ -45,13 +45,13 @@ module.exports = {
             })
     },
 
-    updateCuCls: function (openId, customUsername, customLoggedInStatus, error_neg_1, error_0, success) {
+    updateCuCls: function (openId, username, customLoggedInStatus, error_neg_1, error_0, success) {
         User
             .update({
                 openId: openId
             }, {
                 $set: {
-                    customUsername: customUsername,
+                    username: username,
                     customLoggedInStatus: customLoggedInStatus
                 }
             }, function (err) {
@@ -71,6 +71,24 @@ module.exports = {
             }, {
                 $set: {
                     grillName: grillName
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
+    updateUsername: function (openId, username, error_neg_1, error_0, success) {
+        User
+            .update({
+                openId: openId
+            }, {
+                $set: {
+                    username: username
                 }
             }, function (err) {
                 if (err) {

@@ -1,8 +1,15 @@
 //next: Main admin page where I can add/remove grills, and other very important admin measures
-//next: student choose grill page, preferably change client_login.ejs to angular like admin_login.ejs
+
 //next: barring students: make a grill page that can ban users
+
 //find a way to combine some functions like getAvailable... getAll...
+
 //for certain errors, provide empty arrays to be used, instead of asking the user to reload page .eg. in getAvailable....
+
+//change and resetting password; authorize passwords passed to clientInfoLogin
+
+//admin account creation on master user page/ requesting via email, and I add them on master user dashboard, make
+//sure you check the details on the passport, add a little backdoor for testing purposes
 
 //server side validation of user login using regex
 
@@ -19,19 +26,11 @@
 
 //summary of today's menu
 
-//use cards
-
 //order again --disable button if not available
 
 //what other students are ordering --order same if available
 
-//confirm what has been successfully ordered
-
-//no ordering if current order is in processing
-
 //max number of orders
-
-//moment js from time from order (for today orders only)
 
 //order state only on dining hours
 

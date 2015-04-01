@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="clientLoginApp" ng-controller="MainController">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,20 +10,25 @@
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/paper/bootstrap.min.css">
 
+    <!--animate.css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css"/>
+
     <!--loads font awesome-->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 
+    <!--angular loading bar css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css"/>
+
     <!--normalize.css-->
     <link rel="stylesheet" href="/bower_components/normalize.css/normalize.css"/>
 
-    <!-- bootstrap validator css -->
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+    <!--toastr-->
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
 
-    <!-- loads custom css file -->
-    <link rel="stylesheet" href="/public/css/client/client_login.css">
+    <!-- loads custom css files -->
     <link rel="stylesheet" href="/public/css/client/client_cards.css">
+    <link rel="stylesheet" href="/public/css/client/client_login.css">
 
     <!--google analytics-->
     <script>
@@ -43,7 +48,6 @@
 
             ga('create', 'UA-58209445-2', 'auto');
             ga('require', 'linkid', 'linkid.js');
-            <%- gAnalyticsUserId %>
             ga('send', 'pageview');
         }
     </script>
@@ -53,8 +57,14 @@
 </head>
 
 <body>
+
+<!--toast notifications-->
+<toast></toast>
+<!--end of toast-->
+
+
 <!--start of nav-->
-<div class="navbar navbar-default navbar-fixed-top">
+<div class="navbar navbar-default navbar-fixed-top ng-cloak">
     <div class="container">
         <div class="navbar-header">
             <!--button to target the navbar-right which will appear on collapse of navbar items-->
@@ -70,17 +80,20 @@
         </div>
 
         <!--this navbar will be collapsed on mobile-->
-        <div class="collapse navbar-collapse navHeaderCollapse">
+        <div class="collapse navbar-collapse navHeaderCollapse ng-cloak">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="https://my.harvard.edu" target="_blank">my.harvard.edu</a></li>
                 <li><a href="https://canvas.harvard.edu/" target="_blank">Canvas</a></li>
                 <li><a href="#">About</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <%= displayName %> <b class="caret"></b>
+                        {{myUsername}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" class="logoutHarvardLogin">Logout from Harvard</a></li>
+                        <li><a href="#"
+                               class="logoutHarvardLogin">Logout from Harvard
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -91,7 +104,7 @@
 
 
 <!--start of jumbotron-->
-<div class='container'>
+<div class='container ng-cloak'>
 
     <!--the text-center class centers everything in it-->
     <div class="jumbotron text-center">
@@ -109,43 +122,115 @@
 </div>
 <!--end of jumbotron-->
 
-<!--start of custom student login form-->
-<div class="container">
+<!--start of client info login form-->
+<div class="container ng-cloak">
+
+    <div class="alert alert-dismissible alert-warning ng-cloak"
+         ng-if="masterClientLoginFormErrorBanner">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{masterClientLoginFormError}}</strong>
+    </div>
+
     <!--data-dv attributes for bootstrap validator plugin-->
-    <form action="/infoLogin"
-          method="post"
-          id="studentLoginForm"
-          data-bv-message="This value is not valid"
-          data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
-          data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
-          data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+    <form name="clientLoginForm"
+          id="clientLoginForm">
 
         <!--Username field-->
-        <div class="form-group">
-            <label for="customUsername">Name</label>
+        <div class="form-group ng-cloak">
+            <label for="username">Username</label>
             <input type="text"
                    class="form-control"
-                   id="customUsername"
-                   placeholder="This will appear on your orders"
-                   name="customUsername"
-                   data-bv-message="The name is not valid"
-                   data-bv-notempty="true"
-                   data-bv-notempty-message="The name is required and cannot be empty"
-                   data-bv-regexp="true"
-                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
-                   data-bv-regexp-message="The name can only consist of alphabetical, number, dot and underscore"
-                   data-bv-stringlength="true"
-                   data-bv-stringlength-min="4"
-                   data-bv-stringlength-max="15"
-                   data-bv-stringlength-message="The name must be at least 4 and at most 15 characters long"/>
+                   id="username"
+                   placeholder="Enter your username here"
+                   ng-model="masterClientLoginForm.username"
+                   ng-minlength="4"
+                   ng-maxlength="15"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable"
+                   name="username">
+            <span ng-show="clientLoginForm.username.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span ng-show="clientLoginForm.username.$error.minlength">
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span ng-show="clientLoginForm.username.$error.maxlength">
+                <small>Minimum length required is 15:</small>
+            </span>
+            <span ng-show="clientLoginForm.username.$error.pattern">
+                <small>Only letters, numbers and underscores allowed:</small>
+            </span>
+        </div>
+
+        <p><strong>Please select one dining</strong></p>
+
+        <div ng-repeat="(grillName, grillStatus) in allGrillStatusesModel"
+             class="form-group clearfix ng-cloak">
+
+            <div class="alert alert-success col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-if="grillStatus.grillStatus == 'open'"
+                 ng-click="selectGrill(grillName)">
+                <input type="checkbox"
+                       ng-disabled="isLoading || universalDisable"
+                       ng-model="grillStatus.isSelected"
+                       ng-true-value="'yes'"
+                       ng-false-value="'no'"
+                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Open
+            </div>
+
+            <div class="alert alert-warning col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 ng-if="grillStatus.grillStatus == 'closed'"
+                 ng-click="selectGrill(grillName)">
+                <input type="checkbox"
+                       ng-disabled="isLoading || universalDisable"
+                       ng-model="grillStatus.isSelected"
+                       ng-true-value="'yes'"
+                       ng-false-value="'no'"
+                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Closed
+            </div>
+        </div>
+
+        <!--client password field-->
+        <div class="form-group ng-cloak"
+             ng-if="oneGrillIsSelected">
+            <label for="clientPassword">Password</label>
+            <input type="password"
+                   name="password"
+                   class="form-control"
+                   id="clientPassword"
+                   placeholder="Enter password here"
+                   ng-model="masterclientLoginForm.password"
+                   ng-minlength="4"
+                   ng-maxlength="20"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable">
+                    <span ng-show="clientLoginForm.password.$error.required">
+                        <small>This is a required field:</small>
+                    </span>
+                    <span ng-show="clientLoginForm.password.$error.minlength">
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span ng-show="clientLoginForm.password.$error.maxlength">
+                        <small>Minimum length required is 20:</small>
+                    </span>
+                    <span ng-show="clientLoginForm.password.$error.pattern">
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-default btn-block">SUBMIT</button>
+            <button type="submit"
+                    class="btn btn-default btn-danger btn-lg btn-block"
+                    ng-disabled="clientLoginForm.$invalid || !oneGrillIsSelected"
+                    ng-click="submitClientLoginForm()"
+                    id="harvardID">LOGIN
+            </button>
         </div>
     </form>
 </div>
-<!--end of custom student login form-->
+<!--end of student login form-->
 
 <!--footer 1 for large screens-->
 <div class="text-center navbar navbar-default navbar-fixed-bottom hidden-xs hidden-sm">
@@ -221,22 +306,65 @@
 
 
 <!-- JAVASCRIPT -->
+
+<!-- socket.io javascript -->
+<script type="text/javascript" src="socket.io/socket.io.js"></script>
+
 <!-- jquery -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!--AngularJS SCRIPTS-->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.9/angular-route.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-animate.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-sanitize.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+
+<!--angular analytics-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics-ga.min.js"></script>
+
 
 <!-- Bootstrap.js -->
 <script type="text/javascript"
         src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
+<!--angular loading bar js-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.js"></script>
+
 <!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 
-<!-- loads jquery for bootstrapvalidator plugin -->
+<!--angular-ui-router-->
 <script type="text/javascript"
-        src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
 
-<!-- customlogin javascript file: should be loaded after jquery-->
+<!--text angular-->
+<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
+
+<!--toastr js-->
+<script src="/bower_components/toastr/toastr.min.js"></script>
+
+<!--moment js-->
+<script type="text/javascript"
+        src="/bower_components/angular-moment/angular-moment.min.js"></script>
+<script type="text/javascript"
+        src="/bower_components/moment/min/moment.min.js"></script>
+
 <script type="text/javascript" src="/public/js/client/client_login.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/clientLoginApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/directives.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/filters.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/services/socketIoService.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/services/mainFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/services/globals.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/client/services/referenceFactory.js"></script>
 
 </body>
 </html>

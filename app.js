@@ -249,7 +249,7 @@ app.get('/adminLogin.html', routes.admin_login_Html);
 app.get('/clientLogin.html', routes.clientLogin_Html);
 app.get('/admin.html', routes.admin_Html);
 app.get('/client.html', routes.client_Html);
-app.post('/infoLogin', routes.infoLogin);
+app.post('/clientInfoLogin', routes.clientInfoLogin);
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
@@ -259,6 +259,7 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 //LOGIN API - NOT AUTHENTICATED
 app.get('/api/getTemporarySocketRoom', loginAPI.getTemporarySocketRoom);
 app.post('/api/adminLoginStartUp', loginAPI.adminLoginStartUp);
+app.post('/api/clientLoginStartUp', loginAPI.clientLoginStartUp);
 app.post('/api/getAllGrillStatuses', loginAPI.getAllGrillStatuses);
 
 app.post('/sendEmail', basicAPI.sendEmail);

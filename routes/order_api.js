@@ -83,7 +83,17 @@ module.exports = {
 
                 statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -137,10 +147,20 @@ module.exports = {
             }
 
             function statsSuccess(currentGrillStatus) {
-                if (theUser.customLoggedInStatus == 1) {
+                if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
                     order_handler.getAdminClientOrders(req, res, theUser, currentGrillStatus, amount, skipOrders, currentOrdersToBeSkipped);
                 } else {
-                    res.redirect('login.html');
+                    res.status(401).send({
+                        code: 401,
+                        notify: true,
+                        type: 'error',
+                        msg: 'You are not logged in. Refresh the page',
+                        reason: errorLogger(module, 'User not logged in', err),
+                        disable: true,
+                        redirect: false,
+                        redirectPage: 'login.html'
+                    });
+                    consoleLogger(errorLogger(module, 'User not logged in', err));
                 }
             }
 
@@ -196,7 +216,17 @@ module.exports = {
 
                 statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not logged in. Refresh the page',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -252,7 +282,17 @@ module.exports = {
 
                 statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not authorized to perform this action. Please refresh this page to log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 
@@ -308,7 +348,17 @@ module.exports = {
 
                 statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
             } else {
-                res.redirect('login.html');
+                res.status(401).send({
+                    code: 401,
+                    notify: true,
+                    type: 'error',
+                    msg: 'You are not authorized to perform this action. Please refresh this page to log in',
+                    reason: errorLogger(module, 'User not logged in', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: 'login.html'
+                });
+                consoleLogger(errorLogger(module, 'User not logged in', err));
             }
         }
 

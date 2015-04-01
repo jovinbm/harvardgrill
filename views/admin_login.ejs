@@ -128,12 +128,12 @@
 
         <!--Username field-->
         <div class="form-group">
-            <label for="customUsername">Username</label>
+            <label for="username">Username</label>
             <input type="text"
                    class="form-control"
-                   id="customUsername"
+                   id="username"
                    placeholder="Enter your username here"
-                   ng-model="masterAdminLoginForm.username"
+                   ng-model="masterClientLoginForm.username"
                    ng-minlength="4"
                    ng-maxlength="15"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
@@ -191,7 +191,7 @@
                    class="form-control"
                    id="adminPassword"
                    placeholder="Enter password here"
-                   ng-model="masterAdminLoginForm.password"
+                   ng-model="masterClientLoginForm.password"
                    ng-minlength="4"
                    ng-maxlength="20"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
