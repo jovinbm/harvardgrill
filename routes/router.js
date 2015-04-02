@@ -46,7 +46,9 @@ module.exports = {
         }
 
         function success(theUser) {
-            if (req.user && theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
+            if (req.user &&
+                theUser.customLoggedInStatus == 1 &&
+                theUser.isAdmin == 'yes') {
                 res.redirect('admin.html');
             } else if (req.user && theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'no') {
                 res.redirect('client.html');
@@ -56,9 +58,6 @@ module.exports = {
             else if (req.user) {
                 var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
                 res.render('client_login', {
-                    displayName: theUser.displayName,
-                    errorCode: 0,
-                    errorMessage: "No errors",
                     gAnalyticsUserId: gaUserId
                 });
             } else {
@@ -93,104 +92,157 @@ module.exports = {
         var password = req.body.password;
         var grillName = req.body.grillName;
 
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-                res.redirect("login.html");
-            }
-        }
-
-        function success(theUser) {
-
-            function errorCuCls(status, err) {
-                res.status(401).send({
-                    code: 401,
-                    notify: true,
-                    type: 'warning',
-                    msg: 'Failed to log you in. Please try again',
-                    reason: errorLogger(module, 'Could not update customLoggedinStatus', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not update customLoggedinStatus', err));
-            }
-
-            function successUpdateCuCls() {
-
-                function errorUpdateGrillName(status, err) {
-                    res.status(401).send({
-                        code: 401,
-                        notify: true,
-                        type: 'warning',
-                        msg: 'Failed to log you in. Please try again',
-                        reason: errorLogger(module, 'Could not update grillName', err),
-                        disable: false,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
-                    });
-                    consoleLogger(errorLogger(module, 'Could not update grillName', err));
-                }
-
-                function successUpdateGrillName() {
-
-                    function errorUpdateUsername(status, err) {
-                        res.status(401).send({
-                            code: 401,
-                            notify: true,
-                            type: 'warning',
-                            msg: 'Failed to log you in. Please try again',
-                            reason: errorLogger(module, 'Could not update username', err),
-                            disable: false,
-                            redirect: false,
-                            redirectPage: '/error/500.html'
-                        });
-                        consoleLogger(errorLogger(module, 'Could not update username', err));
-                    }
-
-                    function successUpdateUsername() {
-                        //TO-do Check the username if it is available, if not render back
-                        //clientLogin using
-                        //res.render('client_login', {
-                        //displayName: theUser.displayName,
-                        //        errorCode: 1,
-                        //        errorMessage: "Name already assigned to another individual. Please make another choice"
-                        //});
-                        //make a warning dismissible banner as in login.ejs
-
-                        if (theUser.isAdmin == 'yes') {
-                            res.redirect('admin.html');
-                            res.status(200).send({
-                                code: 200,
-                                redirect: true,
-                                redirectPage: '/admin.html'
-                            });
-                            consoleLogger(errorLogger(module, 'Could not update username', err));
-                        } else if (theUser.isAdmin == 'no') {
-                            res.status(200).send({
-                                code: 200,
-                                redirect: true,
-                                redirectPage: '/client.html'
-                            });
-                        } else {
-                            errorCuCls();
-                        }
-                    }
-
-                    userDB.updateUsername(req.user.openId, username, errorUpdateUsername, errorUpdateUsername, successUpdateUsername);
-
-                }
-
-                userDB.updateGrillName(req.user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, successUpdateGrillName);
-            }
-
-            userDB.updateCuCls(req.user.openId, req.body.username, 1, errorCuCls, errorCuCls, successUpdateCuCls)
-        }
-
         if (!req.user) {
             res.redirect("login.html");
         } else {
             userDB.findUser(req.user.openId, error, error, success);
+        }
+
+        function error(status, err) {
+            res.status(401).send({
+                code: 401,
+                notify: false,
+                type: 'warning',
+                banner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: 'Failed to log you in. Please try again',
+                reason: errorLogger(module, 'Could not retrieve user', err),
+                disable: false,
+                redirect: false,
+                redirectPage: '/error/500.html'
+            });
+            consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+        }
+
+        function success(theUser) {
+            //now check password
+            userDB.checkUserPassword(theUser.openId, password, errorPassword, errorPassword, successPassword);
+
+            function errorPassword(status, err) {
+                res.status(401).send({
+                    code: 401,
+                    notify: false,
+                    type: 'warning',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
+                    msg: 'Failed to log you in. Please try again',
+                    reason: errorLogger(module, 'error finding password', err),
+                    disable: false,
+                    redirect: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'error finding password', err));
+            }
+
+            function successPassword(status) {
+                if (status == -1) {
+                    //means passwords don't match
+                    res.status(401).send({
+                        code: 401,
+                        notify: false,
+                        type: 'warning',
+                        banner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
+                        msg: 'The password you entered is incorrect. Please try again',
+                        reason: errorLogger(module, 'Password does not check'),
+                        disable: false,
+                        redirect: false,
+                        redirectPage: '/error/500.html'
+                    });
+                    consoleLogger(errorLogger(module, 'Password does not check'));
+                } else {
+                    //means passwords check
+                    userDB.updateCuCls(req.user.openId, username, 1, errorCuCls, errorCuCls, successUpdateCuCls);
+
+                    function errorCuCls(status, err) {
+                        res.status(401).send({
+                            code: 401,
+                            notify: false,
+                            type: 'warning',
+                            banner: true,
+                            bannerClass: 'alert alert-dismissible alert-warning',
+                            msg: 'Failed to log you in. Please try again',
+                            reason: errorLogger(module, 'Could not update customLoggedinStatus', err),
+                            disable: false,
+                            redirect: false,
+                            redirectPage: '/error/500.html'
+                        });
+                        consoleLogger(errorLogger(module, 'Could not update customLoggedinStatus', err));
+                    }
+
+                    function successUpdateCuCls() {
+
+                        userDB.updateGrillName(req.user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, successUpdateGrillName);
+
+                        function errorUpdateGrillName(status, err) {
+                            res.status(401).send({
+                                code: 401,
+                                notify: false,
+                                type: 'warning',
+                                banner: true,
+                                bannerClass: 'alert alert-dismissible alert-warning',
+                                msg: 'Failed to log you in. Please try again',
+                                reason: errorLogger(module, 'Could not update grillName', err),
+                                disable: false,
+                                redirect: false,
+                                redirectPage: '/error/500.html'
+                            });
+                            consoleLogger(errorLogger(module, 'Could not update grillName', err));
+                        }
+
+                        function successUpdateGrillName() {
+
+                            userDB.updateUsername(req.user.openId, username, errorUpdateUsername, errorUpdateUsername, successUpdateUsername);
+
+                            function errorUpdateUsername(status, err) {
+                                res.status(401).send({
+                                    code: 401,
+                                    notify: false,
+                                    type: 'warning',
+                                    banner: true,
+                                    bannerClass: 'alert alert-dismissible alert-warning',
+                                    msg: 'Failed to log you in. Please try again',
+                                    reason: errorLogger(module, 'Could not update username', err),
+                                    disable: false,
+                                    redirect: false,
+                                    redirectPage: '/error/500.html'
+                                });
+                                consoleLogger(errorLogger(module, 'Could not update username', err));
+                            }
+
+                            function successUpdateUsername() {
+                                //TO-do Check the username if it is available, if not render back
+                                //clientLogin using
+                                //res.render('client_login', {
+                                //displayName: theUser.displayName,
+                                //        errorCode: 1,
+                                //        errorMessage: "Name already assigned to another individual. Please make another choice"
+                                //});
+                                //make a warning dismissible banner as in login.ejs
+
+                                if (theUser.isAdmin == 'yes') {
+                                    res.redirect('admin.html');
+                                    res.status(200).send({
+                                        code: 200,
+                                        redirect: true,
+                                        redirectPage: '/admin.html'
+                                    });
+                                    consoleLogger(errorLogger(module, 'Could not update username'));
+                                } else if (theUser.isAdmin == 'no') {
+                                    res.status(200).send({
+                                        code: 200,
+                                        redirect: true,
+                                        redirectPage: '/client.html'
+                                    });
+                                } else {
+                                    errorCuCls();
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
         }
     },
 

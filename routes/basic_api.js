@@ -104,15 +104,17 @@ module.exports = {
             } else {
                 res.status(401).send({
                     code: 401,
-                    notify: true,
+                    notify: false,
                     type: 'error',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
                     msg: 'You are not logged in. Refresh the page to do so',
-                    reason: errorLogger(module, 'User not logged in', err),
+                    reason: errorLogger(module, 'User not logged in'),
                     disable: true,
                     redirect: false,
                     redirectPage: 'login.html'
                 });
-                consoleLogger(errorLogger(module, 'User not logged in', err));
+                consoleLogger(errorLogger(module, 'User not logged in'));
             }
         }
 
@@ -130,12 +132,12 @@ module.exports = {
                     notify: true,
                     type: 'error',
                     msg: 'Error when trying to start the app. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    reason: errorLogger(module, 'Could not retrieve user'),
                     disable: true,
                     redirect: true,
                     redirectPage: '/error/500.html'
                 });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+                consoleLogger(errorLogger(module, 'Could not retrieve user'));
             }
         }
 
@@ -145,15 +147,17 @@ module.exports = {
             } else {
                 res.status(401).send({
                     code: 401,
-                    notify: true,
+                    notify: false,
                     type: 'error',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
                     msg: 'You are not logged in. Refresh the page to do so',
-                    reason: errorLogger(module, 'User not logged in', err),
+                    reason: errorLogger(module, 'User not logged in'),
                     disable: true,
                     redirect: false,
                     redirectPage: 'login.html'
                 });
-                consoleLogger(errorLogger(module, 'User not logged in', err));
+                consoleLogger(errorLogger(module, 'User not logged in'));
             }
         }
 

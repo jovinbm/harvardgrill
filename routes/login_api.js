@@ -2,6 +2,7 @@ var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var cuid = require('cuid');
 var Stats = require("../database/stats/stats_model.js");
+var userDB = require('../db/user_db.js');
 
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;
@@ -22,7 +23,6 @@ function getTemporarySocketRoom(req, res) {
     receivedLogger(module);
     var temporarySocketRoom = cuid();
 
-    consoleLogger(temporarySocketRoom);
     res.status(200).send({
         temporarySocketRoom: temporarySocketRoom
     });
@@ -63,6 +63,95 @@ function getAllGrillStatuses(error_neg_1, error_0, success) {
         })
 }
 
+function updateUserDetails(req, res, data) {
+    var module = "updateUserDetails";
+    //check that nobody is using that username
+    userDB.findUserWithUsername(data.username, errorFindingUsername, resolveUsernameAvailability, resolveUsernameAvailability);
+
+    function errorFindingUsername(status, err) {
+        res.status(401).send({
+            code: 401,
+            notify: false,
+            type: 'warning',
+            registrationBanner: true,
+            bannerClass: 'alert alert-dismissible alert-warning',
+            msg: 'Failed to log you in. Please try again',
+            reason: errorLogger(module, 'Could not retrieve user', err),
+            disable: false,
+            redirect: false,
+            redirectPage: '/error/500.html'
+        });
+        consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+    }
+
+    function resolveUsernameAvailability(status) {
+        //1 means username is already in use, -1 means the new user can use the username
+        if (status == -1) {
+            //means username is not available
+            res.status(401).send({
+                code: 401,
+                notify: false,
+                type: 'warning',
+                registrationBanner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: 'The username you entered is already in use. Please choose a different one',
+                reason: errorLogger(module, 'username entered is already in use'),
+                disable: false,
+                redirect: false,
+                redirectPage: '/error/500.html'
+            });
+            consoleLogger(errorLogger(module, 'username entered is already in use'));
+        } else {
+            //means username is available
+            //update displayName
+            userDB.updateDisplayName(req.user.openId, data.displayName, error, error, success1);
+
+            function success1() {
+                userDB.updateUsername(req.user.openId, data.username, error, error, success2);
+
+                function success2() {
+                    userDB.updateEmail(req.user.openId, data.email, error, error, success3);
+
+                    function success3() {
+                        function success4() {
+                            res.status(200).send({
+                                code: 200,
+                                redirect: true,
+                                redirectPage: '/clientLogin.html'
+                            });
+                        }
+
+                        if (data.updatePassword) {
+                            userDB.updatePassword(req.user.openId, data.password1, error, error, success4);
+                        } else {
+                            success4();
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    function error(status, err) {
+        if (status == -1 || status == 0) {
+            res.status(500).send({
+                code: 500,
+                notify: true,
+                type: 'error',
+                registrationBanner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: 'An error occurred. Please try again or reload this page',
+                reason: errorLogger(module, 'Could not retrieve allGrillStatuses', err),
+                disable: true,
+                redirect: false,
+                redirectPage: '/error/500.html'
+            });
+            consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
+        }
+    }
+}
+
 
 module.exports = {
 
@@ -73,6 +162,8 @@ module.exports = {
 
 
     getAllGrillStatuses: function (req, res) {
+        var module = "getAllGrillStatuses";
+
         function errorAllGrillStatus(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
@@ -97,6 +188,10 @@ module.exports = {
         }
 
         getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success)
+    },
+
+    updateUserDetails: function (req, res) {
+        updateUserDetails(req, res, req.body);
     },
 
     clientLoginStartUp: function (req, res) {

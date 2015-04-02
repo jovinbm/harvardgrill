@@ -111,7 +111,6 @@ require('./passport/passport.js')(passport, OpenIDStrategy, LocalStrategy);
 //insert any new client into a unique room == to his socketID
 io.on('connection', function (socket) {
     socket.on('joinRoom', function (data) {
-        console.log("YES");
         var room = data.room;
         socket.join(room);
         socket.emit('joined');
@@ -130,65 +129,49 @@ app.post('/adminUserLogin', function (req, res, next) {
         var module = 'app.post /adminUserLogin';
 
         if (err) {
-            errorLogger(module, err, err);
-
-            return res.status(401).send({
-                code: 401,
-                notify: false,
-                type: 'warning',
-                msg: "A problem occurred when trying to log you in. Please try again",
-                reason: errorLogger(module, 'There was an error logging the user in', err),
-                disable: false,
-                redirect: false,
-                redirectPage: '/error/500.html'
+            return res.status(500).send({
+                code: 500,
+                banner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: info || err,
+                reason: errorLogger(module, info || err, err)
             });
         }
         if (!user) {
-            errorLogger(module, info, info);
-
             return res.status(401).send({
                 code: 401,
-                notify: false,
-                type: 'warning',
-                msg: info,
-                reason: errorLogger(module, 'There was an error logging the user in', err),
-                disable: false,
-                redirect: false,
-                redirectPage: '/error/500.html'
+                banner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: info || err,
+                reason: errorLogger(module, info || err, err)
             });
         }
         req.logIn(user, function (err) {
             if (err) {
-                errorLogger(module, err, err);
+                errorLogger('req.login', err, err);
 
                 return res.status(500).send({
                     code: 500,
-                    notify: false,
-                    type: 'error',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
                     msg: "A problem occurred when trying to log you in. Please try again",
-                    reason: errorLogger(module, 'Failed! req.login()', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    reason: errorLogger(module, 'Failed! req.login()', err)
                 });
             } else {
                 //add the grillName to the user
                 userDB.updateGrillName(user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, success);
 
-                function errorUpdateGrillName() {
-                    errorLogger(module, err, err);
+                function errorUpdateGrillName(status, err) {
+                    errorLogger('updateGrillName', err, err);
                     //log the user out
                     req.logout();
 
                     return res.status(500).send({
                         code: 500,
-                        notify: false,
-                        type: 'error',
+                        banner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
                         msg: "A problem occurred when trying to log you in. Please try again",
-                        reason: errorLogger(module, 'Failed! userDB.updateGrillName', err),
-                        disable: false,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
+                        reason: errorLogger(module, 'Failed! userDB.updateGrillName')
                     });
                 }
 
@@ -245,58 +228,58 @@ app.get('/harvardId', function (req, res, next) {
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
 app.get('/adminLogin.html', routes.admin_login_Html);
-
-app.get('/clientLogin.html', routes.clientLogin_Html);
-app.get('/admin.html', routes.admin_Html);
-app.get('/client.html', routes.client_Html);
-app.post('/clientInfoLogin', routes.clientInfoLogin);
+app.get('/clientLogin.html', authenticate.ensureAuthenticated, routes.clientLogin_Html);
+app.get('/admin.html', authenticate.ensureAuthenticated, routes.admin_Html);
+app.get('/client.html', authenticate.ensureAuthenticated, routes.client_Html);
+app.post('/checkIfFullyRegistered', authenticate.ensureAuthenticatedAngular, authenticate.checkIfFullyRegistered);
+app.post('/updateUserDetails', authenticate.ensureAuthenticatedAngular, loginAPI.updateUserDetails);
+app.post('/clientInfoLogin', authenticate.ensureAuthenticatedAngular, routes.clientInfoLogin);
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
 
 //API
-
-//LOGIN API - NOT AUTHENTICATED
 app.get('/api/getTemporarySocketRoom', loginAPI.getTemporarySocketRoom);
-app.post('/api/adminLoginStartUp', loginAPI.adminLoginStartUp);
-app.post('/api/clientLoginStartUp', loginAPI.clientLoginStartUp);
 app.post('/api/getAllGrillStatuses', loginAPI.getAllGrillStatuses);
 
+app.post('/api/adminLoginStartUp', loginAPI.adminLoginStartUp);
+app.post('/api/clientLoginStartUp', authenticate.ensureAuthenticatedAngular, loginAPI.clientLoginStartUp);
+
 app.post('/sendEmail', basicAPI.sendEmail);
-app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRoom);
-app.post('/api/adminStartUp', authenticate.ensureAuthenticated, basicAPI.adminStartUp);
-app.post('/api/clientStartUp', authenticate.ensureAuthenticated, basicAPI.clientStartUp);
+app.get('/api/getMyRoom', authenticate.ensureAuthenticatedAngular, basicAPI.getSocketRoom);
+app.post('/api/adminStartUp', authenticate.ensureAuthenticatedAngular, basicAPI.adminStartUp);
+app.post('/api/clientStartUp', authenticate.ensureAuthenticatedAngular, basicAPI.clientStartUp);
 
-app.post('/api/openGrill', authenticate.ensureAuthenticated, grillStatusAPI.openGrill);
-app.post('/api/closeGrill', authenticate.ensureAuthenticated, grillStatusAPI.closeGrill);
-app.post('/api/getCurrentGrillStatus', authenticate.ensureAuthenticated, grillStatusAPI.getCurrentGrillStatus);
-app.post('/api/getAllComponentsIndexNames', authenticate.ensureAuthenticated, grillStatusAPI.getAllComponentsIndexNames);
-app.post('/api/updateAvailableComponents', authenticate.ensureAuthenticated, grillStatusAPI.updateAvailableComponents);
+app.post('/api/openGrill', authenticate.ensureAuthenticatedAngular, grillStatusAPI.openGrill);
+app.post('/api/closeGrill', authenticate.ensureAuthenticatedAngular, grillStatusAPI.closeGrill);
+app.post('/api/getCurrentGrillStatus', authenticate.ensureAuthenticatedAngular, grillStatusAPI.getCurrentGrillStatus);
+app.post('/api/getAllComponentsIndexNames', authenticate.ensureAuthenticatedAngular, grillStatusAPI.getAllComponentsIndexNames);
+app.post('/api/updateAvailableComponents', authenticate.ensureAuthenticatedAngular, grillStatusAPI.updateAvailableComponents);
 
-app.post('/api/addComponent', authenticate.ensureAuthenticated, componentAPI.addComponent);
-app.post('/api/saveEditedComponent', authenticate.ensureAuthenticated, componentAPI.saveEditedComponent);
-app.post('/api/deleteComponent', authenticate.ensureAuthenticated, componentAPI.deleteComponent);
+app.post('/api/addComponent', authenticate.ensureAuthenticatedAngular, componentAPI.addComponent);
+app.post('/api/saveEditedComponent', authenticate.ensureAuthenticatedAngular, componentAPI.saveEditedComponent);
+app.post('/api/deleteComponent', authenticate.ensureAuthenticatedAngular, componentAPI.deleteComponent);
 
-app.post('/api/getAllOrderComponents', authenticate.ensureAuthenticated, componentAPI.getAllOrderComponents);
-app.post('/api/getAllOmelets', authenticate.ensureAuthenticated, componentAPI.getAllOmelets);
-app.post('/api/getAllWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAllWeeklySpecials);
-app.post('/api/getAllExtras', authenticate.ensureAuthenticated, componentAPI.getAllExtras);
+app.post('/api/getAllOrderComponents', authenticate.ensureAuthenticatedAngular, componentAPI.getAllOrderComponents);
+app.post('/api/getAllOmelets', authenticate.ensureAuthenticatedAngular, componentAPI.getAllOmelets);
+app.post('/api/getAllWeeklySpecials', authenticate.ensureAuthenticatedAngular, componentAPI.getAllWeeklySpecials);
+app.post('/api/getAllExtras', authenticate.ensureAuthenticatedAngular, componentAPI.getAllExtras);
 
-app.post('/api/getAvailableOrderComponents', authenticate.ensureAuthenticated, componentAPI.getAvailableOrderComponents);
-app.post('/api/getAvailableOmelets', authenticate.ensureAuthenticated, componentAPI.getAvailableOmelets);
-app.post('/api/getAvailableWeeklySpecials', authenticate.ensureAuthenticated, componentAPI.getAvailableWeeklySpecials);
-app.post('/api/getAvailableExtras', authenticate.ensureAuthenticated, componentAPI.getAvailableExtras);
+app.post('/api/getAvailableOrderComponents', authenticate.ensureAuthenticatedAngular, componentAPI.getAvailableOrderComponents);
+app.post('/api/getAvailableOmelets', authenticate.ensureAuthenticatedAngular, componentAPI.getAvailableOmelets);
+app.post('/api/getAvailableWeeklySpecials', authenticate.ensureAuthenticatedAngular, componentAPI.getAvailableWeeklySpecials);
+app.post('/api/getAvailableExtras', authenticate.ensureAuthenticatedAngular, componentAPI.getAvailableExtras);
 
-app.post('/api/getAdminClientOrders', authenticate.ensureAuthenticated, orderAPI.getAdminClientOrders);
-app.post('/api/getMyRecentOrders', authenticate.ensureAuthenticated, orderAPI.getMyRecentOrders);
-app.post('/api/newClientOrder', authenticate.ensureAuthenticated, orderAPI.newClientOrder);
-app.post('/api/markOrderAsDone', authenticate.ensureAuthenticated, orderAPI.markOrderAsDone);
-app.post('/api/markOrderAsDeclined', authenticate.ensureAuthenticated, orderAPI.markOrderAsDeclined);
+app.post('/api/getAdminClientOrders', authenticate.ensureAuthenticatedAngular, orderAPI.getAdminClientOrders);
+app.post('/api/getMyRecentOrders', authenticate.ensureAuthenticatedAngular, orderAPI.getMyRecentOrders);
+app.post('/api/newClientOrder', authenticate.ensureAuthenticatedAngular, orderAPI.newClientOrder);
+app.post('/api/markOrderAsDone', authenticate.ensureAuthenticatedAngular, orderAPI.markOrderAsDone);
+app.post('/api/markOrderAsDeclined', authenticate.ensureAuthenticatedAngular, orderAPI.markOrderAsDeclined);
 
-app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
-app.post('/api/logoutClientSession', authenticate.ensureAuthenticated, logoutAPI.logoutClientSession);
-app.post('/api/logoutClientFull', authenticate.ensureAuthenticated, logoutAPI.logoutClientFull);
-app.post('/api/adminLogout', authenticate.ensureAuthenticated, logoutAPI.adminLogout);
+app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticatedAngular, logoutAPI.logoutHarvardLogin);
+app.post('/api/logoutClientSession', authenticate.ensureAuthenticatedAngular, logoutAPI.logoutClientSession);
+app.post('/api/logoutClientFull', authenticate.ensureAuthenticatedAngular, logoutAPI.logoutClientFull);
+app.post('/api/adminLogout', authenticate.ensureAuthenticatedAngular, logoutAPI.adminLogout);
 
 //error handlers
 // catch 404 and forward to error handler

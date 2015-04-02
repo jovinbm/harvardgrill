@@ -37,39 +37,41 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var module = 'OpenIDStrategy';
 
             var openId = identifier;
-            var isAdmin = 'no';
             var uniqueCuid = cuid();
             var socketRoom = cuid();
-            var displayName = profile.displayName || "Harvard Member";
-            var email = profile.emails[0].value || cuid() + "@harvardclass.com";
-            var customLoggedInStatus = 0;
+            var isAdmin = 'no';
+            var displayName = profile.displayName || "";
+            var email = profile.email || "";
 
             //defining all callbacks
             function error(status, err) {
-                var user = new User({
-                    openId: openId,
-                    isAdmin: isAdmin,
-                    uniqueCuid: uniqueCuid,
-                    socketRoom: socketRoom,
-                    displayName: displayName,
-                    email: email,
-                    customLoggedInStatus: customLoggedInStatus
-                });
+                if (status == 0) {
+                    var user = new User({
+                        openId: openId,
+                        isAdmin: isAdmin,
+                        uniqueCuid: uniqueCuid,
+                        socketRoom: socketRoom,
+                        displayName: displayName,
+                        email: email
+                    });
 
-                function saveError(status, err) {
-                    errorLogger(module, 'Error saving user', err);
-                    done("Authentication failed. Please try again", false);
+                    function saveError(status, err) {
+                        consoleLogger(errorLogger(module, 'Error saving user', err));
+                        done("Authorization failed. Please try again", false, "Authorization failed. Please try again");
+                    }
+
+                    function saveSuccess(theSavedUser) {
+                        done(null, theSavedUser, null)
+                    }
+
+                    userDB.saveUser(user, saveError, saveError, saveSuccess);
+                } else {
+                    done("Authorization failed. Please try again", false, "Authorization failed. Please try again");
                 }
-
-                function saveSuccess(theSavedUser) {
-                    done(null, theSavedUser)
-                }
-
-                userDB.saveUser(user, saveError, saveError, saveSuccess);
             }
 
             function success(theUser) {
-                done(null, theUser);
+                done(null, theUser, null);
             }
 
             userDB.findUser(openId, error, error, success);
@@ -88,7 +90,6 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 var socketRoom = 'adminSocketRoom';
                 var displayName = 'Admin';
                 var tempUsername = 'Admin';
-                var email = 'admin@harvardclass.com';
                 var customLoggedInStatus = 1;
 
                 var user = new User({
@@ -98,17 +99,16 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                     socketRoom: socketRoom,
                     displayName: displayName,
                     username: tempUsername,
-                    email: email,
                     customLoggedInStatus: customLoggedInStatus
                 });
 
                 function saveError(status, err) {
-                    errorLogger(module, 'Error saving user', err);
-                    done("A problem occurred while trying to log you in. Please try again", false);
+                    consoleLogger(errorLogger(module, 'Error saving user', err));
+                    done("A problem occurred while trying to log you in. Please try again", false, "A problem occurred while trying to log you in. Please try again");
                 }
 
                 function saveSuccess(theSavedUser) {
-                    done(null, theSavedUser)
+                    done(null, theSavedUser, null)
                 }
 
                 userDB.saveUser(user, saveError, saveError, saveSuccess);
@@ -123,8 +123,6 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 var socketRoomTemp = 'tempClient' + cuid();
                 var displayNameTemp = 'TempClient';
                 var usernameTemp = 'TempClient';
-                var emailTemp = 'tempclient@harvardclass.com';
-                var customLoggedInStatusTemp = 0;
 
                 var userTemp = new User({
                     openId: openIdTemp,
@@ -132,25 +130,23 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                     uniqueCuid: uniqueCuidTemp,
                     socketRoom: socketRoomTemp,
                     displayName: displayNameTemp,
-                    username: usernameTemp,
-                    email: emailTemp,
-                    customLoggedInStatus: customLoggedInStatusTemp
+                    username: usernameTemp
                 });
 
                 function saveErrorTemp(status, err) {
-                    errorLogger(module, 'Error saving user', err);
-                    done("A problem occurred while trying to log you in. Please try again", false);
+                    consoleLogger(errorLogger(module, 'Error saving user', err));
+                    done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
                 }
 
                 function saveSuccessTemp(theSavedUser) {
-                    done(null, theSavedUser)
+                    done(null, theSavedUser, null)
                 }
 
                 userDB.saveUser(userTemp, saveErrorTemp, saveErrorTemp, saveSuccessTemp);
 
             } else {
-                errorLogger(module, 'Failed! User local strategy authentication failed');
-                done(null, false, 'You have entered incorrect credentials. Please try again')
+                consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
+                done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again')
             }
         }
     ));

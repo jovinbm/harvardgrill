@@ -19,9 +19,17 @@ module.exports = {
 
     errorLogger: function (filename, module, text, err) {
         if (text) {
-            return "ERROR: " + filename + ": " + module + ": " + text + ": err = " + err;
+            if (err) {
+                return "ERROR: " + filename + ": " + module + ": " + text + ": err = " + err;
+            } else {
+                return "ERROR: " + filename + ": " + module + ": " + text + ":";
+            }
         } else {
-            return "ERROR: " + filename + ": " + module + ": err = " + err;
+            if (err) {
+                return "ERROR: " + filename + ": " + module + ": err = " + err;
+            } else {
+                return "ERROR: " + filename + ": " + module + ":";
+            }
         }
     }
 };

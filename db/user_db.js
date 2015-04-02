@@ -21,6 +21,40 @@ module.exports = {
     },
 
 
+    findUserWithUsername: function (username, error_neg_1, error_0, success) {
+        User.findOne({username: username}).exec(
+            function (err, theUser) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else if (theUser == null || theUser == undefined) {
+                    success(1, theUser);
+                } else {
+                    success(-1, theUser);
+                }
+            }
+        );
+    },
+
+
+    checkUserPassword: function (openId, password, error_neg_1, error_0, success) {
+        User.findOne({openId: openId}).exec(
+            function (err, theUser) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else if (theUser == null || theUser == undefined) {
+                    error_neg_1(0, err);
+                } else {
+                    if (theUser.password == password) {
+                        success(1)
+                    } else {
+                        success(-1);
+                    }
+                }
+            }
+        );
+    },
+
+
     saveUser: function (theUserObject, error_neg_1, error_0, success) {
         theUserObject.save(function (err, theSavedUser) {
             if (err) {
@@ -82,6 +116,24 @@ module.exports = {
         )
     },
 
+    updateDisplayName: function (openId, displayName, error_neg_1, error_0, success) {
+        User
+            .update({
+                openId: openId
+            }, {
+                $set: {
+                    displayName: displayName
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
     updateUsername: function (openId, username, error_neg_1, error_0, success) {
         User
             .update({
@@ -89,6 +141,43 @@ module.exports = {
             }, {
                 $set: {
                     username: username
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
+    updateEmail: function (openId, email, error_neg_1, error_0, success) {
+        User
+            .update({
+                openId: openId
+            }, {
+                $set: {
+                    email: email
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
+
+    updatePassword: function (openId, password, error_neg_1, error_0, success) {
+        User
+            .update({
+                openId: openId
+            }, {
+                $set: {
+                    password: password
                 }
             }, function (err) {
                 if (err) {

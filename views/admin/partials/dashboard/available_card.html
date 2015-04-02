@@ -91,7 +91,7 @@
         </div>
 
         <div class="alert alert-warning"
-             ng-if="availableCardIsDirty == true">
+             ng-if="availableCardIsDirty">
             <p>You have made changes to what's available above. Please click UPDATE below to save changes when done</p>
         </div>
 
@@ -101,7 +101,7 @@
 
         <div class="pull-right ng-cloak">
             <a href ng-click="updateAvailableComponents()"
-               ng-disabled="isLoading || availableCardIsDirty == false || universalDisable"
+               ng-disabled="isLoading || !availableCardIsDirty || universalDisable"
                class="btn btn-info btn-md">
                 Update
             </a>

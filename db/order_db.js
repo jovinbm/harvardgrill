@@ -80,7 +80,7 @@ module.exports = {
         qUpdates.userUpdateUserLastActivity(theUser.openId, error_neg_1, error_0, success2);
 
         function success2() {
-            if (skipOrders == false) {
+            if (!skipOrders) {
                 Order
                     .find({
                         grillName: grillName,

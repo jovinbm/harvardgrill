@@ -97,7 +97,7 @@
         </div>
 
         <div class="alert alert-warning ng-cloak"
-             ng-if="confirmModalIsDirty == true">
+             ng-if="confirmModalIsDirty">
             <p>You have made changes to what's available above. Please click UPDATE below to save changes when
                 done</p>
         </div>
@@ -113,7 +113,7 @@
     <div class="modal-footer ng-cloak">
         <button class="btn btn-info"
                 ng-click="updateAvailableComponents()"
-                ng-disabled="isLoading || confirmModalIsDirty == false || universalDisable">UPDATE AVAILABLE
+                ng-disabled="isLoading || !confirmModalIsDirty || universalDisable">UPDATE AVAILABLE
         </button>
         <button class="btn btn-warning"
                 ng-click="cancel()"
@@ -121,7 +121,7 @@
         </button>
         <button class="btn btn-primary"
                 ng-click="ok()"
-                ng-disabled="isLoading || confirmModalIsDirty == true || universalDisable || (allOrderComponents.length < 1 && allOmelets.length < 1 && allWeeklySpecials.length > 1 && allExtras.length > 1)">
+                ng-disabled="isLoading || confirmModalIsDirty || universalDisable || (allOrderComponents.length < 1 && allOmelets.length < 1 && allWeeklySpecials.length > 1 && allExtras.length > 1)">
             Open Grill
         </button>
     </div>

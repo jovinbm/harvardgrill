@@ -85,15 +85,17 @@ module.exports = {
             } else {
                 res.status(401).send({
                     code: 401,
-                    notify: true,
+                    notify: false,
                     type: 'error',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
                     msg: 'You are not logged in. Refresh the page',
-                    reason: errorLogger(module, 'User not logged in', err),
+                    reason: errorLogger(module, 'User not logged in'),
                     disable: true,
                     redirect: false,
                     redirectPage: 'login.html'
                 });
-                consoleLogger(errorLogger(module, 'User not logged in', err));
+                consoleLogger(errorLogger(module, 'User not logged in'));
             }
         }
 
@@ -152,15 +154,17 @@ module.exports = {
                 } else {
                     res.status(401).send({
                         code: 401,
-                        notify: true,
+                        notify: false,
                         type: 'error',
+                        banner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
                         msg: 'You are not logged in. Refresh the page',
-                        reason: errorLogger(module, 'User not logged in', err),
+                        reason: errorLogger(module, 'User not logged in'),
                         disable: true,
                         redirect: false,
                         redirectPage: 'login.html'
                     });
-                    consoleLogger(errorLogger(module, 'User not logged in', err));
+                    consoleLogger(errorLogger(module, 'User not logged in'));
                 }
             }
 
@@ -218,15 +222,17 @@ module.exports = {
             } else {
                 res.status(401).send({
                     code: 401,
-                    notify: true,
+                    notify: false,
                     type: 'error',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
                     msg: 'You are not logged in. Refresh the page',
-                    reason: errorLogger(module, 'User not logged in', err),
+                    reason: errorLogger(module, 'User not logged in'),
                     disable: true,
                     redirect: false,
                     redirectPage: 'login.html'
                 });
-                consoleLogger(errorLogger(module, 'User not logged in', err));
+                consoleLogger(errorLogger(module, 'User not logged in'));
             }
         }
 
@@ -284,15 +290,17 @@ module.exports = {
             } else {
                 res.status(401).send({
                     code: 401,
-                    notify: true,
+                    notify: false,
                     type: 'error',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
                     msg: 'You are not authorized to perform this action. Please refresh this page to log in',
-                    reason: errorLogger(module, 'User not logged in', err),
+                    reason: errorLogger(module, 'User not logged in'),
                     disable: true,
                     redirect: false,
                     redirectPage: 'login.html'
                 });
-                consoleLogger(errorLogger(module, 'User not logged in', err));
+                consoleLogger(errorLogger(module, 'User not logged in'));
             }
         }
 
@@ -350,15 +358,17 @@ module.exports = {
             } else {
                 res.status(401).send({
                     code: 401,
-                    notify: true,
+                    notify: false,
                     type: 'error',
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
                     msg: 'You are not authorized to perform this action. Please refresh this page to log in',
-                    reason: errorLogger(module, 'User not logged in', err),
+                    reason: errorLogger(module, 'User not logged in'),
                     disable: true,
                     redirect: false,
                     redirectPage: 'login.html'
                 });
-                consoleLogger(errorLogger(module, 'User not logged in', err));
+                consoleLogger(errorLogger(module, 'User not logged in'));
             }
         }
 

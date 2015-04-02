@@ -9,6 +9,9 @@ angular.module('adminLoginApp')
             //universalDisable variable is used to disable everything crucial in case an error
             //occurs.This is sometimes needed if a reload did not work
             $scope.universalDisable = false;
+            $scope.showBanner = false;
+            $scope.bannerClass = "";
+            $scope.bannerMessage = "";
 
             $scope.universalDisableTrue = function () {
                 $scope.universalDisable = true;
@@ -16,22 +19,28 @@ angular.module('adminLoginApp')
             $scope.universalDisableFalse = function () {
                 $scope.universalDisable = false;
             };
-
             $scope.responseStatusHandler = function (resp) {
                 if (resp) {
                     if (resp.redirect) {
-                        if (resp.redirect == true) {
+                        if (resp.redirect) {
                             $window.location.href = resp.redirectPage;
                         }
                     }
                     if (resp.disable) {
-                        if (resp.disable == true) {
+                        if (resp.disable) {
                             $scope.universalDisableTrue();
                         }
                     }
                     if (resp.notify) {
                         if (resp.type && resp.msg) {
                             $scope.showToast(resp.type, resp.msg);
+                        }
+                    }
+                    if (resp.banner) {
+                        if (resp.bannerClass && resp.msg) {
+                            $scope.showBanner = true;
+                            $scope.bannerClass = resp.bannerClass;
+                            $scope.bannerMessage = resp.msg;
                         }
                     }
                     if (resp.reason) {
@@ -148,13 +157,10 @@ angular.module('adminLoginApp')
                 grillName: ""
             };
 
-            $scope.masterAdminLoginFormErrorBanner = false;
-            $scope.masterAdminLoginFormError = "";
-
             $scope.submitAdminLoginForm = function () {
                 //check that only one grill is selected
                 checkIfGrillIsSelected();
-                if ($scope.oneGrillIsSelected == true) {
+                if ($scope.oneGrillIsSelected) {
                     //find which grill is selected
                     for (var prop in $scope.allGrillStatusesModel) {
                         if ($scope.allGrillStatusesModel.hasOwnProperty(prop)) {
@@ -175,8 +181,6 @@ angular.module('adminLoginApp')
                             $scope.oneGrillIsSelected = false;
                             globals.allGrillStatuses(null, true, true);
                             $scope.masterClientLoginForm.password = "";
-                            $scope.masterAdminLoginFormErrorBanner = true;
-                            $scope.masterAdminLoginFormError = errResponse.msg;
                             $scope.responseStatusHandler(errResponse);
                         })
                 } else {

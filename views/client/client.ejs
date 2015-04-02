@@ -68,6 +68,12 @@
 
 <div class="container increase_margin_for__mobile ng-cloak">
 
+    <div ng-class="bannerClass"
+         ng-if="showBanner">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{bannerMessage}}</strong>
+    </div>
+
     <div class="alert alert-success ng-cloak"
          ng-if="mainCurrentGrillStatus.grillStatus == 'open'">
         <p><strong>Grill Status: Open and accepting orders</strong></p>

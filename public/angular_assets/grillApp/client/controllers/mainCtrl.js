@@ -7,6 +7,10 @@ angular.module('grillApp')
             //universalDisable variable is used to disable everything crucial in case an error
             //occurs.This is sometimes needed if a reload did not work
             $scope.universalDisable = false;
+            $scope.showBanner = false;
+            $scope.bannerClass = "";
+            $scope.bannerMessage = "";
+
             $scope.universalDisableTrue = function () {
                 $scope.universalDisable = true;
             };
@@ -17,18 +21,25 @@ angular.module('grillApp')
             $scope.responseStatusHandler = function (resp) {
                 if (resp) {
                     if (resp.redirect) {
-                        if (resp.redirect == true) {
+                        if (resp.redirect) {
                             $window.location.href = resp.redirectPage;
                         }
                     }
                     if (resp.disable) {
-                        if (resp.disable == true) {
+                        if (resp.disable) {
                             $scope.universalDisableTrue();
                         }
                     }
                     if (resp.notify) {
                         if (resp.type && resp.msg) {
                             $scope.showToast(resp.type, resp.msg);
+                        }
+                    }
+                    if (resp.banner) {
+                        if (resp.bannerClass && resp.msg) {
+                            $scope.showBanner = true;
+                            $scope.bannerClass = resp.bannerClass;
+                            $scope.bannerMessage = resp.msg;
                         }
                     }
                     if (resp.reason) {

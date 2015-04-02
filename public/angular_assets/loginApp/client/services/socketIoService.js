@@ -48,6 +48,10 @@ angular.module('clientLoginApp')
 
             return {
 
+                checkIfFullyRegistered: function () {
+                    return $http.post('/checkIfFullyRegistered');
+                },
+
                 getSocketRoom: function () {
                     //no grillName required here since this is the very first request
                     return $http.get('/api/getMyRoom');
@@ -61,6 +65,10 @@ angular.module('clientLoginApp')
 
                 getAllGrillStatuses: function () {
                     return $http.post('/api/getAllGrillStatuses');
+                },
+
+                updateUserDetails: function (details) {
+                    return $http.post('/updateUserDetails', details);
                 },
 
                 clientUserLogin: function (loginData) {

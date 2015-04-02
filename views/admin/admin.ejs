@@ -66,6 +66,12 @@
 </div>
 <!--end of nav-->
 
+<div ng-class="bannerClass"
+     ng-if="showBanner">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>{{bannerMessage}}</strong>
+</div>
+
 
 <div class="container ng-cloak increase_margin_for__mobile">
     <div ui-view></div>
