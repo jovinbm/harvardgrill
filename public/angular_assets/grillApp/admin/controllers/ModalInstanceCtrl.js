@@ -20,7 +20,7 @@ angular.module('grillApp')
             $scope.allExtras = [];
 
             function getAllOrderComponents() {
-                EditService.getAllOrderComponents()
+                EditService.getAllComponents('oc')
                     .success(function (orderComponents) {
                         $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allOrderComponents = orderComponents.allComponents;
@@ -31,7 +31,7 @@ angular.module('grillApp')
             }
 
             function getAllOmelets() {
-                EditService.getAllOmelets()
+                EditService.getAllComponents('oo')
                     .success(function (orderComponents) {
                         $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allOmelets = orderComponents.allComponents;
@@ -43,7 +43,7 @@ angular.module('grillApp')
 
 
             function getAllWeeklySpecials() {
-                EditService.getAllWeeklySpecials()
+                EditService.getAllComponents('ws')
                     .success(function (orderComponents) {
                         $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allWeeklySpecials = orderComponents.allComponents;
@@ -54,7 +54,7 @@ angular.module('grillApp')
             }
 
             function getAllExtras() {
-                EditService.getAllExtras()
+                EditService.getAllComponents('oe')
                     .success(function (orderComponents) {
                         $rootScope.$broadcast('responseStatusHandler', orderComponents);
                         $scope.allExtras = orderComponents.allComponents;

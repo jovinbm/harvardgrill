@@ -50,7 +50,7 @@ angular.module('grillApp')
 
             //request all components;
             function getAllOrderComponents() {
-                EditService.getAllOrderComponents()
+                EditService.getAllComponents('oc')
                     .success(function (orderComponents) {
                         $scope.allOrderComponents = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
@@ -63,7 +63,7 @@ angular.module('grillApp')
             }
 
             function getAllOmelets() {
-                EditService.getAllOmelets()
+                EditService.getAllComponents('oo')
                     .success(function (orderComponents) {
                         $scope.allOmelets = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
@@ -77,7 +77,7 @@ angular.module('grillApp')
 
 
             function getAllWeeklySpecials() {
-                EditService.getAllWeeklySpecials()
+                EditService.getAllComponents('ws')
                     .success(function (orderComponents) {
                         $scope.allWeeklySpecials = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);
@@ -90,7 +90,7 @@ angular.module('grillApp')
             }
 
             function getAllExtras() {
-                EditService.getAllExtras()
+                EditService.getAllComponents('oe')
                     .success(function (orderComponents) {
                         $scope.allExtras = orderComponents.allComponents;
                         $scope.editViewReference = ReferenceService.refreshEditViewReference(orderComponents.allComponents);

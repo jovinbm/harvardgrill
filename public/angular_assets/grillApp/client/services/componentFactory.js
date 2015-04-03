@@ -4,20 +4,10 @@ angular.module('grillApp')
         function ($window, $http, $rootScope, globals) {
 
             return {
-                getAvailableOrderComponents: function () {
-                    return $http.post('/api/getAvailableOrderComponents')
-                },
-
-                getAvailableOmelets: function () {
-                    return $http.post('/api/getAvailableOmelets')
-                },
-
-                getAvailableWeeklySpecials: function () {
-                    return $http.post('/api/getAvailableWeeklySpecials')
-                },
-
-                getAvailableExtras: function () {
-                    return $http.post('/api/getAvailableExtras')
+                getAvailableComponents: function (componentGroup) {
+                    return $http.post('/api/getAvailableComponents', {
+                        componentGroup: componentGroup
+                    })
                 },
 
                 getMyRecentOrders: function () {

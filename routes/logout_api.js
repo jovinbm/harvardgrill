@@ -20,6 +20,13 @@ var logout_handler = require('../handlers/logout_handler.js');
 var userDB = require('../db/user_db.js');
 
 
+function getTheUser(req) {
+    return req.customData.theUser;
+}
+function getTheCurrentGrillStatus(req) {
+    return req.customData.currentGrillStatus;
+}
+
 module.exports = {
     logoutHarvardLogin: function (req, res) {
         var module = 'logoutHarvardLogin';
@@ -32,141 +39,64 @@ module.exports = {
     logoutClientSession: function (req, res) {
         var module = 'logoutClientSession';
         receivedLogger(module);
+        userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
 
-        /*no need to complete the ajax request -- user will be redirected to login which has it's
-         own js file*/
-        //retrieve the user
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: "A problem has occurred. Please try again",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
+        //toggle the user's customLoggedInStatus
+        function toggled() {
+            logout_handler.logoutClientSession(req, res);
         }
 
-        function success(theUser) {
-
-            function errorToggle(status, err) {
-                if (status == -1 || status == 0) {
-                    res.status(500).send({
-                        code: 500,
-                        notify: true,
-                        type: 'error',
-                        msg: "A problem has occurred. Please reload the page",
-                        reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
-                        disable: true,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
-                    });
-                    consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
-                }
-            }
-
-            //toggle the user's customLoggedInStatus
-            function toggled() {
-                logout_handler.logoutClientSession(req, res, theUser);
-            }
-
-            userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
-    },
-
-
-    logoutClientFull: function (req, res) {
-        var module = 'logoutClientFull';
-        receivedLogger(module);
-
-        /*no need to complete the ajax request -- user will be redirected to login which has it's
-         own js file*/
-        //retrieve the user
-        function error(status, err) {
+        function errorToggle(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
                     disable: true,
                     redirect: false,
                     redirectPage: '/error/500.html'
                 });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
             }
         }
-
-        function success(theUser) {
-            //toggle the user's customLoggedInStatus
-
-            function errorToggle(status, err) {
-                if (status == -1 || status == 0) {
-                    res.status(500).send({
-                        code: 500,
-                        notify: true,
-                        type: 'error',
-                        msg: "A problem has occurred. Please try again",
-                        reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
-                        disable: true,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
-                    });
-                    consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
-                }
-            }
-
-            function toggled() {
-                logout_handler.logoutClientFull(req, res, theUser);
-            }
-
-            userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
     },
 
 
-    adminLogout: function (req, res) {
-        var module = 'adminLogout';
+    logoutClientFull: function (req, res) {
+        var module = 'logoutClientFull';
         receivedLogger(module);
+        userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
 
-        /*no need to complete the ajax request -- user will be redirected to login which has it's
-         own js file*/
-        //retrieve the user
-        function error(status, err) {
+        function toggled() {
+            logout_handler.logoutClientFull(req, res);
+        }
+
+        function errorToggle(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please try again",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
+                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
                     disable: true,
                     redirect: false,
                     redirectPage: '/error/500.html'
                 });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
             }
         }
+    },
 
-        function success(theUser) {
-            //toggle the user's customLoggedInStatus
-            function toggled() {
-                logout_handler.adminLogout(req, res, theUser);
-            }
 
-            toggled();
+    adminLogout: function (req, res) {
+        var module = 'adminLogout';
+        receivedLogger(module);
+        toggled();
+        function toggled() {
+            logout_handler.adminLogout(req, res);
         }
-
-        userDB.findUser(req.user.openId, error, error, success);
     }
 };

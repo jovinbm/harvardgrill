@@ -65,7 +65,6 @@ module.exports = {
         });
     },
 
-
     deleteUser: function (theUser, error_neg_1, error_0, success) {
         User.
             find({uniqueCuid: theUser.uniqueCuid})

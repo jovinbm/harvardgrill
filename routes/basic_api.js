@@ -25,6 +25,12 @@ var errorLogger = function (module, text, err) {
 var basic_handler = require('../handlers/basic_handler.js');
 var userDB = require('../db/user_db.js');
 
+function getTheUser(req) {
+    return req.customData.theUser;
+}
+function getTheCurrentGrillStatus(req) {
+    return req.customData.currentGrillStatus;
+}
 
 module.exports = {
     sendEmail: function (req, res) {
@@ -46,121 +52,27 @@ module.exports = {
     getSocketRoom: function (req, res) {
         var module = 'getSocketRoom';
         receivedLogger(module);
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: 'Error when trying to start the app. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: true,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
-        }
-
-        function success(theUser) {
-            res.status(200).send({
-                socketRoom: theUser.socketRoom,
-                grillName: theUser.grillName,
-                username: theUser.username,
-                uniqueCuid: theUser.uniqueCuid
-            });
-            consoleLogger(successLogger(module));
-
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
+        var theUser = req.customData.theUser;
+        res.status(200).send({
+            socketRoom: theUser.socketRoom,
+            grillName: theUser.grillName,
+            username: theUser.username,
+            uniqueCuid: theUser.uniqueCuid
+        });
+        consoleLogger(successLogger(module));
     },
 
 
     adminStartUp: function (req, res) {
         var module = 'adminStartUp';
         receivedLogger(module);
+        basic_handler.adminStartUp(req, res);
 
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: 'Error when trying to start the app. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: true,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
-        }
-
-        function success(theUser) {
-            if (theUser.customLoggedInStatus == 1) {
-                basic_handler.adminStartUp(req, res, theUser);
-            } else {
-                res.status(401).send({
-                    code: 401,
-                    notify: false,
-                    type: 'error',
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'You are not logged in. Refresh the page to do so',
-                    reason: errorLogger(module, 'User not logged in'),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: 'login.html'
-                });
-                consoleLogger(errorLogger(module, 'User not logged in'));
-            }
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
     },
 
     clientStartUp: function (req, res) {
         var module = 'clientStartUp';
         receivedLogger(module);
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: 'Error when trying to start the app. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve user'),
-                    disable: true,
-                    redirect: true,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user'));
-            }
-        }
-
-        function success(theUser) {
-            if (theUser.customLoggedInStatus == 1) {
-                basic_handler.clientStartUp(req, res, theUser);
-            } else {
-                res.status(401).send({
-                    code: 401,
-                    notify: false,
-                    type: 'error',
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'You are not logged in. Refresh the page to do so',
-                    reason: errorLogger(module, 'User not logged in'),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: 'login.html'
-                });
-                consoleLogger(errorLogger(module, 'User not logged in'));
-            }
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
+        basic_handler.clientStartUp(req, res);
     }
 };

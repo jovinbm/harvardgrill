@@ -2,6 +2,13 @@ var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var statsDB = require('../db/stats_db.js');
 
+function getTheUser(req) {
+    return req.customData.theUser;
+}
+function getTheCurrentGrillStatus(req) {
+    return req.customData.currentGrillStatus;
+}
+
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;
     rL('basic_handler', module);
@@ -19,71 +26,21 @@ var errorLogger = function (module, text, err) {
 
 module.exports = {
 
-    adminStartUp: function (req, res, theUser) {
+    adminStartUp: function (req, res) {
         var module = 'adminStartup';
         receivedLogger(module);
-
-        function errorGrillStatus(status, err) {
-            if (status == -1) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: 'Error when trying to start the app. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve startup info', err),
-                    disable: true,
-                    redirect: true,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Failed! Could not retrieve startup info', err));
-            } else if (status == 0) {
-                consoleLogger("**basic_handler: adminStartUp: Could not find currentGrillStatus, proceeding to create first instance");
-            }
-        }
-
-        function success(currentGrillStatus) {
-            res.status(200).send({
-                currentGrillStatus: currentGrillStatus
-            });
-            consoleLogger(successLogger(module));
-        }
-
-        statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, success)
-
+        res.status(200).send({
+            currentGrillStatus: req.customData.currentGrillStatus
+        });
+        consoleLogger(successLogger(module));
     },
 
-    clientStartUp: function (req, res, theUser) {
+    clientStartUp: function (req, res) {
         var module = 'clientStartup';
         receivedLogger(module);
-
-        function errorGrillStatus(status, err) {
-            if (status == -1) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: 'Error when trying to start the app. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve startup info', err),
-                    disable: true,
-                    redirect: true,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Failed! Could not retrieve startup info', err));
-            } else if (status == 0) {
-                consoleLogger("**basic_handler: clientStartUp: Could not find currentGrillStatus, proceeding to create first instance");
-            }
-        }
-
-        function success(currentGrillStatus) {
-            res.status(200).send({
-                currentGrillStatus: currentGrillStatus
-            });
-            consoleLogger(successLogger(module));
-        }
-
-        statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, success);
-
+        res.status(200).send({
+            currentGrillStatus: req.customData.currentGrillStatus
+        });
+        consoleLogger(successLogger(module));
     }
-
-
 };

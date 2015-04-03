@@ -19,6 +19,12 @@ var userDB = require('../db/user_db.js');
 var statsDB = require('../db/stats_db.js');
 var order_handler = require('../handlers/order_handler.js');
 
+function getTheUser(req) {
+    return req.customData.theUser;
+}
+function getTheCurrentGrillStatus(req) {
+    return req.customData.currentGrillStatus;
+}
 
 module.exports = {
 
@@ -26,80 +32,7 @@ module.exports = {
         var module = 'newClientOrder';
         receivedLogger(module);
         var theOrder = req.body.theOrderArray;
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
-        }
-
-        function success(theUser) {
-
-            if (theUser.customLoggedInStatus == 1) {
-
-                //get the current Grill Status
-
-                function errorGrillStatus(status, err) {
-                    res.status(500).send({
-                        code: 500,
-                        notify: true,
-                        type: 'error',
-                        msg: "A problem has occurred. Please reload the page",
-                        reason: errorLogger(module, 'Error while retrieving stats info', err),
-                        disable: true,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
-                    });
-                    consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
-                }
-
-                function statsSuccess(currentGrillStatus) {
-                    if (currentGrillStatus.grillStatus == "open") {
-                        order_handler.newClientOrder(req, res, theUser, currentGrillStatus, theOrder);
-                    } else {
-                        res.status(500).send({
-                            code: 500,
-                            notify: true,
-                            type: 'error',
-                            msg: "The grill is currently still open. Close the grill to perform this action",
-                            reason: errorLogger(module, 'Grill is not closed'),
-                            disable: false,
-                            redirect: false,
-                            redirectPage: '/error/500.html'
-                        });
-                        consoleLogger(errorLogger(module, 'Grill is not closed'));
-                    }
-                }
-
-                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
-            } else {
-                res.status(401).send({
-                    code: 401,
-                    notify: false,
-                    type: 'error',
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'You are not logged in. Refresh the page',
-                    reason: errorLogger(module, 'User not logged in'),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: 'login.html'
-                });
-                consoleLogger(errorLogger(module, 'User not logged in'));
-            }
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
+        order_handler.newClientOrder(req, res, theOrder);
     },
 
     getAdminClientOrders: function (req, res) {
@@ -115,128 +48,13 @@ module.exports = {
         if (currentOrdersToBeSkipped == []) {
             skipOrders = false;
         }
-
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
-        }
-
-        function success(theUser) {
-            function errorGrillStatus(status, err) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Error while retrieving stats info', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
-            }
-
-            function statsSuccess(currentGrillStatus) {
-                if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
-                    order_handler.getAdminClientOrders(req, res, theUser, currentGrillStatus, amount, skipOrders, currentOrdersToBeSkipped);
-                } else {
-                    res.status(401).send({
-                        code: 401,
-                        notify: false,
-                        type: 'error',
-                        banner: true,
-                        bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: 'You are not logged in. Refresh the page',
-                        reason: errorLogger(module, 'User not logged in'),
-                        disable: true,
-                        redirect: false,
-                        redirectPage: 'login.html'
-                    });
-                    consoleLogger(errorLogger(module, 'User not logged in'));
-                }
-            }
-
-            statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
+        order_handler.getAdminClientOrders(req, res, amount, skipOrders, currentOrdersToBeSkipped);
     },
 
     getMyRecentOrders: function (req, res) {
         var module = 'getMyRecentOrders';
         receivedLogger(module);
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
-        }
-
-        function success(theUser) {
-
-            if (theUser.customLoggedInStatus == 1) {
-
-                //get the current Grill Status
-
-                function errorGrillStatus(status, err) {
-                    res.status(500).send({
-                        code: 500,
-                        notify: true,
-                        type: 'error',
-                        msg: "A problem has occurred. Please reload the page",
-                        reason: errorLogger(module, 'Error while retrieving stats info', err),
-                        disable: true,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
-                    });
-                    consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
-                }
-
-                function statsSuccess(currentGrillStatus) {
-                    order_handler.getMyRecentOrders(req, res, theUser, currentGrillStatus);
-                }
-
-                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
-            } else {
-                res.status(401).send({
-                    code: 401,
-                    notify: false,
-                    type: 'error',
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'You are not logged in. Refresh the page',
-                    reason: errorLogger(module, 'User not logged in'),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: 'login.html'
-                });
-                consoleLogger(errorLogger(module, 'User not logged in'));
-            }
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
+        order_handler.getMyRecentOrders(req, res);
     },
 
 
@@ -245,133 +63,14 @@ module.exports = {
         receivedLogger(module);
         var orderUniqueCuid = req.body.orderUniqueCuid;
         var processedOrderComponents = req.body.processedOrderComponents;
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
-        }
-
-        function success(theUser) {
-
-            if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
-
-                //get the current Grill Status
-
-                function errorGrillStatus(status, err) {
-                    res.status(500).send({
-                        code: 500,
-                        notify: true,
-                        type: 'error',
-                        msg: "A problem has occurred. Please reload the page",
-                        reason: errorLogger(module, 'Error while retrieving stats info', err),
-                        disable: true,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
-                    });
-                    consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
-                }
-
-                function statsSuccess(currentGrillStatus) {
-                    order_handler.markOrderAsDone(req, res, theUser, currentGrillStatus, orderUniqueCuid, processedOrderComponents);
-                }
-
-                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
-            } else {
-                res.status(401).send({
-                    code: 401,
-                    notify: false,
-                    type: 'error',
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'You are not authorized to perform this action. Please refresh this page to log in',
-                    reason: errorLogger(module, 'User not logged in'),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: 'login.html'
-                });
-                consoleLogger(errorLogger(module, 'User not logged in'));
-            }
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
+        order_handler.markOrderAsDone(req, res, orderUniqueCuid, processedOrderComponents);
     },
 
 
     markOrderAsDeclined: function (req, res) {
         var module = 'markOrderAsDeclined';
         receivedLogger(module);
-
         var orderUniqueCuid = req.body.orderUniqueCuid;
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not retrieve user', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-            }
-        }
-
-        function success(theUser) {
-
-            if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
-
-                //get the current Grill Status
-
-                function errorGrillStatus(status, err) {
-                    res.status(500).send({
-                        code: 500,
-                        notify: true,
-                        type: 'error',
-                        msg: "A problem has occurred. Please reload the page",
-                        reason: errorLogger(module, 'Error while retrieving stats info', err),
-                        disable: true,
-                        redirect: false,
-                        redirectPage: '/error/500.html'
-                    });
-                    consoleLogger(errorLogger(module, 'Error while retrieving stats info', err));
-                }
-
-                function statsSuccess(currentGrillStatus) {
-                    order_handler.markOrderAsDeclined(req, res, theUser, currentGrillStatus, orderUniqueCuid);
-                }
-
-                statsDB.getCurrentGrillStatus(theUser.grillName, theUser, errorGrillStatus, errorGrillStatus, statsSuccess);
-            } else {
-                res.status(401).send({
-                    code: 401,
-                    notify: false,
-                    type: 'error',
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'You are not authorized to perform this action. Please refresh this page to log in',
-                    reason: errorLogger(module, 'User not logged in'),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: 'login.html'
-                });
-                consoleLogger(errorLogger(module, 'User not logged in'));
-            }
-        }
-
-        userDB.findUser(req.user.openId, error, error, success);
+        order_handler.markOrderAsDeclined(req, res, orderUniqueCuid);
     }
 };

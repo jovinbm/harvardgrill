@@ -31,20 +31,10 @@ angular.module('grillApp')
                     }
                 },
 
-                getAllOrderComponents: function () {
-                    return $http.post('/api/getAllOrderComponents')
-                },
-
-                getAllOmelets: function () {
-                    return $http.post('/api/getAllOmelets')
-                },
-
-                getAllWeeklySpecials: function () {
-                    return $http.post('/api/getAllWeeklySpecials')
-                },
-
-                getAllExtras: function () {
-                    return $http.post('/api/getAllExtras')
+                getAllComponents: function (componentGroup) {
+                    return $http.post('/api/getAllComponents', {
+                        componentGroup: componentGroup
+                    })
                 }
             }
         }])

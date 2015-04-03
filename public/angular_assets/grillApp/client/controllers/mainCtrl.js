@@ -179,7 +179,7 @@ angular.module('grillApp')
             //in turn un-checking all checked boxes. Be careful!
 
             function getAvailableOrderComponents(refreshMyNewOrder) {
-                ComponentService.getAvailableOrderComponents()
+                ComponentService.getAvailableComponents('oc')
                     .success(function (orderComponents) {
                         $scope.availableOrderComponents = orderComponents.availableComponents;
 
@@ -200,7 +200,7 @@ angular.module('grillApp')
             }
 
             function getAvailableOmelets(refreshMyNewOrder) {
-                ComponentService.getAvailableOmelets()
+                ComponentService.getAvailableComponents('oo')
                     .success(function (orderComponents) {
                         $scope.availableOmelets = orderComponents.availableComponents;
 
@@ -223,7 +223,7 @@ angular.module('grillApp')
 
 
             function getAvailableWeeklySpecials(refreshMyNewOrder) {
-                ComponentService.getAvailableWeeklySpecials()
+                ComponentService.getAvailableComponents('ws')
                     .success(function (orderComponents) {
                         $scope.availableWeeklySpecials = orderComponents.availableComponents;
 
@@ -244,7 +244,7 @@ angular.module('grillApp')
             }
 
             function getAvailableExtras(refreshMyNewOrder) {
-                ComponentService.getAvailableExtras()
+                ComponentService.getAvailableComponents('oe')
                     .success(function (orderComponents) {
                         $scope.availableExtras = orderComponents.availableComponents;
 

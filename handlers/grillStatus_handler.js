@@ -19,27 +19,20 @@ var errorLogger = function (module, text, err) {
     return eL('grillStatus_handler', module, text, err);
 };
 
+function getTheUser(req) {
+    return req.customData.theUser;
+}
+function getTheCurrentGrillStatus(req) {
+    return req.customData.currentGrillStatus;
+}
+
 module.exports = {
 
-    openGrill: function (req, res, theUser) {
+    openGrill: function (req, res) {
         var module = 'openGrill';
         receivedLogger(module);
-
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'warning',
-                    msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page",
-                    reason: errorLogger(module, 'Could not open grill', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Failed! Could not open grill', err));
-            }
-        }
+        var theUser = req.customData.theUser;
+        statsDB.openGrill(theUser.grillName, theUser, error, error, success);
 
         function success(newGrillStatus) {
             res.status(200).send({
@@ -53,28 +46,25 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        statsDB.openGrill(theUser.grillName, theUser, error, error, success);
-    },
-
-    closeGrill: function (req, res, theUser) {
-        var module = 'closeGrill';
-        receivedLogger(module);
-
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page",
-                    reason: errorLogger(module, 'Could not close grill', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page",
+                    reason: errorLogger(module, 'Could not open grill', err)
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not close grill', err));
+                consoleLogger(errorLogger(module, 'Failed! Could not open grill', err));
             }
         }
+    },
+
+    closeGrill: function (req, res) {
+        var module = 'closeGrill';
+        receivedLogger(module);
+        var theUser = req.customData.theUser;
+        statsDB.closeGrill(theUser.grillName, theUser, error, error, success);
 
         function success(newGrillStatus) {
             res.status(200).send({
@@ -88,62 +78,36 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        statsDB.closeGrill(theUser.grillName, theUser, error, error, success);
-    },
-
-    getCurrentGrillStatus: function (req, res, theUser) {
-        var module = 'getCurrentGrillStatus';
-        receivedLogger(module);
-
-        function error(status, err) {
-            if (status == -1) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: 'A problem has occurred. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve currentGrillStatus', err),
-                    disable: true,
-                    redirect: true,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Failed! Could not retrieve currentGrillStatus', err));
-            } else if (status == 0) {
-                consoleLogger("**grillStatus_handler: clientStartUp: Could not find currentGrillStatus, proceeding to create first instance");
-            }
-        }
-
-        function success(currentGrillStatus) {
-            res.status(200).send({
-                currentGrillStatus: currentGrillStatus
-            });
-            consoleLogger(successLogger(module));
-        }
-
-        statsDB.getCurrentGrillStatus(theUser.grillName, theUser, error, error, success)
-
-    },
-
-
-    updateAvailableComponents: function (req, res, theUser, allComponents) {
-        var module = 'updateAvailableComponents';
-        receivedLogger(module);
-
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: 'Update failed, please try again. If problem persists please reload this page',
-                    reason: errorLogger(module, 'Could not update available components', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page",
+                    reason: errorLogger(module, 'Could not close grill', err)
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not update available components', err));
+                consoleLogger(errorLogger(module, 'Failed! Could not close grill', err));
             }
         }
+    },
+
+    getCurrentGrillStatus: function (req, res) {
+        var module = 'getCurrentGrillStatus';
+        receivedLogger(module);
+        res.status(200).send({
+            currentGrillStatus: req.customData.currentGrillStatus
+        });
+        consoleLogger(successLogger(module));
+
+    },
+
+
+    updateAvailableComponents: function (req, res, allComponents) {
+        var module = 'updateAvailableComponents';
+        receivedLogger(module);
+        var theUser = req.customData.theUser;
+        componentDB.updateAvailableComponents(theUser.grillName, theUser, allComponents, error, error, success);
 
         function success() {
             res.status(200).send({
@@ -156,8 +120,18 @@ module.exports = {
             consoleLogger(successLogger(module));
         }
 
-        componentDB.updateAvailableComponents(theUser.grillName, theUser, allComponents, error, error, success)
-
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    code: 500,
+                    notify: true,
+                    type: 'warning',
+                    msg: 'Update failed, please try again. If problem persists please reload this page',
+                    reason: errorLogger(module, 'Could not update available components', err)
+                });
+                consoleLogger(errorLogger(module, 'Failed! Could not update available components', err));
+            }
+        }
     }
 
 

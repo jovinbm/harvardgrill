@@ -2,6 +2,13 @@ var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var userDB = require('../db/user_db.js');
 
+function getTheUser(req) {
+    return req.customData.theUser;
+}
+function getTheCurrentGrillStatus(req) {
+    return req.customData.currentGrillStatus;
+}
+
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;
     rL('logout_handler', module);
@@ -23,11 +30,9 @@ module.exports = {
     logoutHarvardLogin: function (req, res) {
         var module = 'logoutHarvardLogin';
         receivedLogger(module);
-
         //delete the harvard cs50 ID session
         req.logout();
-
-        //send a success so that the user will be logged out and redirected to login
+        //send a success so that the user will be logged out and redirected to login by angular responseHandler
         res.status(200).send({
             msg: 'LogoutHarvardLogin success'
         });
@@ -35,11 +40,10 @@ module.exports = {
     },
 
 
-    logoutClientSession: function (req, res, theUser) {
+    logoutClientSession: function (req, res) {
         var module = 'logoutClientSession';
         receivedLogger(module);
-
-        //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
+        //the logout_api toggles the customLoggedInStatus -- respond with a success, angular client will redirect
         res.status(200).send({
             code: 200,
             notify: false,
@@ -50,14 +54,12 @@ module.exports = {
     },
 
 
-    logoutClientFull: function (req, res, theUser) {
+    logoutClientFull: function (req, res) {
         var module = 'logoutClientFull';
         receivedLogger(module);
-
         //delete the harvard cs50 ID session
         req.logout();
-
-        //send a success so that the user will be logged out and redirected to login
+        //send a success so that the user will be logged out and redirected to login by clientAngular
         res.status(200).send({
             code: 200,
             notify: false,
@@ -68,14 +70,24 @@ module.exports = {
     },
 
 
-    adminLogout: function (req, res, theUser) {
+    adminLogout: function (req, res) {
         var module = 'adminLogout';
         receivedLogger(module);
+        var theUser = getTheUser(req);
+        userDB.deleteUser(theUser, error, error, success);
 
-        //log the admin user out
-        req.logout();
+        function success() {
+            //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
+            req.logout();
+            res.status(200).send({
+                code: 200,
+                notify: false,
+                redirect: true,
+                redirectPage: "/adminLogin.html"
+            });
+            consoleLogger(successLogger(module));
+        }
 
-        //delete the admin
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({
@@ -91,19 +103,6 @@ module.exports = {
                 consoleLogger(errorLogger(module, 'Failed! Could not logout admin', err));
             }
         }
-
-        function success() {
-            //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
-            res.status(200).send({
-                code: 200,
-                notify: false,
-                redirect: true,
-                redirectPage: "/adminLogin.html"
-            });
-            consoleLogger(successLogger(module));
-        }
-
-        userDB.deleteUser(theUser, error, error, success)
     }
 
 

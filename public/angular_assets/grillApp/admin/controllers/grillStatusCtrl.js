@@ -138,7 +138,7 @@ angular.module('grillApp')
 
             //request all components;
             function getAllOrderComponents() {
-                EditService.getAllOrderComponents()
+                EditService.getAllComponents('oc')
                     .success(function (orderComponents) {
                         $scope.allOrderComponents = orderComponents.allComponents;
                         $scope.responseStatusHandler(orderComponents);
@@ -149,7 +149,7 @@ angular.module('grillApp')
             }
 
             function getAllOmelets() {
-                EditService.getAllOmelets()
+                EditService.getAllComponents('oo')
                     .success(function (orderComponents) {
                         $scope.allOmelets = orderComponents.allComponents;
                         $scope.responseStatusHandler(orderComponents);
@@ -161,7 +161,7 @@ angular.module('grillApp')
 
 
             function getAllWeeklySpecials() {
-                EditService.getAllWeeklySpecials()
+                EditService.getAllComponents('ws')
                     .success(function (orderComponents) {
                         $scope.allWeeklySpecials = orderComponents.allComponents;
                         $scope.responseStatusHandler(orderComponents);
@@ -172,7 +172,7 @@ angular.module('grillApp')
             }
 
             function getAllExtras() {
-                EditService.getAllExtras()
+                EditService.getAllComponents('oe')
                     .success(function (orderComponents) {
                         $scope.allExtras = orderComponents.allComponents;
                         $scope.responseStatusHandler(orderComponents);
