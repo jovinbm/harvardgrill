@@ -47,7 +47,7 @@ angular.module('adminLoginApp')
                         $log.warn(resp.reason);
                     }
                 } else {
-                    $scope.showToast('warning', 'Connection lost, reconnecting...')
+                    //do nothing
                 }
             };
 
@@ -89,12 +89,14 @@ angular.module('adminLoginApp')
                         toastr.success(text);
                         break;
                     case "warning":
+                        toastr.clear();
                         toastr.warning(text, 'Warning', {
                             closeButton: true,
                             tapToDismiss: true
                         });
                         break;
                     case "error":
+                        toastr.clear();
                         toastr.error(text, 'Error', {
                             closeButton: true,
                             tapToDismiss: true,
