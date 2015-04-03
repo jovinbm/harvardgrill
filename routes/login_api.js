@@ -27,7 +27,6 @@ function getTheCurrentGrillStatus(req) {
 }
 
 function getAllGrillStatuses(error_neg_1, error_0, success) {
-
     //count the number available
     Stats
         .count()
@@ -129,6 +128,175 @@ module.exports = {
         }
     },
 
+
+    clientHarvardLogin: function (req, res, next) {
+        passport.authenticate('openid', function (err, user, info) {
+            var module = 'app.post /harvardId';
+
+            if (err) {
+                errorLogger(module, err, err);
+                return res.render('login', {
+                    errorCode: 1,
+                    errorMessage: "Authentication failed. Please try again"
+                })
+            }
+            if (!user) {
+                errorLogger(module, "Authentication failed. Please try again", err);
+                return res.render('login', {
+                    errorCode: 1,
+                    errorMessage: "Authentication failed. Please try again"
+                })
+            }
+            req.logIn(user, function (err) {
+                if (err) {
+                    errorLogger(module, err, err);
+                    return res.render('login', {
+                        errorCode: 1,
+                        errorMessage: "Authentication failed. Please try again"
+                    })
+                }
+                return res.redirect('clientLogin.html');
+            });
+        })(req, res, next);
+    },
+
+
+    localUserLogin: function (req, res, next) {
+        var module = 'app.post /localUserLogin';
+        receivedLogger(module);
+        passport.authenticate('local', function (err, user, info) {
+
+            if (err) {
+                return res.status(500).send({
+                    code: 500,
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
+                    msg: info || err,
+                    reason: errorLogger(module, info || err, err)
+                });
+            }
+            if (!user) {
+                return res.status(401).send({
+                    code: 401,
+                    banner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
+                    msg: info || err,
+                    reason: errorLogger(module, info || err, err)
+                });
+            }
+            req.logIn(user, function (err) {
+                if (err) {
+                    errorLogger('req.login', err, err);
+
+                    return res.status(500).send({
+                        code: 500,
+                        banner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
+                        msg: "A problem occurred when trying to log you in. Please try again",
+                        reason: errorLogger(module, 'Failed! req.login()', err)
+                    });
+                } else {
+                    successLogger(module);
+                    var redirectPage = '/clientLogin.html';
+                    if (user.isAdmin == 'yes') {
+                        redirectPage = 'adminLogin.html'
+                    }
+                    return res.status(200).send({
+                        code: 200,
+                        notify: false,
+                        type: 'success',
+                        msg: "You have successfully logged in",
+                        reason: successLogger(module, 'localUserLogin Success'),
+                        redirect: true,
+                        redirectPage: redirectPage
+                    });
+                }
+            });
+        })(req, res, next);
+    },
+
+    updateUserDetails: function (req, res) {
+        var module = "updateUserDetails";
+        var displayName = req.body.displayName;
+        var username = req.body.username;
+        var email = req.body.email;
+        var password = req.body.password1;
+
+        //check that nobody is using that username
+        userDB.findUserWithUsername(username, errorFindingUsername, resolveUsernameAvailability, resolveUsernameAvailability);
+
+        function errorFindingUsername(status, err) {
+            res.status(401).send({
+                code: 401,
+                registrationBanner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: 'Failed to log you in. Please try again',
+                reason: errorLogger(module, 'Could not retrieve user', err)
+            });
+            consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+        }
+
+        function resolveUsernameAvailability(status) {
+            //1 means username is already in use, -1 means the new user can use the username
+            if (status == -1) {
+                //means username is not available
+                res.status(401).send({
+                    code: 401,
+                    registrationBanner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
+                    msg: 'The username you entered is already in use. Please choose a different one',
+                    reason: errorLogger(module, 'username entered is already in use')
+                });
+                consoleLogger(errorLogger(module, 'username entered is already in use'));
+            } else {
+                //means username is available
+                //update update the user
+                var theUser = getTheUser(req);
+                //check if there is no realName
+                if (!theUser.realName) {
+                    theUser.realName = displayName;
+                }
+                //check if there is no email
+                if (!theUser.realEmail) {
+                    theUser.realEmail = email
+                }
+                theUser.displayName = displayName;
+                theUser.username = username;
+                theUser.email = email;
+
+                userDB.saveUser(theUser, error, error, successSave);
+
+                function successSave() {
+                    //check if the user requires a password update
+
+                    if (req.body.updatePassword) {
+                        userDB.updatePassword(req.user.openId, password, error, error, success4);
+                    } else {
+                        success4();
+                    }
+
+                    function success4() {
+                        res.status(200).send({
+                            code: 200,
+                            redirect: true,
+                            redirectPage: '/clientLogin.html'
+                        });
+                    }
+                }
+
+                function error() {
+                    res.status(401).send({
+                        code: 401,
+                        registrationBanner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
+                        msg: 'We could not log you in. Please check your details and try again',
+                        reason: errorLogger(module, 'username entered is already in use')
+                    });
+                }
+            }
+        }
+    },
+
     clientInfoLogin: function (req, res) {
         var module = 'clientInfoLogin';
         receivedLogger(module);
@@ -169,19 +337,28 @@ module.exports = {
                 userDB.saveUser(theUser, errorSaveUser, errorSaveUser, successSaveUser);
 
                 function successSaveUser() {
+                    var redirectPage = '';
                     if (theUser.isAdmin == 'yes') {
-                        res.redirect('admin.html');
+                        //setting redirect page if the user chose 'profile' as grill or not
+                        redirectPage = '/admin.html';
+                        if (grillName == 'profile') {
+                            redirectPage = '/adminProfile.html'
+                        }
                         res.status(200).send({
                             code: 200,
                             redirect: true,
-                            redirectPage: '/admin.html'
+                            redirectPage: redirectPage
                         });
-                        consoleLogger(errorLogger(module, 'Could not update username'));
                     } else if (theUser.isAdmin == 'no') {
+                        //setting redirect page if the user chose 'profile' as grill or not
+                        redirectPage = '/client.html';
+                        if (grillName == 'profile') {
+                            redirectPage = '/clientProfile.html'
+                        }
                         res.status(200).send({
                             code: 200,
                             redirect: true,
-                            redirectPage: '/client.html'
+                            redirectPage: redirectPage
                         });
                     }
                 }
@@ -200,179 +377,84 @@ module.exports = {
         }
     },
 
-    updateUserDetails: function (req, res) {
-        var module = "updateUserDetails";
-        var displayName = req.body.displayName;
-        var username = req.body.username;
-        var email = req.body.email;
-        var password = req.body.password1;
 
-        //check that nobody is using that username
-        userDB.findUserWithUsername(username, errorFindingUsername, resolveUsernameAvailability, resolveUsernameAvailability);
+    adminInfoLogin: function (req, res, next) {
+        var module = 'adminInfoLogin';
+        var password = req.body.password;
+        consoleLogger("**********" + JSON.stringify(req.body));
+        var grillName = req.body.grillName;
+        var theUser = getTheUser(req);
 
-        function errorFindingUsername(status, err) {
+        userDB.checkUserPassword(theUser.openId, password, errorPassword, errorPassword, successPassword);
+
+        function errorPassword(status, err) {
             res.status(401).send({
                 code: 401,
-                registrationBanner: true,
+                banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
                 msg: 'Failed to log you in. Please try again',
-                reason: errorLogger(module, 'Could not retrieve user', err)
+                reason: errorLogger(module, 'error finding password', err)
             });
-            consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+            consoleLogger(errorLogger(module, 'error finding password', err));
         }
 
-        function resolveUsernameAvailability(status) {
-            //1 means username is already in use, -1 means the new user can use the username
+        function successPassword(status) {
             if (status == -1) {
-                //means username is not available
+                //means passwords don't match
                 res.status(401).send({
                     code: 401,
-                    registrationBanner: true,
+                    banner: true,
                     bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'The username you entered is already in use. Please choose a different one',
-                    reason: errorLogger(module, 'username entered is already in use')
+                    msg: 'The password you entered is incorrect. Please try again',
+                    reason: errorLogger(module, 'Password does not check')
                 });
-                consoleLogger(errorLogger(module, 'username entered is already in use'));
+                consoleLogger(errorLogger(module, 'Password does not check'));
             } else {
-                //means username is available
-                //update update the user
-                var theUser = getTheUser(req);
-                theUser.displayName = displayName;
-                theUser.username = username;
-                theUser.email = email;
+                //means passwords check
+                //update the user with the current info
+                theUser.customLoggedInStatus = 1;
+                theUser.grillName = grillName;
+                userDB.saveUser(theUser, errorSaveUser, errorSaveUser, successSaveUser);
 
-                userDB.saveUser(theUser, error, error, successSave);
-
-                function successSave() {
-                    //check if the user requires a password update
-
-                    if (req.body.updatePassword) {
-                        userDB.updatePassword(req.user.openId, password, error, error, success4);
-                    } else {
-                        success4();
-                    }
-
-                    function success4() {
+                function successSaveUser() {
+                    var redirectPage = '';
+                    if (theUser.isAdmin == 'yes') {
+                        //setting redirect page if the user chose 'profile' as grill or not
+                        redirectPage = '/admin.html';
+                        if (grillName == 'profile') {
+                            redirectPage = '/adminProfile.html'
+                        }
                         res.status(200).send({
                             code: 200,
                             redirect: true,
-                            redirectPage: '/clientLogin.html'
+                            redirectPage: redirectPage
+                        });
+                    } else if (theUser.isAdmin == 'no') {
+                        //setting redirect page if the user chose 'profile' as grill or not
+                        redirectPage = '/client.html';
+                        if (grillName == 'profile') {
+                            redirectPage = '/clientProfile.html'
+                        }
+                        res.status(200).send({
+                            code: 200,
+                            redirect: true,
+                            redirectPage: redirectPage
                         });
                     }
                 }
 
-                function error() {
+                function errorSaveUser(status, err) {
                     res.status(401).send({
                         code: 401,
-                        registrationBanner: true,
+                        banner: true,
                         bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: 'We could not log you in. Please check your details and try again',
-                        reason: errorLogger(module, 'username entered is already in use')
+                        msg: 'Failed to log you in. Please try again',
+                        reason: errorLogger(module, 'error saving updated user', err)
                     });
+                    consoleLogger(errorLogger(module, 'error saving updated user', err));
                 }
             }
         }
-    },
-
-    adminUserLogin: function (req, res, next) {
-        var grillName = req.body.grillName;
-
-        passport.authenticate('local', function (err, user, info) {
-            var module = 'app.post /adminUserLogin';
-
-            if (err) {
-                return res.status(500).send({
-                    code: 500,
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: info || err,
-                    reason: errorLogger(module, info || err, err)
-                });
-            }
-            if (!user) {
-                return res.status(401).send({
-                    code: 401,
-                    banner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: info || err,
-                    reason: errorLogger(module, info || err, err)
-                });
-            }
-            req.logIn(user, function (err) {
-                if (err) {
-                    errorLogger('req.login', err, err);
-
-                    return res.status(500).send({
-                        code: 500,
-                        banner: true,
-                        bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: "A problem occurred when trying to log you in. Please try again",
-                        reason: errorLogger(module, 'Failed! req.login()', err)
-                    });
-                } else {
-                    //add the grillName to the user
-                    userDB.updateGrillName(user.openId, grillName, errorUpdateGrillName, errorUpdateGrillName, success);
-
-                    function errorUpdateGrillName(status, err) {
-                        errorLogger('updateGrillName', err, err);
-                        //log the user out
-                        req.logout();
-
-                        return res.status(500).send({
-                            code: 500,
-                            banner: true,
-                            bannerClass: 'alert alert-dismissible alert-warning',
-                            msg: "A problem occurred when trying to log you in. Please try again",
-                            reason: errorLogger(module, 'Failed! userDB.updateGrillName')
-                        });
-                    }
-
-                    function success() {
-                        return res.status(200).send({
-                            code: 200,
-                            notify: false,
-                            type: 'success',
-                            msg: "You have successfully logged in",
-                            reason: successLogger(module, 'adminLoginSuccess'),
-                            disable: false,
-                            redirect: true,
-                            redirectPage: '/clientLogin.html'
-                        });
-                    }
-                }
-            });
-        })(req, res, next);
-    },
-
-    clientHarvardLogin: function (req, res, next) {
-        passport.authenticate('openid', function (err, user, info) {
-            var module = 'app.post /harvardId';
-
-            if (err) {
-                errorLogger(module, err, err);
-                return res.render('login', {
-                    errorCode: 1,
-                    errorMessage: "Authentication failed. Please try again"
-                })
-            }
-            if (!user) {
-                errorLogger(module, "Authentication failed. Please try again", err);
-                return res.render('login', {
-                    errorCode: 1,
-                    errorMessage: "Authentication failed. Please try again"
-                })
-            }
-            req.logIn(user, function (err) {
-                if (err) {
-                    errorLogger(module, err, err);
-                    return res.render('login', {
-                        errorCode: 1,
-                        errorMessage: "Authentication failed. Please try again"
-                    })
-                }
-                return res.redirect('clientLogin.html');
-            });
-        })(req, res, next);
     },
 
     clientLoginStartUp: function (req, res) {

@@ -39,6 +39,20 @@ module.exports = {
         }
     },
 
+    local_login_Html: function (req, res) {
+        var module = 'local_login_Html';
+        receivedLogger(module);
+
+        if (req.user) {
+            res.redirect("clientLogin.html");
+        } else {
+            res.render('local_login', {
+                errorCode: 0,
+                errorMessage: "No errors"
+            })
+        }
+    },
+
 
     clientLogin_Html: function (req, res) {
         var module = 'clientLogin_Html';
@@ -50,25 +64,36 @@ module.exports = {
         } else if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'no') {
             res.redirect('client.html');
         } else {
-            var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
-            res.render('client_login', {
-                gAnalyticsUserId: gaUserId
-            })
+            if (theUser.isAdmin == 'yes') {
+                res.redirect('adminLogin.html');
+            } else {
+                var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
+                res.render('client/client_login', {
+                    gAnalyticsUserId: gaUserId
+                })
+            }
         }
     },
 
 
-    admin_login_Html: function (req, res) {
+    adminLogin_Html: function (req, res) {
         var module = 'admin_login_Html';
         receivedLogger(module);
+        var theUser = getTheUser(req);
 
-        if (req.user) {
-            res.redirect("clientLogin.html");
+        if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'yes') {
+            res.redirect('admin.html');
+        } else if (theUser.customLoggedInStatus == 1 && theUser.isAdmin == 'no') {
+            res.redirect('client.html');
         } else {
-            res.render('admin_login.ejs', {
-                errorCode: 0,
-                errorMessage: "No errors"
-            })
+            if (theUser.isAdmin == 'yes') {
+                var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
+                res.render('admin/admin_login', {
+                    gAnalyticsUserId: gaUserId
+                })
+            } else {
+                res.redirect('clientLogin.html')
+            }
         }
     },
 
@@ -88,6 +113,22 @@ module.exports = {
         }
     },
 
+    client_profile_Html: function (req, res) {
+        var module = 'client_profile_Html';
+        receivedLogger(module);
+        var theUser = getTheUser(req);
+
+        if (theUser.isAdmin == 'yes') {
+            res.redirect('adminProfile.html');
+        } else if (theUser.isAdmin == 'no') {
+            var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
+            res.render('client/client_profile.ejs', {
+                gAnalyticsUserId: gaUserId,
+                displayName: theUser.displayName
+            });
+        }
+    },
+
     admin_Html: function (req, res) {
         var module = 'admin_Html';
         receivedLogger(module);
@@ -100,6 +141,22 @@ module.exports = {
             });
         } else if (theUser.isAdmin == 'no') {
             res.redirect('client.html');
+        }
+    },
+
+    admin_profile_Html: function (req, res) {
+        var module = 'admin_profile_Html';
+        receivedLogger(module);
+        var theUser = getTheUser(req);
+
+        if (theUser.isAdmin == 'yes') {
+            var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
+            res.render('admin/admin_profile.ejs', {
+                gAnalyticsUserId: gaUserId,
+                displayName: theUser.displayName
+            });
+        } else if (theUser.isAdmin == 'no') {
+            res.redirect('clientProfile.html');
         }
     }
 };

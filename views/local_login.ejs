@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="adminLoginApp" ng-controller="MainController">
+<html lang="en" ng-app="localLoginApp" ng-controller="MainController">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,8 +27,8 @@
     <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
 
     <!-- loads custom css files -->
-    <link rel="stylesheet" href="/public/css/admin/admin_cards.css">
-    <link rel="stylesheet" href="/public/css/admin/admin_login.css">
+    <link rel="stylesheet" href="/public/css/local_login/local_login_cards.css">
+    <link rel="stylesheet" href="/public/css/local_login/local_login.css">
 
     <!--google analytics-->
     <script>
@@ -117,14 +117,15 @@
 <div class="container ng-cloak">
 
     <div ng-class="bannerClass"
+         class="ng-cloak"
          ng-if="showBanner">
         <button type="button" class="close" data-dismiss="alert">×</button>
         <strong>{{bannerMessage}}</strong>
     </div>
 
     <!--data-dv attributes for bootstrap validator plugin-->
-    <form name="adminLoginForm"
-          id="adminLoginForm">
+    <form name="localLoginForm"
+          id="localLoginForm">
 
         <!--Username field-->
         <div class="form-group">
@@ -133,80 +134,51 @@
                    class="form-control"
                    id="username"
                    placeholder="Enter your username here"
-                   ng-model="masterClientLoginForm.username"
+                   ng-model="masterLocalLoginForm.username"
                    ng-minlength="4"
                    ng-maxlength="15"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable"
                    name="username">
-            <span ng-show="adminLoginForm.username.$error.required">
+            <span ng-show="localLoginForm.username.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span ng-show="adminLoginForm.username.$error.minlength">
+            <span ng-show="localLoginForm.username.$error.minlength">
                 <small>Minimum length required is 4:</small>
             </span>
-            <span ng-show="adminLoginForm.username.$error.maxlength">
+            <span ng-show="localLoginForm.username.$error.maxlength">
                 <small>Minimum length required is 15:</small>
             </span>
-            <span ng-show="adminLoginForm.username.$error.pattern">
+            <span ng-show="localLoginForm.username.$error.pattern">
                 <small>Only letters, numbers and underscores allowed:</small>
             </span>
         </div>
 
-        <p><strong>Please select one dining</strong></p>
-
-        <div ng-repeat="(grillName, grillStatus) in allGrillStatusesModel"
-             class="form-group clearfix ng-cloak">
-
-            <div class="alert alert-success col-lg-6 col-md-6 col-sm-6 col-xs-12"
-                 ng-if="grillStatus.grillStatus == 'open'"
-                 ng-click="selectGrill(grillName)">
-                <input type="checkbox"
-                       ng-disabled="isLoading || universalDisable"
-                       ng-model="grillStatus.isSelected"
-                       ng-true-value="'yes'"
-                       ng-false-value="'no'"
-                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Open
-            </div>
-
-            <div class="alert alert-warning col-lg-6 col-md-6 col-sm-6 col-xs-12"
-                 ng-if="grillStatus.grillStatus == 'closed'"
-                 ng-click="selectGrill(grillName)">
-                <input type="checkbox"
-                       ng-disabled="isLoading || universalDisable"
-                       ng-model="grillStatus.isSelected"
-                       ng-true-value="'yes'"
-                       ng-false-value="'no'"
-                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Closed
-            </div>
-        </div>
-
-        <!--admin password field-->
-        <div class="form-group"
-             ng-if="oneGrillIsSelected">
-            <label for="adminPassword">Admin Password</label>
+        <!--password field-->
+        <div class="form-group">
+            <label for="password">Password</label>
             <input type="password"
                    name="password"
                    class="form-control"
-                   id="adminPassword"
+                   id="password"
                    placeholder="Enter password here"
-                   ng-model="masterClientLoginForm.password"
+                   ng-model="masterLocalLoginForm.password"
                    ng-minlength="4"
                    ng-maxlength="20"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable">
-                    <span ng-show="adminLoginForm.password.$error.required">
+                    <span ng-show="localLoginForm.password.$error.required">
                         <small>This is a required field:</small>
                     </span>
-                    <span ng-show="adminLoginForm.password.$error.minlength">
+                    <span ng-show="localLoginForm.password.$error.minlength">
                         <small>Minimum length required is 4:</small>
                     </span>
-                    <span ng-show="adminLoginForm.password.$error.maxlength">
+                    <span ng-show="localLoginForm.password.$error.maxlength">
                         <small>Minimum length required is 20:</small>
                     </span>
-                    <span ng-show="adminLoginForm.password.$error.pattern">
+                    <span ng-show="localLoginForm.password.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
                     </span>
         </div>
@@ -214,14 +186,42 @@
         <div class="form-group">
             <button type="submit"
                     class="btn btn-default btn-danger btn-lg btn-block"
-                    ng-disabled="adminLoginForm.$invalid || !oneGrillIsSelected"
-                    ng-click="submitAdminLoginForm()"
-                    id="harvardID">ADMIN LOGIN
+                    ng-disabled="localLoginForm.$invalid"
+                    ng-click="submitLocalLoginForm()"
+                    id="harvardID">SIGN IN
             </button>
         </div>
     </form>
 </div>
 <!--end of custom student login form-->
+
+
+<!--start of available grills-->
+<div class="container ng-cloak">
+    <p><strong>Available grills</strong></p>
+
+    <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12 col-xs-12 ng-cloak"
+         ng-if="allGrillStatuses.length ==  0">
+        <strong>Oops! There are currently no grills in operation</strong>
+    </div>
+
+    <div ng-repeat="(grillName, grillStatus) in allGrillStatusesModel"
+         ng-if="allGrillStatuses.length > 0"
+         class="form-group clearfix ng-cloak">
+
+        <div class="alert alert-success col-lg-6 col-md-6 col-sm-6 col-xs-12"
+             ng-if="grillStatus.grillStatus == 'open'">
+            <strong>{{grillName}}:</strong> Open
+        </div>
+
+        <div class="alert alert-warning col-lg-6 col-md-6 col-sm-6 col-xs-12"
+             ng-if="grillStatus.grillStatus == 'closed'">
+            <strong>{{grillName}}:</strong> Closed
+        </div>
+    </div>
+</div>
+<!--end of available grills-->
+
 
 <!--footer 1 for large screens-->
 <div class="text-center navbar navbar-default navbar-fixed-bottom hidden hidden-xs hidden-sm">
@@ -347,15 +347,14 @@
 <script type="text/javascript"
         src="/bower_components/moment/min/moment.min.js"></script>
 
-<script type="text/javascript" src="/public/js/admin/admin_login.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/adminLoginApp.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/directives.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/filters.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/controllers/mainCtrl.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/socketIoService.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/mainFactory.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/globals.js"></script>
-<script type="text/javascript" src="/public/angular_assets/loginApp/admin/services/referenceFactory.js"></script>
+<script type="text/javascript" src="/public/js/local_login/local_login.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/local/localLoginApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/local/directives.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/local/filters.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/local/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/local/services/socketIoService.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/local/services/mainFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/loginApp/local/services/globals.js"></script>
 
 </body>
 </html>

@@ -19,8 +19,16 @@ angular.module('adminLoginApp')
                         allGrillStatusesModel[grill.grillName] = grill;
 
                     });
+                    //add a grill called 'profile' that allows user to log in into their profiles
+                    allGrillStatusesModel['profile'] = {
+                        isSelected: 'no'
+                    };
                     return allGrillStatusesModel;
                 } else {
+                    //add a grill called 'profile' that allows user to log in into their profiles
+                    allGrillStatusesModel['profile'] = {
+                        isSelected: 'no'
+                    };
                     return allGrillStatusesModel;
                 }
             }

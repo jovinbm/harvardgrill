@@ -12,10 +12,12 @@ angular.module('clientLoginApp', [
 ])
 
     .run(function ($templateCache, $http) {
-        //views
+        //forms
+        $http.get('views/client/login_partials/forms/client_info_login.html', {cache: $templateCache});
+        $http.get('views/client/login_partials/forms/client_registration.html', {cache: $templateCache});
         //partials->navs
-        //partials->sections
-        //partials->modals
+        $http.get('views/client/login_partials/navs/client_login_top_nav.html', {cache: $templateCache});
+        $http.get('views/client/login_partials/navs/client_login_footer.html', {cache: $templateCache});
     })
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

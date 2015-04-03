@@ -48,3 +48,5 @@
 //middleware for detecting if user is not logged in, customLoggedInStatus, or if not fullly registered
 
 //update username on client_login screen. I left remnants of username field
+
+//redirect user to clientLogin.html/adminLogin.html on getCurrentGrillStatus if the grill they are looking for is not found

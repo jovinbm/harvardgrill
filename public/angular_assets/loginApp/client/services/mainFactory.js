@@ -8,7 +8,6 @@ angular.module('clientLoginApp')
                     .success(function (resp) {
                         $rootScope.$broadcast('responseStatusHandler', resp);
                         $rootScope.$broadcast('allGrillStatuses', resp.allGrillStatuses);
-                        $rootScope.$broadcast('responseStatusHandler', resp);
                     })
                     .error(function (errResponse) {
                         $rootScope.$broadcast('responseStatusHandler', errResponse);

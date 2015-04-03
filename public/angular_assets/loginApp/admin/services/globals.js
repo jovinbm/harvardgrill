@@ -2,15 +2,45 @@ angular.module('adminLoginApp')
 
     .factory('globals', ['$window', '$rootScope', 'socketService',
         function ($window, $rootScope, socketService) {
-            var myTemporarySocketRoom;
+            var username;
+            var myUniqueCuid;
+            var grillName;
+            var mySocketRoom;
             var allGrillStatuses = {};
             return {
 
-                temporarySocketRoom: function (newTemporarySocketRoom) {
-                    if (newTemporarySocketRoom) {
-                        myTemporarySocketRoom = newTemporarySocketRoom;
+                username: function (newUsername) {
+                    if (newUsername) {
+                        username = newUsername;
+                        return username;
                     } else {
-                        return myTemporarySocketRoom;
+                        return username;
+                    }
+                },
+
+                grillName: function (newGrillName) {
+                    if (newGrillName) {
+                        grillName = newGrillName;
+                        return grillName;
+                    } else {
+                        return grillName;
+                    }
+                },
+
+                uniqueCuid: function (newUniqueCuid) {
+                    if (newUniqueCuid) {
+                        myUniqueCuid = newUniqueCuid;
+                        return myUniqueCuid;
+                    } else {
+                        return myUniqueCuid;
+                    }
+                },
+
+                socketRoom: function (newSocketRoom) {
+                    if (newSocketRoom) {
+                        mySocketRoom = newSocketRoom;
+                    } else {
+                        return mySocketRoom;
                     }
                 },
 

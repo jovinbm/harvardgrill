@@ -1,0 +1,138 @@
+<div class="container ng-cloak"
+     ng-if="isFullyRegistered && isFullyRegistered != 'loading'">
+
+    <div ng-class="bannerClass"
+         class="ng-cloak"
+         ng-if="showBanner">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{bannerMessage}}</strong>
+    </div>
+
+    <!--data-dv attributes for bootstrap validator plugin-->
+    <form name="adminLoginForm"
+          id="adminLoginForm">
+
+        <!--&lt;!&ndash;Username field&ndash;&gt;-->
+        <!--<div class="form-group">-->
+        <!--<label for="username">Username</label>-->
+        <!--<input type="text"-->
+        <!--class="form-control"-->
+        <!--id="username"-->
+        <!--placeholder="Enter your username here"-->
+        <!--ng-model="masterClientLoginForm.username"-->
+        <!--ng-minlength="4"-->
+        <!--ng-maxlength="15"-->
+        <!--ng-pattern="/^[a-zA-Z0-9_]*$/"-->
+        <!--required-->
+        <!--ng-disabled="isLoading || universalDisable"-->
+        <!--name="username">-->
+        <!--<span ng-show="adminLoginForm.username.$error.required">-->
+        <!--<small>This is a required field:</small>-->
+        <!--</span>-->
+        <!--<span ng-show="adminLoginForm.username.$error.minlength">-->
+        <!--<small>Minimum length required is 4:</small>-->
+        <!--</span>-->
+        <!--<span ng-show="adminLoginForm.username.$error.maxlength">-->
+        <!--<small>Minimum length required is 15:</small>-->
+        <!--</span>-->
+        <!--<span ng-show="adminLoginForm.username.$error.pattern">-->
+        <!--<small>Only letters, numbers and underscores allowed:</small>-->
+        <!--</span>-->
+        <!--</div>-->
+
+        <h1>Hello @{{myUsername}}</h1>
+
+        <p><strong>Please select one dining</strong></p>
+
+        <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12 col-xs-12"
+             ng-if="allGrillStatuses.length ==  0">
+            <strong>Oops! We could not find any grills in operation</strong>
+        </div>
+
+        <div>
+
+        </div>
+
+        <div ng-repeat="(grillName, grillStatus) in allGrillStatusesModel"
+             ng-if="allGrillStatuses.length > 0"
+             class="form-group col_no_padding col-lg-4 col-md-4 col-sm-6 col-xs-12 clearfix ng-cloak">
+
+            <div class="alert alert-success"
+                 ng-if="grillStatus.grillStatus == 'open'"
+                 ng-click="selectGrill(grillName)">
+                <input type="checkbox"
+                       ng-disabled="isLoading || universalDisable"
+                       ng-model="grillStatus.isSelected"
+                       ng-true-value="'yes'"
+                       ng-false-value="'no'"
+                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Open
+            </div>
+
+            <div class="alert alert-warning"
+                 ng-if="grillStatus.grillStatus == 'closed'"
+                 ng-click="selectGrill(grillName)">
+                <input type="checkbox"
+                       ng-disabled="isLoading || universalDisable"
+                       ng-model="grillStatus.isSelected"
+                       ng-true-value="'yes'"
+                       ng-false-value="'no'"
+                       ng-click="selectGrill(grillName)"> <strong>{{grillName}}:</strong> Closed
+            </div>
+        </div>
+
+        <hr/>
+
+
+        <div class="form-group clearfix col_no_padding ng-cloak col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p><strong>Or just log in to profile</strong></p>
+
+            <div class="alert alert-success"
+                 ng-click="selectGrill('profile')">
+                <input type="checkbox"
+                       ng-disabled="isLoading || universalDisable"
+                       ng-model="grillStatus.isSelected"
+                       ng-true-value="'yes'"
+                       ng-false-value="'no'"
+                       ng-click="selectGrill('profile')"> <strong>Log in to my profile</strong>
+            </div>
+        </div>
+
+        <!--admin password field-->
+        <div class="form-group col_no_padding ng-cloak col-lg-12 col-md-12 col-sm-12 col-xs-12"
+             ng-if="oneGrillIsSelected">
+            <label for="adminPassword">Admin Password</label>
+            <input type="password"
+                   name="password"
+                   class="form-control"
+                   id="adminPassword"
+                   placeholder="Enter password here"
+                   ng-model="masterAdminLoginForm.password"
+                   ng-minlength="4"
+                   ng-maxlength="20"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable">
+                    <span ng-show="adminLoginForm.password.$error.required">
+                        <small>This is a required field:</small>
+                    </span>
+                    <span ng-show="adminLoginForm.password.$error.minlength">
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span ng-show="adminLoginForm.password.$error.maxlength">
+                        <small>Minimum length required is 20:</small>
+                    </span>
+                    <span ng-show="adminLoginForm.password.$error.pattern">
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
+        </div>
+
+        <div class="form-group col_no_padding ng-cloak col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button type="submit"
+                    class="btn btn-default btn-danger btn-lg btn-block"
+                    ng-disabled="adminLoginForm.$invalid || !oneGrillIsSelected"
+                    ng-click="submitAdminLoginForm()"
+                    id="harvardID">ADMIN LOGIN
+            </button>
+        </div>
+    </form>
+</div>

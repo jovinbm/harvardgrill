@@ -92,23 +92,50 @@ module.exports = {
 
     addUserGrillStatus: function (req, res, next) {
         var module = "addUserGrillStatus";
-        statsDB.getCurrentGrillStatus(req.customData.theUser.grillName, req.customData.theUser, error, error, success);
+        //skip if the grillName is 'profile' because the user will be heading to see their profile
 
-        function success(currentGrillStatus) {
-            req.customData.currentGrillStatus = currentGrillStatus;
+        if (req.customData.theUser.grillName == 'profile') {
+            //put empty grillStatus
+            req.customData.currentGrillStatus = [];
             consoleLogger(successLogger(module));
             next();
-        }
+        } else {
+            statsDB.getCurrentGrillStatus(req.customData.theUser.grillName, req.customData.theUser, error, error, success);
 
-        function error(status, err) {
-            res.status(500).send({
-                code: 500,
-                notify: true,
-                type: 'error',
-                msg: 'An error occurred while retrieving grill info. Please reload the page',
-                reason: errorLogger(module, 'error grill status')
-            });
-            consoleLogger(errorLogger(module, 'error grillStatus', err));
+            function success(currentGrillStatus) {
+                req.customData.currentGrillStatus = currentGrillStatus;
+                consoleLogger(successLogger(module));
+                next();
+            }
+
+            function error(status, err) {
+                if (status == 0) {
+                    //means the grill the user is looking for is not found. This is a big error
+                    //redirect the user to clientLogin
+                    res.status(500).send({
+                        code: 500,
+                        notify: true,
+                        type: 'warning',
+                        banner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
+                        msg: 'This grill is not available. Redirecting you to login',
+                        reason: errorLogger(module, 'error grill status'),
+                        disable: true,
+                        redirect: true,
+                        redirectPage: '/login.html'
+                    });
+                    consoleLogger(errorLogger(module, 'GrillStatus Not found', err));
+                } else {
+                    res.status(500).send({
+                        code: 500,
+                        notify: true,
+                        type: 'error',
+                        msg: 'An error occurred while retrieving grill info. Please reload the page',
+                        reason: errorLogger(module, 'error finding grill status')
+                    });
+                    consoleLogger(errorLogger(module, 'error finding grillStatus', err));
+                }
+            }
         }
     },
 

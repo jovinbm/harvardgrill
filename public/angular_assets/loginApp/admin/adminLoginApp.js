@@ -12,10 +12,14 @@ angular.module('adminLoginApp', [
 ])
 
     .run(function ($templateCache, $http) {
-        //views
+        //forms
+        $http.get('views/admin/login_partials/forms/admin_info_login.html', {cache: $templateCache});
+        $http.get('views/admin/login_partials/forms/admin_registration.html', {cache: $templateCache});
         //partials->navs
-        //partials->sections
-        //partials->modals
+        $http.get('views/admin/login_partials/navs/admin_login_top_nav.html', {cache: $templateCache});
+        $http.get('views/admin/login_partials/navs/admin_login_footer.html', {cache: $templateCache});
+        //sections
+        $http.get('views/admin/login_partials/sections/grill_edit.html', {cache: $templateCache});
     })
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

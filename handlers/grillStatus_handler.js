@@ -35,6 +35,7 @@ module.exports = {
         statsDB.openGrill(theUser.grillName, theUser, error, error, success);
 
         function success(newGrillStatus) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 newGrillStatus: newGrillStatus,
                 code: 200,
@@ -43,11 +44,11 @@ module.exports = {
                 msg: 'The grill is now open'
             });
             ioJs.emitToAll('adminChanges', 'changes');
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not open grill', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
@@ -55,7 +56,6 @@ module.exports = {
                     msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not open grill', err)
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not open grill', err));
             }
         }
     },
@@ -67,6 +67,7 @@ module.exports = {
         statsDB.closeGrill(theUser.grillName, theUser, error, error, success);
 
         function success(newGrillStatus) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 newGrillStatus: newGrillStatus,
                 code: 200,
@@ -75,10 +76,10 @@ module.exports = {
                 msg: 'The grill is now closed'
             });
             ioJs.emitToAll('adminChanges', 'changes');
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
+            consoleLogger(errorLogger(module, 'Failed! Could not close grill', err));
             if (status == -1 || status == 0) {
                 res.status(500).send({
                     code: 500,
@@ -87,19 +88,128 @@ module.exports = {
                     msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page",
                     reason: errorLogger(module, 'Could not close grill', err)
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not close grill', err));
             }
+        }
+    },
+
+    createGrill: function (req, res, newGrillName) {
+        var module = 'createGrill';
+        receivedLogger(module);
+        var theUser = req.customData.theUser;
+        statsDB.checkIfGrillExists(newGrillName, theUser, error, error, successExists);
+
+        function successExists(status) {
+            if (status == 1) {
+                //means name is available for use
+                statsDB.createGrill(newGrillName, theUser, errorCreate, errorCreate, successCreate);
+                function successCreate() {
+                    consoleLogger(successLogger(module));
+                    res.status(200).send({
+                        code: 200,
+                        notify: true,
+                        type: 'success',
+                        msg: "Grill created successfully"
+                    })
+                }
+
+                function errorCreate(status, err) {
+                    consoleLogger(errorLogger(module, 'Error creating grill', err));
+                    res.status(500).send({
+                        code: 500,
+                        notify: true,
+                        type: 'warning',
+                        msg: "An error occurred while creating the new grill. Please try again",
+                        reason: errorLogger(module, 'Error creating grill', err)
+                    });
+                }
+
+            } else {
+                //means a status is -1, the grillName is in use
+                consoleLogger(errorLogger(module, 'Failed! Grill with similar name exists'));
+                res.status(500).send({
+                    code: 500,
+                    notify: true,
+                    type: 'warning',
+                    msg: "A grill with a similar name exists. Use a different name",
+                    reason: errorLogger(module, 'Grill with similar name exists')
+                });
+            }
+        }
+
+        function error(status, err) {
+            consoleLogger(errorLogger(module, 'Error creating grill', err));
+            res.status(500).send({
+                code: 500,
+                notify: true,
+                type: 'warning',
+                msg: "An error occurred while creating the new grill. Please try again",
+                reason: errorLogger(module, 'Error creating grill', err)
+            });
+        }
+    },
+
+    deleteGrill: function (req, res, grillName) {
+        var module = 'deleteGrill';
+        receivedLogger(module);
+        var theUser = req.customData.theUser;
+        statsDB.checkIfGrillExists(grillName, theUser, error, error, successExists);
+
+        function successExists(status) {
+            if (status == -1) {
+                //means the grill is available
+                statsDB.deleteGrill(grillName, theUser, errorDelete, errorDelete, successDelete);
+                function successDelete() {
+                    consoleLogger(successLogger(module));
+                    res.status(200).send({
+                        code: 200,
+                        notify: true,
+                        type: 'success',
+                        msg: "Grill successfully removed"
+                    });
+                }
+
+                function errorDelete(status, err) {
+                    consoleLogger(errorLogger(module, 'Error deleting grill', err));
+                    res.status(500).send({
+                        code: 500,
+                        notify: true,
+                        type: 'warning',
+                        msg: "An error occurred while deleting. Please try again",
+                        reason: errorLogger(module, 'Error deleting grill', err)
+                    });
+                }
+            } else {
+                //means the grillName is not on record
+                consoleLogger(errorLogger(module, 'Failed! did not find required grill'));
+                res.status(500).send({
+                    code: 500,
+                    notify: true,
+                    type: 'warning',
+                    msg: "We could not find the grill. Please try again or refresh this page",
+                    reason: errorLogger(module, 'Did not find grill')
+                });
+            }
+        }
+
+        function error(status, err) {
+            consoleLogger(errorLogger(module, 'Error deleting grill', err));
+            res.status(500).send({
+                code: 500,
+                notify: true,
+                type: 'warning',
+                msg: "An error occurred while deleting. Please try again",
+                reason: errorLogger(module, 'Error deleting grill', err)
+            });
         }
     },
 
     getCurrentGrillStatus: function (req, res) {
         var module = 'getCurrentGrillStatus';
         receivedLogger(module);
+        consoleLogger(successLogger(module));
         res.status(200).send({
             currentGrillStatus: req.customData.currentGrillStatus
         });
-        consoleLogger(successLogger(module));
-
     },
 
 
@@ -110,6 +220,7 @@ module.exports = {
         componentDB.updateAvailableComponents(theUser.grillName, theUser, allComponents, error, error, success);
 
         function success() {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 code: 200,
                 notify: true,
@@ -117,11 +228,11 @@ module.exports = {
                 msg: "Update successful"
             });
             ioJs.emitToAll('adminChanges', 'changes');
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not update available components', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
@@ -129,7 +240,6 @@ module.exports = {
                     msg: 'Update failed, please try again. If problem persists please reload this page',
                     reason: errorLogger(module, 'Could not update available components', err)
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not update available components', err));
             }
         }
     }

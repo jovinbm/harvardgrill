@@ -161,7 +161,8 @@ angular.module('clientLoginApp')
                 password1: "",
                 password2: ""
             };
-            $scope.isFullyRegistered = true;
+            //variable set to 'loading' to prevent showing of both the registration form / login form while the content is being loaded
+            $scope.isFullyRegistered = 'loading';
 
             $scope.submitUpdatedDetails = function () {
                 socketService.updateUserDetails($scope.registrationDetails)
@@ -175,8 +176,6 @@ angular.module('clientLoginApp')
                         $scope.oneGrillIsSelected = false;
                         globals.allGrillStatuses(null, true, true);
                         $scope.masterClientLoginForm.password = "";
-                        $scope.masterClientLoginFormErrorBanner = true;
-                        $scope.masterClientLoginFormError = errResponse.msg;
                         $scope.responseStatusHandler(errResponse);
                     })
             };
@@ -230,10 +229,6 @@ angular.module('clientLoginApp')
 
             //************THE CLIENT INFO LOGIN FORM*****************
 
-
-            $scope.masterClientLoginFormErrorBanner = false;
-            $scope.masterClientLoginFormError = "";
-
             $scope.submitClientLoginForm = function () {
                 //check that only one grill is selected
                 checkIfGrillIsSelected();
@@ -258,8 +253,6 @@ angular.module('clientLoginApp')
                             $scope.oneGrillIsSelected = false;
                             globals.allGrillStatuses(null, true, true);
                             $scope.masterClientLoginForm.password = "";
-                            $scope.masterClientLoginFormErrorBanner = true;
-                            $scope.masterClientLoginFormError = errResponse.msg;
                             $scope.responseStatusHandler(errResponse);
                         })
                 } else {

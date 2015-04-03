@@ -1,6 +1,6 @@
 angular.module('adminLoginApp')
-    .controller('MainController', ['$filter', '$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'referenceService',
-        function ($filter, $log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, referenceService) {
+    .controller('MainController', ['$filter', '$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'referenceService', 'allGrillService',
+        function ($filter, $log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, referenceService, allGrillService) {
 
             $scope.allGrillStatuses = globals.allGrillStatuses(null, true, true);
 
@@ -12,6 +12,10 @@ angular.module('adminLoginApp')
             $scope.showBanner = false;
             $scope.bannerClass = "";
             $scope.bannerMessage = "";
+
+            $scope.showRegistrationBanner = false;
+            $scope.registrationBannerClass = "";
+            $scope.registrationBannerMessage = "";
 
             $scope.universalDisableTrue = function () {
                 $scope.universalDisable = true;
@@ -43,6 +47,13 @@ angular.module('adminLoginApp')
                             $scope.bannerMessage = resp.msg;
                         }
                     }
+                    if (resp.registrationBanner) {
+                        if (resp.bannerClass && resp.msg) {
+                            $scope.showRegistrationBanner = true;
+                            $scope.registrationBannerClass = resp.bannerClass;
+                            $scope.registrationBannerMessage = resp.msg;
+                        }
+                    }
                     if (resp.reason) {
                         $log.warn(resp.reason);
                     }
@@ -57,9 +68,6 @@ angular.module('adminLoginApp')
 
 
             //***************end of request error handler**************
-
-            //gets temp user's details (NB: THIS USER HAS NOT LOGGED IN, HELL IT MIGHT EVEN BE A HACKER)
-            $scope.temporarySocketRoom = globals.temporarySocketRoom();
 
             //*****************************isLoading functions to disable elements while content is loading or processing
             $scope.isLoading = false;
@@ -131,28 +139,100 @@ angular.module('adminLoginApp')
 
             //***************end of time functions******************
 
+            $scope.masterAdminLoginForm = {
+                username: "",
+                password: "",
+                //grillName is updated when submitting
+                grillName: ""
+            };
+
+            $scope.allGrillStatuses = globals.allGrillStatuses(null, true, true);
+            $scope.mySocketRoom = globals.socketRoom();
+            $scope.myUsername = globals.username();
+            $scope.myUniqueCuid = globals.uniqueCuid();
+
+            //******************registration details and functions
+            $scope.registrationDetails = {
+                displayName: "",
+                username: "",
+                email: "",
+                updatePassword: false,
+                password1: "",
+                password2: ""
+            };
+
+            //variable set to 'loading' to prevent showing of both the registration form / login form while the content is being loaded
+            $scope.isFullyRegistered = 'loading';
+
+            $scope.submitUpdatedDetails = function () {
+                socketService.updateUserDetails($scope.registrationDetails)
+                    .success(function (resp) {
+                        //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        //hide password field since grill selection will be refreshed
+
+                        $scope.oneGrillIsSelected = false;
+                        globals.allGrillStatuses(null, true, true);
+                        $scope.masterAdminLoginForm.password = "";
+                        $scope.masterAdminLoginFormErrorBanner = true;
+                        $scope.masterAdminLoginFormError = errResponse.msg;
+                        $scope.responseStatusHandler(errResponse);
+                    })
+            };
+
+            //************end of registration details
+
+
             //initial requests
-            socketService.getMyTemporarySocketRoom()
+            socketService.checkIfFullyRegistered()
                 .success(function (resp) {
-                    globals.temporarySocketRoom(resp.temporarySocketRoom);
-
-                    //join the random temporary socketRoom given
-                    socket.emit('joinRoom', {
-                        room: resp.temporarySocketRoom
-                    });
-
-                    //a success emit("joined") is picked up by "mainService" in mainFactory.js
-
-                    $scope.responseStatusHandler(resp);
+                    $scope.isFullyRegistered = true;
+                    continueSocketRoom();
                 })
                 .error(function (errResponse) {
-                    $scope.responseStatusHandler(errResponse);
+                    if (errResponse.loginErrorType == 'user') {
+                        //then user is not logged in
+                        $scope.isFullyRegistered = false;
+                        $scope.registrationDetails.displayName = errResponse.availableDetails.displayName;
+                        $scope.registrationDetails.username = errResponse.availableDetails.username;
+                        $scope.registrationDetails.email = errResponse.availableDetails.email;
+                        if (errResponse.updatePassword) {
+                            $scope.registrationDetails.updatePassword = true;
+                        }
+                    } else {
+                        $scope.responseStatusHandler(errResponse);
+                    }
+                    continueSocketRoom();
                 });
+
+            function continueSocketRoom() {
+                socketService.getSocketRoom()
+                    .success(function (resp) {
+                        $scope.mySocketRoom = globals.socketRoom(resp.socketRoom);
+                        $scope.myUsername = globals.username(resp.username);
+                        $scope.masterAdminLoginForm.username = resp.username;
+                        $scope.myUniqueCuid = globals.uniqueCuid(resp.uniqueCuid);
+
+                        //join the random temporary socketRoom given
+                        socket.emit('joinRoom', {
+                            room: resp.socketRoom
+                        });
+
+                        //a success emit("joined") is picked up by "mainService" in mainFactory.js
+
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    });
+            }
 
 
             //************THE ADMIN LOGIN FORM*****************
 
-            $scope.masterClientLoginForm = {
+            $scope.masterAdminLoginForm = {
                 username: "",
                 password: "",
                 //grillName is updated when submitting
@@ -167,12 +247,12 @@ angular.module('adminLoginApp')
                     for (var prop in $scope.allGrillStatusesModel) {
                         if ($scope.allGrillStatusesModel.hasOwnProperty(prop)) {
                             if ($scope.allGrillStatusesModel[prop].isSelected == 'yes') {
-                                $scope.masterClientLoginForm.grillName = prop;
+                                $scope.masterAdminLoginForm.grillName = prop;
                             }
                         }
                     }
                     //submit the login
-                    socketService.adminUserLogin($scope.masterClientLoginForm)
+                    socketService.adminInfoLogin($scope.masterAdminLoginForm)
                         .success(function (resp) {
                             //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
                             $scope.responseStatusHandler(resp);
@@ -182,13 +262,12 @@ angular.module('adminLoginApp')
 
                             $scope.oneGrillIsSelected = false;
                             globals.allGrillStatuses(null, true, true);
-                            $scope.masterClientLoginForm.password = "";
+                            $scope.masterAdminLoginForm.password = "";
                             $scope.responseStatusHandler(errResponse);
                         })
                 } else {
                     $scope.showToast('warning', 'At least one dining grill should be selected');
                 }
-
             };
 
             //get from factory, key=grillName, value=the grillStatus, default isSelected in each = 'no'
@@ -249,6 +328,37 @@ angular.module('adminLoginApp')
 
             //*************END OF ADMIN LOGIN FORM FUNCTIONS*********
 
+            //***********GRILL MANIPULATIONS
+
+            //a variable that is used to hold details for manipulating grills
+            $scope.grillObject = {
+                newGrillName: ""
+            };
+
+            $scope.createGrill = function (grillName) {
+                allGrillService.createGrill(grillName)
+                    .success(function (resp) {
+                        pollAllGrillStatuses();
+                        $scope.responseStatusHandler(resp);
+                        $scope.grillObject.newGrillName = "";
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    })
+            };
+
+            $scope.deleteGrill = function (grillName) {
+                allGrillService.deleteGrill(grillName)
+                    .success(function (resp) {
+                        pollAllGrillStatuses();
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    })
+            };
+
+            //***********END OF GRILL MANIPULATIONS
 
             //*********crucial intervals
 

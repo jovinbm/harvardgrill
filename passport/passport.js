@@ -41,7 +41,9 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var socketRoom = cuid();
             var isAdmin = 'no';
             var displayName = profile.displayName || "";
+            var realName = profile.displayName || "";
             var email = profile.email || "";
+            var realEmail = profile.email || "";
 
             //defining all callbacks
             function error(status, err) {
@@ -51,7 +53,9 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                         isAdmin: isAdmin,
                         uniqueCuid: uniqueCuid,
                         socketRoom: socketRoom,
+                        realName: realName,
                         displayName: displayName,
+                        realEmail: realEmail,
                         email: email
                     });
 
@@ -82,36 +86,37 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
     passport.use(new LocalStrategy(
         function (username, password, done) {
             var module = 'LocalStrategy';
+            receivedLogger(module);
 
             if (username.length > 0 && password.length > 0 && password == 'hgadmin') {
                 var openId = cuid();
                 var isAdmin = 'yes';
                 var uniqueCuid = cuid();
                 var socketRoom = 'adminSocketRoom';
+                var realName = 'Admin';
                 var displayName = 'Admin';
                 var tempUsername = 'Admin';
-                var customLoggedInStatus = 1;
 
                 var user = new User({
                     openId: openId,
                     isAdmin: isAdmin,
                     uniqueCuid: uniqueCuid,
                     socketRoom: socketRoom,
+                    realName: realName,
                     displayName: displayName,
-                    username: tempUsername,
-                    customLoggedInStatus: customLoggedInStatus
+                    username: tempUsername
                 });
 
-                function saveError(status, err) {
-                    consoleLogger(errorLogger(module, 'Error saving user', err));
-                    done("A problem occurred while trying to log you in. Please try again", false, "A problem occurred while trying to log you in. Please try again");
-                }
+                userDB.saveUser(user, saveError, saveError, saveSuccess);
 
                 function saveSuccess(theSavedUser) {
                     done(null, theSavedUser, null)
                 }
 
-                userDB.saveUser(user, saveError, saveError, saveSuccess);
+                function saveError(status, err) {
+                    consoleLogger(errorLogger(module, 'Error saving user', err));
+                    done("A problem occurred while trying to log you in. Please try again", false, "A problem occurred while trying to log you in. Please try again");
+                }
 
             } else if (username.length > 0 && password.length > 0 && password == 'tempclient') {
 
@@ -121,6 +126,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 var isAdminTemp = 'no';
                 var uniqueCuidTemp = cuid();
                 var socketRoomTemp = 'tempClient' + cuid();
+                var realNameTemp = 'TempClient';
                 var displayNameTemp = 'TempClient';
                 var usernameTemp = 'TempClient';
 
@@ -129,20 +135,21 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                     isAdmin: isAdminTemp,
                     uniqueCuid: uniqueCuidTemp,
                     socketRoom: socketRoomTemp,
+                    realName: realNameTemp,
                     displayName: displayNameTemp,
                     username: usernameTemp
                 });
 
-                function saveErrorTemp(status, err) {
-                    consoleLogger(errorLogger(module, 'Error saving user', err));
-                    done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
-                }
+                userDB.saveUser(userTemp, saveErrorTemp, saveErrorTemp, saveSuccessTemp);
 
                 function saveSuccessTemp(theSavedUser) {
                     done(null, theSavedUser, null)
                 }
 
-                userDB.saveUser(userTemp, saveErrorTemp, saveErrorTemp, saveSuccessTemp);
+                function saveErrorTemp(status, err) {
+                    consoleLogger(errorLogger(module, 'Error saving user', err));
+                    done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
+                }
 
             } else {
                 consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));

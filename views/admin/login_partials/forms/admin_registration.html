@@ -1,0 +1,179 @@
+<div class="container ng-cloak"
+     ng-if="!isFullyRegistered && isFullyRegistered != 'loading'">
+
+    <div ng-class="registrationBannerClass"
+         ng-if="showRegistrationBanner">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{registrationBannerMessage}}</strong>
+    </div>
+
+    <p>Welcome: Please updated your details. Everything listed here is required</p>
+
+    <!--data-dv attributes for bootstrap validator plugin-->
+    <form name="adminRegistrationForm"
+          id="adminRegistrationForm">
+
+        <!--DisplayName field-->
+        <div class="form-group ng-cloak">
+            <label for="displayName">Name</label>
+            <input type="text"
+                   class="form-control"
+                   id="displayName"
+                   placeholder="Enter your name here"
+                   ng-model="registrationDetails.displayName"
+                   ng-minlength="4"
+                   ng-maxlength="30"
+                   required
+                   ng-disabled="isLoading || universalDisable"
+                   name="displayName">
+            <span ng-show="adminRegistrationForm.displayName.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.displayName.$error.minlength">
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.displayName.$error.maxlength">
+                <small>Minimum length required is 30:</small>
+            </span>
+        </div>
+
+        <!--Username field-->
+        <div class="form-group ng-cloak">
+            <label for="username">Username</label>
+            <input type="text"
+                   class="form-control"
+                   id="username"
+                   placeholder="Enter your username here"
+                   ng-model="registrationDetails.username"
+                   ng-minlength="4"
+                   ng-maxlength="15"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable"
+                   name="username">
+            <span ng-show="adminRegistrationForm.username.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.username.$error.minlength">
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.username.$error.maxlength">
+                <small>Minimum length required is 15:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.username.$error.pattern">
+                <small>Only letters, numbers and underscores allowed:</small>
+            </span>
+        </div>
+
+        <!--Email field-->
+        <div class="form-group ng-cloak">
+            <label for="email">Email</label>
+            <input type="email"
+                   class="form-control"
+                   id="email"
+                   placeholder="Enter your email here"
+                   ng-model="registrationDetails.email"
+                   required
+                   ng-disabled="isLoading || universalDisable"
+                   name="email">
+            <span ng-show="adminRegistrationForm.email.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.email.$error.minlength">
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.email.$error.maxlength">
+                <small>Minimum length required is 15:</small>
+            </span>
+            <span ng-show="adminRegistrationForm.email.$error.pattern">
+                <small>Email: you@example.com</small>
+            </span>
+        </div>
+
+
+        <!--password update field-->
+        <div class="form-group ng-cloak"
+             ng-if="registrationDetails.updatePassword">
+            <label for="clientUpdatePassword1">Password</label>
+            <input type="password"
+                   name="password1"
+                   class="form-control"
+                   id="clientUpdatePassword1"
+                   placeholder="Enter password here"
+                   ng-model="registrationDetails.password1"
+                   ng-minlength="4"
+                   ng-maxlength="20"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable">
+                    <span ng-show="adminRegistrationForm.password1.$error.required">
+                        <small>This is a required field:</small>
+                    </span>
+                    <span ng-show="adminRegistrationForm.password1.$error.minlength">
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span ng-show="adminRegistrationForm.password1.$error.maxlength">
+                        <small>Minimum length required is 20:</small>
+                    </span>
+                    <span ng-show="adminRegistrationForm.password1.$error.pattern">
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
+                    <span ng-show="registrationDetails.password1 != registrationDetails.password2">
+                        <small>Passwords do not match:</small>
+                    </span>
+        </div>
+
+        <div class="form-group ng-cloak"
+             ng-if="registrationDetails.updatePassword">
+            <label for="clientUpdatePassword2">Confirm Password</label>
+            <input type="password"
+                   name="password2"
+                   class="form-control"
+                   id="clientUpdatePassword2"
+                   placeholder="Enter password here"
+                   ng-model="registrationDetails.password2"
+                   ng-minlength="4"
+                   ng-maxlength="20"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   required
+                   ng-disabled="isLoading || universalDisable">
+                    <span ng-show="adminRegistrationForm.password2.$error.required">
+                        <small>This is a required field:</small>
+                    </span>
+                    <span ng-show="adminRegistrationForm.password2.$error.minlength">
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span ng-show="adminRegistrationForm.password2.$error.maxlength">
+                        <small>Minimum length required is 20:</small>
+                    </span>
+                    <span ng-show="adminRegistrationForm.password2.$error.pattern">
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
+                    <span ng-show="registrationDetails.password1 != registrationDetails.password2">
+                        <small>Passwords do not match:</small>
+                    </span>
+        </div>
+
+        <!--button for just updating the user details, not the password-->
+        <div class="form-group ng-cloak"
+             ng-if="!registrationDetails.updatePassword">
+            <button type="submit"
+                    class="btn btn-default btn-danger btn-lg btn-block"
+                    ng-disabled="adminRegistrationForm.$invalid || isLoading || universalDisable"
+                    ng-click="submitUpdatedDetails()"
+                    id="harvardID">LOGIN
+            </button>
+        </div>
+
+        <!--button for updating user details and password for the first time-->
+        <div class="form-group ng-cloak"
+             ng-if="registrationDetails.updatePassword">
+            <button type="submit"
+                    class="btn btn-default btn-danger btn-lg btn-block"
+                    ng-disabled="registrationDetails.password1 != registrationDetails.password2 || adminRegistrationForm.$invalid || isLoading || universalDisable"
+                    ng-click="submitUpdatedDetails()"
+                    id="harvardID">LOGIN
+            </button>
+        </div>
+    </form>
+</div>

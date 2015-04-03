@@ -42,6 +42,20 @@ module.exports = {
         grillStatus_handler.closeGrill(req, res);
     },
 
+    createGrill: function (req, res) {
+        var module = 'createGrill';
+        receivedLogger(module);
+        var newGrillName = req.body.grillName;
+        grillStatus_handler.createGrill(req, res, newGrillName);
+    },
+
+    deleteGrill: function (req, res) {
+        var module = 'deleteGrill';
+        receivedLogger(module);
+        var grillName = req.body.grillName;
+        grillStatus_handler.deleteGrill(req, res, grillName);
+    },
+
     getCurrentGrillStatus: function (req, res) {
         var module = 'getCurrentGrillStatus';
         receivedLogger(module);

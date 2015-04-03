@@ -48,10 +48,13 @@ angular.module('adminLoginApp')
 
             return {
 
-                getMyTemporarySocketRoom: function () {
-                    //give this user a temporary socketRoom using cuid()
-                    //when the server does not find the user
-                    return $http.get('/api/getTemporarySocketRoom');
+                checkIfFullyRegistered: function () {
+                    return $http.post('/checkIfFullyRegistered');
+                },
+
+                getSocketRoom: function () {
+                    //no grillName required here since this is the very first request
+                    return $http.get('/api/getMyRoom');
                 },
 
                 adminLoginStartUp: function () {
@@ -60,12 +63,16 @@ angular.module('adminLoginApp')
                     return $http.post('/api/adminLoginStartUp');
                 },
 
+                updateUserDetails: function (details) {
+                    return $http.post('/updateUserDetails', details);
+                },
+
                 getAllGrillStatuses: function () {
                     return $http.post('/api/getAllGrillStatuses');
                 },
 
-                adminUserLogin: function (loginData) {
-                    return $http.post('/adminUserLogin', loginData);
+                adminInfoLogin: function (loginData) {
+                    return $http.post('/adminInfoLogin', loginData);
                 }
             }
         }

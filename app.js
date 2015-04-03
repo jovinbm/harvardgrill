@@ -112,8 +112,10 @@ io.on('connection', function (socket) {
     });
 });
 
-app.post('/adminUserLogin', loginAPI.adminUserLogin);
 app.get('/harvardId', loginAPI.clientHarvardLogin);
+app.post('/localUserLogin', loginAPI.localUserLogin);
+app.post('/adminInfoLogin', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.adminInfoLogin);
+app.post('/clientInfoLogin', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.clientInfoLogin);
 
 
 app.post('/harvardId/login', passport.authenticate('openid'));
@@ -125,20 +127,22 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 //getting files
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
-app.get('/adminLogin.html', routes.admin_login_Html);
+app.get('/localLogin.html', routes.local_login_Html);
+app.get('/adminLogin.html', middleware.ensureAuthenticated, middleware.addUserData, routes.adminLogin_Html);
 app.get('/clientLogin.html', middleware.ensureAuthenticated, middleware.addUserData, routes.clientLogin_Html);
 app.get('/admin.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.admin_Html);
+app.get('/adminProfile.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.admin_profile_Html);
 app.get('/client.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.client_Html);
+app.get('/clientProfile.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.client_profile_Html);
 //end of getting files
 
 
 //login api
-app.post('/checkIfFullyRegistered', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.checkIfFullyRegistered);
-app.post('/updateUserDetails', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.updateUserDetails);
-app.post('/clientInfoLogin', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.clientInfoLogin);
 app.get('/api/getTemporarySocketRoom', loginAPI.getTemporarySocketRoom);
 app.post('/api/getAllGrillStatuses', loginAPI.getAllGrillStatuses);
-app.post('/api/adminLoginStartUp', loginAPI.adminLoginStartUp);
+app.post('/checkIfFullyRegistered', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.checkIfFullyRegistered);
+app.post('/updateUserDetails', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.updateUserDetails);
+app.post('/api/adminLoginStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.adminLoginStartUp);
 app.post('/api/clientLoginStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.clientLoginStartUp);
 //end of login api
 
@@ -151,6 +155,8 @@ app.post('/api/clientStartUp', middleware.ensureAuthenticatedAngular, middleware
 
 app.post('/api/openGrill', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, middleware.checkCustomLoggedInStatusAngular, middleware.checkUserIsAdmin, middleware.checkGrillIsClosed, grillStatusAPI.openGrill);
 app.post('/api/closeGrill', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, middleware.checkCustomLoggedInStatusAngular, middleware.checkUserIsAdmin, middleware.checkGrillIsOpen, grillStatusAPI.closeGrill);
+app.post('/api/createGrill', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.checkUserIsAdmin, grillStatusAPI.createGrill);
+app.post('/api/deleteGrill', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.checkUserIsAdmin, grillStatusAPI.deleteGrill);
 app.post('/api/getCurrentGrillStatus', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, middleware.checkCustomLoggedInStatusAngular, grillStatusAPI.getCurrentGrillStatus);
 app.post('/api/getAllComponentsIndexNames', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, middleware.checkCustomLoggedInStatusAngular, grillStatusAPI.getAllComponentsIndexNames);
 app.post('/api/updateAvailableComponents', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, middleware.checkCustomLoggedInStatusAngular, middleware.checkUserIsAdmin, grillStatusAPI.updateAvailableComponents);
