@@ -25,6 +25,7 @@ var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var userDB = require('../db/user_db.js');
 var User = require("../database/users/user_model.js");
+var bcrypt = require('bcrypt');
 
 module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
     passport.use(new OpenIDStrategy({
@@ -89,7 +90,6 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             receivedLogger(module);
 
             if (username.length > 0 && password.length > 0) {
-
                 //this function returns a status of 1 if the user does not exist, and (-1,theUser) if the
                 //user exists
                 //else (-1,err) if there was an error while executing db operations
@@ -98,13 +98,19 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 function successDbUsername(status, theUser) {
                     if (status == -1) {
                         //means the user exists
-                        if (theUser.password == password) {
-                            done(null, theUser, null)
-                        } else {
-                            //passwords don't check
-                            consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
-                            done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again')
-                        }
+                        bcrypt.compare(password, theUser.password, function (err, res) {
+                            if (err) {
+                                consoleLogger(errorLogger(module, 'error comparing passwords', err));
+                                done("A problem occurred when trying to log you in. Please try again", false, "error comparing password");
+                            } else if (res) {
+                                //means the password checks with hash
+                                done(null, theUser, null)
+                            } else {
+                                //passwords don't check
+                                consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
+                                done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again')
+                            }
+                        });
                     } else {
                         //means user does not exist(status here is 1, theUser is empty
                         //proceed to create the new user while checking that they have used the passwords tempclient/hgadmin
@@ -177,10 +183,9 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
             } else {
                 consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed, username and(or) password required'));
-                done('Username and(or) password required. Please try again', false, 'Username and(or) password required. Please try again')
+                done('Username and(or) password required. Please try again', false, 'Username and(or) password required. Please try again');
             }
-        }
-    ));
+        }));
 
     passport.serializeUser(function (user, done) {
         //only save the user openId into the session to keep the data stored low

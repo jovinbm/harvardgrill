@@ -6,6 +6,7 @@ var userDB = require('../db/user_db.js');
 var passport = require('passport');
 var OpenIDStrategy = require('passport-openid').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
 
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;
@@ -285,7 +286,35 @@ module.exports = {
                     //check if the user requires a password update
 
                     if (req.body.updatePassword) {
-                        userDB.updatePassword(req.user.openId, password, error, error, success4);
+
+                        bcrypt.hash(password, 10, function (err, hash) {
+                            if (err) {
+                                consoleLogger(errorLogger(module, 'error hashing password', err));
+                                res.status(401).send({
+                                    code: 401,
+                                    registrationBanner: true,
+                                    bannerClass: 'alert alert-dismissible alert-warning',
+                                    msg: 'We could not log you in. Please check your details and try again',
+                                    reason: errorLogger(module, 'error hashing password')
+                                });
+                            } else {
+                                continueWithPasswordHash(hash);
+                            }
+                        });
+
+                        function continueWithPasswordHash(passwordHash) {
+                            userDB.updatePassword(req.user.openId, passwordHash, errorUpdatingPassword, errorUpdatingPassword, success4);
+                            function errorUpdatingPassword() {
+                                consoleLogger(errorLogger(module, 'error updating password', err));
+                                res.status(401).send({
+                                    code: 401,
+                                    registrationBanner: true,
+                                    bannerClass: 'alert alert-dismissible alert-warning',
+                                    msg: 'We could not log you in. Please check your details and try again',
+                                    reason: errorLogger(module, 'error updating password')
+                                });
+                            }
+                        }
                     } else {
                         success4();
                     }
@@ -320,9 +349,10 @@ module.exports = {
         var grillName = req.body.grillName;
         var theUser = getTheUser(req);
 
-        userDB.checkUserPassword(theUser.openId, password, errorPassword, errorPassword, successPassword);
+        userDB.checkUserPassword(theUser.openId, password, errorPassword, errorPasswordBcrypt, successPassword);
 
         function errorPassword(status, err) {
+            consoleLogger(errorLogger(module, 'error finding password', err));
             res.status(401).send({
                 code: 401,
                 banner: true,
@@ -330,7 +360,18 @@ module.exports = {
                 msg: 'Failed to log you in. Please try again',
                 reason: errorLogger(module, 'error finding password', err)
             });
-            consoleLogger(errorLogger(module, 'error finding password', err));
+        }
+
+        function errorPasswordBcrypt(err) {
+            //means bcrypt ran into an error when comparing passwords
+            consoleLogger(errorLogger(module, 'error comparing passwords', err));
+            res.status(401).send({
+                code: 401,
+                banner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: 'Failed to log you in. Please try again',
+                reason: errorLogger(module, 'comparing passwords', err)
+            });
         }
 
         function successPassword(status) {
@@ -396,13 +437,13 @@ module.exports = {
     adminInfoLogin: function (req, res, next) {
         var module = 'adminInfoLogin';
         var password = req.body.password;
-        consoleLogger("**********" + JSON.stringify(req.body));
         var grillName = req.body.grillName;
         var theUser = getTheUser(req);
 
-        userDB.checkUserPassword(theUser.openId, password, errorPassword, errorPassword, successPassword);
+        userDB.checkUserPassword(theUser.openId, password, errorPassword, errorPasswordBcrypt, successPassword);
 
         function errorPassword(status, err) {
+            consoleLogger(errorLogger(module, 'error finding password', err));
             res.status(401).send({
                 code: 401,
                 banner: true,
@@ -410,11 +451,23 @@ module.exports = {
                 msg: 'Failed to log you in. Please try again',
                 reason: errorLogger(module, 'error finding password', err)
             });
-            consoleLogger(errorLogger(module, 'error finding password', err));
+        }
+
+        function errorPasswordBcrypt(err) {
+            //means bcrypt ran into an error when comparing passwords
+            consoleLogger(errorLogger(module, 'error comparing passwords', err));
+            res.status(401).send({
+                code: 401,
+                banner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: 'Failed to log you in. Please try again',
+                reason: errorLogger(module, 'error comparing passwords', err)
+            });
         }
 
         function successPassword(status) {
             if (status == -1) {
+                consoleLogger("YESS");
                 //means passwords don't match
                 res.status(401).send({
                     code: 401,
@@ -470,6 +523,7 @@ module.exports = {
                 }
             }
         }
+
     },
 
     clientLoginStartUp: function (req, res) {

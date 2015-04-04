@@ -1,6 +1,21 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var User = require("../database/users/user_model.js");
+var bcrypt = require('bcrypt');
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('user_db.js', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('user_db.js', module, text);
+};
+
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('user_db.js', module, text, err);
+};
 
 
 module.exports = {
@@ -36,7 +51,7 @@ module.exports = {
     },
 
 
-    checkUserPassword: function (openId, password, error_neg_1, error_0, success) {
+    checkUserPassword: function (openId, password, error_neg_1, errorPasswordBcrypt, success) {
         User.findOne({openId: openId}).exec(
             function (err, theUser) {
                 if (err) {
@@ -44,11 +59,19 @@ module.exports = {
                 } else if (theUser == null || theUser == undefined) {
                     error_neg_1(0, err);
                 } else {
-                    if (theUser.password == password) {
-                        success(1)
-                    } else {
-                        success(-1);
-                    }
+                    bcrypt.compare(password, theUser.password, function (err, res) {
+                        consoleLogger(res);
+                        if (err) {
+                            consoleLogger(errorLogger(module, 'error comparing passwords', err));
+                            errorPasswordBcrypt(err);
+                        } else if (res) {
+                            //means the password checks with hash
+                            success(1);
+                        } else {
+                            //passwords don't check
+                            success(-1);
+                        }
+                    });
                 }
             }
         );
@@ -170,13 +193,13 @@ module.exports = {
     },
 
 
-    updatePassword: function (openId, password, error_neg_1, error_0, success) {
+    updatePassword: function (openId, passwordHash, error_neg_1, error_0, success) {
         User
             .update({
                 openId: openId
             }, {
                 $set: {
-                    password: password
+                    password: passwordHash
                 }
             }, function (err) {
                 if (err) {
