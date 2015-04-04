@@ -7,6 +7,7 @@ var passport = require('passport');
 var OpenIDStrategy = require('passport-openid').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt');
+var email = require('../functions/email.js');
 
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;
@@ -325,6 +326,9 @@ module.exports = {
                             redirect: true,
                             redirectPage: '/clientLogin.html'
                         });
+
+                        //send a welcome email
+                        email.sendWelcomeEmail(theUser);
                     }
                 }
 

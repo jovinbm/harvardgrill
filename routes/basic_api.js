@@ -1,10 +1,3 @@
-var email = require("emailjs");
-var mailServer = email.server.connect({
-    user: "jovinbeda@gmail.com",
-    password: "uxccpufouacqxrzm",
-    host: "smtp.gmail.com",
-    ssl: true
-});
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 
@@ -33,21 +26,6 @@ function getTheCurrentGrillStatus(req) {
 }
 
 module.exports = {
-    sendEmail: function (req, res) {
-        var module = 'sendEmail';
-        receivedLogger(module);
-        res.redirect('login.html');
-        var message = {
-            text: "Name: " + req.body.name + ", Email: " + req.body.email + ", Message: " + req.body.message,
-            from: req.body.email,
-            to: "jovinbeda@gmail.com",
-            subject: "HARVARD-GRILL WEBSITE"
-        };
-        mailServer.send(message, function (err) {
-            consoleLogger(err || successLogger(module, 'Message sent to jovinbeda@gmail.com'));
-        });
-    },
-
 
     getSocketRoom: function (req, res) {
         var module = 'getSocketRoom';

@@ -27,6 +27,7 @@ var fs = require('fs');
 var basic = require('./functions/basic.js');
 var consoleLogger = require('./functions/basic.js').consoleLogger;
 var middleware = require('./functions/middleware.js');
+var email = require('./functions/email.js');
 var routes = require('./routes/router.js');
 var basicAPI = require('./routes/basic_api.js');
 var grillStatusAPI = require('./routes/grillStatus_api');
@@ -119,7 +120,6 @@ app.post('/clientInfoLogin', middleware.ensureAuthenticatedAngular, middleware.a
 
 
 app.post('/harvardId/login', passport.authenticate('openid'));
-app.post('/sendEmail', basicAPI.sendEmail);
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
