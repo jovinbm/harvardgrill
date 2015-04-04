@@ -8,6 +8,14 @@ body {
     padding-bottom: 140px;
 }
 
+/*forms*/
+.form-error-notice {
+    color: rgb(169, 68, 66);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
 .displayName {
     color: cyan;
 }

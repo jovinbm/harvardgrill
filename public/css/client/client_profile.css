@@ -2,3 +2,11 @@
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
+
+/*forms*/
+.form-error-notice {
+    color: rgb(169, 68, 66);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}

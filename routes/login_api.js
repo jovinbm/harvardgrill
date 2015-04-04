@@ -221,9 +221,15 @@ module.exports = {
         var username = req.body.username;
         var email = req.body.email;
         var password = req.body.password1;
+        var theUser = getTheUser(req);
 
         //check that nobody is using that username
-        userDB.findUserWithUsername(username, errorFindingUsername, resolveUsernameAvailability, resolveUsernameAvailability);
+        userDB.findUserWithUsername(username, errorFindingUsername, errorFindingUsername, resolveUsernameAvailability);
+
+        //here, the application tries to find the username given. If it exists, then the function return (-1,theUser),
+        // theUser being theUser with the wanted username. This means that the username is already taken this the user should be notified
+        //NB.HERE I also check if the retrieved user's uniqueCuid is the same as the one of the user requesting a change of username
+        //if it is, then this means it's the same user, he just did not change his/her username
 
         function errorFindingUsername(status, err) {
             res.status(401).send({
@@ -236,22 +242,31 @@ module.exports = {
             consoleLogger(errorLogger(module, 'Could not retrieve user', err));
         }
 
-        function resolveUsernameAvailability(status) {
+        function resolveUsernameAvailability(status, retrievedUser) {
             //1 means username is already in use, -1 means the new user can use the username
             if (status == -1) {
-                //means username is not available
-                res.status(401).send({
-                    code: 401,
-                    registrationBanner: true,
-                    bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'The username you entered is already in use. Please choose a different one',
-                    reason: errorLogger(module, 'username entered is already in use')
-                });
-                consoleLogger(errorLogger(module, 'username entered is already in use'));
+                if (retrievedUser.uniqueCuid == theUser.uniqueCuid) {
+                    //means it's the same user, so just continue and update the username
+                    continueUpdating();
+                } else {
+                    //means it's a different user wanting a username that's already in use. notify the user
+                    res.status(401).send({
+                        code: 401,
+                        registrationBanner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
+                        msg: 'The username you entered is already in use. Please choose a different one',
+                        reason: errorLogger(module, 'username entered is already in use')
+                    });
+                    consoleLogger(errorLogger(module, 'username entered is already in use'));
+                }
             } else {
                 //means username is available
+                continueUpdating();
+            }
+
+            function continueUpdating() {
                 //update update the user
-                var theUser = getTheUser(req);
+
                 //check if there is no realName
                 if (!theUser.realName) {
                     theUser.realName = displayName;

@@ -90,13 +90,57 @@ module.exports = {
         }
     },
 
-
-    adminLogout: function (req, res) {
-        var module = 'adminLogout';
+    logoutAdminSession: function (req, res) {
+        var module = 'logoutAdminSession';
         receivedLogger(module);
-        toggled();
+        userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
+
+        //toggle the user's customLoggedInStatus
         function toggled() {
-            logout_handler.adminLogout(req, res);
+            logout_handler.logoutAdminSession(req, res);
+        }
+
+        function errorToggle(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    code: 500,
+                    notify: true,
+                    type: 'error',
+                    msg: "A problem has occurred. Please reload the page",
+                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
+            }
+        }
+    },
+
+
+    logoutAdminFull: function (req, res) {
+        var module = 'logoutAdminFull';
+        receivedLogger(module);
+        userDB.toggleCls(req.user.openId, 0, errorToggle, errorToggle, toggled);
+
+        function toggled() {
+            logout_handler.logoutAdminFull(req, res);
+        }
+
+        function errorToggle(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({
+                    code: 500,
+                    notify: true,
+                    type: 'error',
+                    msg: "A problem has occurred. Please try again",
+                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
+                    disable: true,
+                    redirect: false,
+                    redirectPage: '/error/500.html'
+                });
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
+            }
         }
     }
 };

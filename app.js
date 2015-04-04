@@ -179,7 +179,8 @@ app.post('/api/markOrderAsDeclined', middleware.ensureAuthenticatedAngular, midd
 app.post('/api/logoutHarvardLogin', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutHarvardLogin);
 app.post('/api/logoutClientSession', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutClientSession);
 app.post('/api/logoutClientFull', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutClientFull);
-app.post('/api/adminLogout', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.adminLogout);
+app.post('/api/logoutAdminFull', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutAdminFull);
+app.post('/api/logoutAdminSession', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutAdminSession);
 //end of logout api
 
 //error handlers

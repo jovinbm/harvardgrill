@@ -69,40 +69,32 @@ module.exports = {
         consoleLogger(successLogger(module));
     },
 
-
-    adminLogout: function (req, res) {
-        var module = 'adminLogout';
+    logoutAdminSession: function (req, res) {
+        var module = 'logoutAdminSession';
         receivedLogger(module);
-        var theUser = getTheUser(req);
-        userDB.deleteUser(theUser, error, error, success);
+        //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
+        res.status(200).send({
+            code: 200,
+            notify: false,
+            redirect: true,
+            redirectPage: "/adminLogin.html"
+        });
+        consoleLogger(successLogger(module));
+    },
 
-        function success() {
-            //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
-            req.logout();
-            res.status(200).send({
-                code: 200,
-                notify: false,
-                redirect: true,
-                redirectPage: "/adminLogin.html"
-            });
-            consoleLogger(successLogger(module));
-        }
 
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                res.status(500).send({
-                    code: 500,
-                    notify: true,
-                    type: 'error',
-                    msg: 'Error when trying to log you out. Please try again',
-                    reason: errorLogger(module, 'Could not logout admin', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
-                });
-                consoleLogger(errorLogger(module, 'Failed! Could not logout admin', err));
-            }
-        }
+    logoutAdminFull: function (req, res) {
+        var module = 'logoutAdminFull';
+        receivedLogger(module);
+        //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
+        req.logout();
+        res.status(200).send({
+            code: 200,
+            notify: false,
+            redirect: true,
+            redirectPage: "/localLogin.html"
+        });
+        consoleLogger(successLogger(module));
     }
 
 

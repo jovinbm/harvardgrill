@@ -45,6 +45,12 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var email = profile.email || "";
             var realEmail = profile.email || "";
 
+            userDB.findUser(openId, error, error, success);
+
+            function success(theUser) {
+                done(null, theUser, null);
+            }
+
             //defining all callbacks
             function error(status, err) {
                 if (status == 0) {
@@ -74,12 +80,6 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 }
             }
 
-            function success(theUser) {
-                done(null, theUser, null);
-            }
-
-            userDB.findUser(openId, error, error, success);
-
         }
     ));
 
@@ -88,72 +88,96 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var module = 'LocalStrategy';
             receivedLogger(module);
 
-            if (username.length > 0 && password.length > 0 && password == 'hgadmin') {
-                var openId = cuid();
-                var isAdmin = 'yes';
-                var uniqueCuid = cuid();
-                var socketRoom = 'adminSocketRoom';
-                var realName = 'Admin';
-                var displayName = 'Admin';
-                var tempUsername = 'Admin';
+            if (username.length > 0 && password.length > 0) {
 
-                var user = new User({
-                    openId: openId,
-                    isAdmin: isAdmin,
-                    uniqueCuid: uniqueCuid,
-                    socketRoom: socketRoom,
-                    realName: realName,
-                    displayName: displayName,
-                    username: tempUsername
-                });
+                //this function returns a status of 1 if the user does not exist, and (-1,theUser) if the
+                //user exists
+                //else (-1,err) if there was an error while executing db operations
+                userDB.findUserWithUsername(username, errorDbUsername, errorDbUsername, successDbUsername);
 
-                userDB.saveUser(user, saveError, saveError, saveSuccess);
+                function successDbUsername(status, theUser) {
+                    if (status == -1) {
+                        //means the user exists
+                        if (theUser.password == password) {
+                            done(null, theUser, null)
+                        } else {
+                            //passwords don't check
+                            consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
+                            done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again')
+                        }
+                    } else {
+                        //means user does not exist(status here is 1, theUser is empty
+                        //proceed to create the new user while checking that they have used the passwords tempclient/hgadmin
 
-                function saveSuccess(theSavedUser) {
-                    done(null, theSavedUser, null)
+                        if (password == 'hgadmin') {
+                            var openId = cuid();
+                            var uniqueCuid = cuid();
+
+                            var user = new User({
+                                openId: openId,
+                                isAdmin: 'yes',
+                                uniqueCuid: uniqueCuid,
+                                socketRoom: 'adminSocketRoom',
+                                realName: '',
+                                displayName: '',
+                                username: username
+                            });
+
+                            userDB.saveUser(user, saveError, saveError, saveSuccess);
+
+                            function saveSuccess(theSavedUser) {
+                                done(null, theSavedUser, null)
+                            }
+
+                            function saveError(status, err) {
+                                consoleLogger(errorLogger(module, 'Error saving user', err));
+                                done("A problem occurred while trying to log you in. Please try again", false, "A problem occurred while trying to log you in. Please try again");
+                            }
+
+                        } else if (password == 'tempclient') {
+
+                            //these are for development only, used to imitate a client
+
+                            var openIdTemp = cuid();
+                            var uniqueCuidTemp = cuid();
+                            var socketRoomTemp = 'tempClient' + cuid();
+
+                            var userTemp = new User({
+                                openId: openIdTemp,
+                                isAdmin: 'no',
+                                uniqueCuid: uniqueCuidTemp,
+                                socketRoom: socketRoomTemp,
+                                realName: '',
+                                displayName: '',
+                                username: username
+                            });
+
+                            userDB.saveUser(userTemp, saveErrorTemp, saveErrorTemp, saveSuccessTemp);
+
+                            function saveSuccessTemp(theSavedUser) {
+                                done(null, theSavedUser, null)
+                            }
+
+                            function saveErrorTemp(status, err) {
+                                consoleLogger(errorLogger(module, 'Error saving user', err));
+                                done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
+                            }
+
+                        } else {
+                            consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
+                            done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again');
+                        }
+                    }
                 }
 
-                function saveError(status, err) {
-                    consoleLogger(errorLogger(module, 'Error saving user', err));
-                    done("A problem occurred while trying to log you in. Please try again", false, "A problem occurred while trying to log you in. Please try again");
-                }
-
-            } else if (username.length > 0 && password.length > 0 && password == 'tempclient') {
-
-                //these are for development only, used to imitate a client
-
-                var openIdTemp = cuid();
-                var isAdminTemp = 'no';
-                var uniqueCuidTemp = cuid();
-                var socketRoomTemp = 'tempClient' + cuid();
-                var realNameTemp = 'TempClient';
-                var displayNameTemp = 'TempClient';
-                var usernameTemp = 'TempClient';
-
-                var userTemp = new User({
-                    openId: openIdTemp,
-                    isAdmin: isAdminTemp,
-                    uniqueCuid: uniqueCuidTemp,
-                    socketRoom: socketRoomTemp,
-                    realName: realNameTemp,
-                    displayName: displayNameTemp,
-                    username: usernameTemp
-                });
-
-                userDB.saveUser(userTemp, saveErrorTemp, saveErrorTemp, saveSuccessTemp);
-
-                function saveSuccessTemp(theSavedUser) {
-                    done(null, theSavedUser, null)
-                }
-
-                function saveErrorTemp(status, err) {
-                    consoleLogger(errorLogger(module, 'Error saving user', err));
+                function errorDbUsername() {
+                    consoleLogger(errorLogger(module, 'Error while trying to find user', err));
                     done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
                 }
 
             } else {
-                consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
-                done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again')
+                consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed, username and(or) password required'));
+                done('Username and(or) password required. Please try again', false, 'Username and(or) password required. Please try again')
             }
         }
     ));

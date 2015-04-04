@@ -136,21 +136,21 @@
                    placeholder="Enter your username here"
                    ng-model="masterLocalLoginForm.username"
                    ng-minlength="4"
-                   ng-maxlength="15"
+                   ng-maxlength="7"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable"
                    name="username">
-            <span ng-show="localLoginForm.username.$error.required">
+            <span class="form-error-notice" ng-show="localLoginForm.username.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span ng-show="localLoginForm.username.$error.minlength">
+            <span class="form-error-notice" ng-show="localLoginForm.username.$error.minlength">
                 <small>Minimum length required is 4:</small>
             </span>
-            <span ng-show="localLoginForm.username.$error.maxlength">
-                <small>Minimum length required is 15:</small>
+            <span class="form-error-notice" ng-show="localLoginForm.username.$error.maxlength">
+                <small>Minimum length required is 7:</small>
             </span>
-            <span ng-show="localLoginForm.username.$error.pattern">
+            <span class="form-error-notice" ng-show="localLoginForm.username.$error.pattern">
                 <small>Only letters, numbers and underscores allowed:</small>
             </span>
         </div>
@@ -169,16 +169,16 @@
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable">
-                    <span ng-show="localLoginForm.password.$error.required">
+                    <span class="form-error-notice" ng-show="localLoginForm.password.$error.required">
                         <small>This is a required field:</small>
                     </span>
-                    <span ng-show="localLoginForm.password.$error.minlength">
+                    <span class="form-error-notice" ng-show="localLoginForm.password.$error.minlength">
                         <small>Minimum length required is 4:</small>
                     </span>
-                    <span ng-show="localLoginForm.password.$error.maxlength">
+                    <span class="form-error-notice" ng-show="localLoginForm.password.$error.maxlength">
                         <small>Minimum length required is 20:</small>
                     </span>
-                    <span ng-show="localLoginForm.password.$error.pattern">
+                    <span class="form-error-notice" ng-show="localLoginForm.password.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
                     </span>
         </div>

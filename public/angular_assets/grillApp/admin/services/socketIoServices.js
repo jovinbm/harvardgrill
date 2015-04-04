@@ -95,8 +95,12 @@ angular.module('grillApp')
     .factory('logoutService', ['$http',
         function ($http) {
             return {
-                adminLogout: function () {
-                    return $http.post('/api/adminLogout');
+                logoutAdminFull: function () {
+                    return $http.post('/api/logoutAdminFull');
+                },
+
+                logoutAdminSession: function () {
+                    return $http.post('/api/logoutAdminSession');
                 }
             }
         }]);

@@ -31,3 +31,11 @@ h1.jumbo-header {
 .col_no_padding {
     padding-left: 0;
 }
+
+/*forms*/
+.form-error-notice {
+    color: rgb(169, 68, 66);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}

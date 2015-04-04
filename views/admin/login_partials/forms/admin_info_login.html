@@ -21,21 +21,21 @@
         <!--placeholder="Enter your username here"-->
         <!--ng-model="masterClientLoginForm.username"-->
         <!--ng-minlength="4"-->
-        <!--ng-maxlength="15"-->
+        <!--ng-maxlength="7"-->
         <!--ng-pattern="/^[a-zA-Z0-9_]*$/"-->
         <!--required-->
         <!--ng-disabled="isLoading || universalDisable"-->
         <!--name="username">-->
-        <!--<span ng-show="adminLoginForm.username.$error.required">-->
+        <!--<span class="form-error-notice" ng-show="adminLoginForm.username.$error.required">-->
         <!--<small>This is a required field:</small>-->
         <!--</span>-->
-        <!--<span ng-show="adminLoginForm.username.$error.minlength">-->
+        <!--<span class="form-error-notice" ng-show="adminLoginForm.username.$error.minlength">-->
         <!--<small>Minimum length required is 4:</small>-->
         <!--</span>-->
-        <!--<span ng-show="adminLoginForm.username.$error.maxlength">-->
-        <!--<small>Minimum length required is 15:</small>-->
+        <!--<span class="form-error-notice" ng-show="adminLoginForm.username.$error.maxlength">-->
+        <!--<small>Minimum length required is 7:</small>-->
         <!--</span>-->
-        <!--<span ng-show="adminLoginForm.username.$error.pattern">-->
+        <!--<span class="form-error-notice" ng-show="adminLoginForm.username.$error.pattern">-->
         <!--<small>Only letters, numbers and underscores allowed:</small>-->
         <!--</span>-->
         <!--</div>-->
@@ -90,7 +90,7 @@
                  ng-click="selectGrill('profile')">
                 <input type="checkbox"
                        ng-disabled="isLoading || universalDisable"
-                       ng-model="grillStatus.isSelected"
+                       ng-model="allGrillStatusesModel.profile.isSelected"
                        ng-true-value="'yes'"
                        ng-false-value="'no'"
                        ng-click="selectGrill('profile')"> <strong>Log in to my profile</strong>
@@ -112,16 +112,16 @@
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable">
-                    <span ng-show="adminLoginForm.password.$error.required">
+                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.required">
                         <small>This is a required field:</small>
                     </span>
-                    <span ng-show="adminLoginForm.password.$error.minlength">
+                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.minlength">
                         <small>Minimum length required is 4:</small>
                     </span>
-                    <span ng-show="adminLoginForm.password.$error.maxlength">
+                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.maxlength">
                         <small>Minimum length required is 20:</small>
                     </span>
-                    <span ng-show="adminLoginForm.password.$error.pattern">
+                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
                     </span>
         </div>
