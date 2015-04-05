@@ -7,32 +7,56 @@
         <strong>{{registrationBannerMessage}}</strong>
     </div>
 
-    <p>Welcome: Please updated your details. Everything listed here is required</p>
+    <p>Welcome: Please update your details. It takes 27.5 seconds. Everything listed here is required</p>
 
     <!--data-dv attributes for bootstrap validator plugin-->
     <form name="adminRegistrationForm"
           id="adminRegistrationForm">
 
-        <!--DisplayName field-->
+        <!--FirstName field-->
         <div class="form-group ng-cloak">
-            <label for="displayName">Name</label>
+            <label for="firstName">First name</label>
             <input type="text"
                    class="form-control"
-                   id="displayName"
-                   placeholder="Enter your name here"
-                   ng-model="registrationDetails.displayName"
-                   ng-minlength="4"
+                   id="firstName"
+                   placeholder="Enter your first name here"
+                   ng-model="registrationDetails.firstName"
+                   ng-minlength="2"
                    ng-maxlength="30"
                    required
                    ng-disabled="isLoading || universalDisable"
-                   name="displayName">
-            <span class="form-error-notice" ng-show="adminRegistrationForm.displayName.$error.required">
+                   name="firstName">
+            <span class="form-error-notice" ng-show="adminRegistrationForm.firstName.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span class="form-error-notice" ng-show="adminRegistrationForm.displayName.$error.minlength">
-                <small>Minimum length required is 4:</small>
+            <span class="form-error-notice" ng-show="adminRegistrationForm.firstName.$error.minlength">
+                <small>Minimum length required is 2:</small>
             </span>
-            <span class="form-error-notice" ng-show="adminRegistrationForm.displayName.$error.maxlength">
+            <span class="form-error-notice" ng-show="adminRegistrationForm.firstName.$error.maxlength">
+                <small>Maximum length required is 30:</small>
+            </span>
+        </div>
+
+        <!--LastName field-->
+        <div class="form-group ng-cloak">
+            <label for="LastName">Last name</label>
+            <input type="text"
+                   class="form-control"
+                   id="LastName"
+                   placeholder="Enter your last name here"
+                   ng-model="registrationDetails.lastName"
+                   ng-minlength="2"
+                   ng-maxlength="30"
+                   required
+                   ng-disabled="isLoading || universalDisable"
+                   name="lastName">
+            <span class="form-error-notice" ng-show="adminRegistrationForm.lastName.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice" ng-show="adminRegistrationForm.lastName.$error.minlength">
+                <small>Minimum length required is 2:</small>
+            </span>
+            <span class="form-error-notice" ng-show="adminRegistrationForm.lastName.$error.maxlength">
                 <small>Maximum length required is 30:</small>
             </span>
         </div>
@@ -68,11 +92,12 @@
         <!--Email field-->
         <div class="form-group ng-cloak">
             <label for="email">Email</label>
-            <input type="email"
+            <input type="text"
                    class="form-control"
                    id="email"
                    placeholder="Enter your email here"
                    ng-model="registrationDetails.email"
+                   ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i"
                    required
                    ng-disabled="isLoading || universalDisable"
                    name="email">
@@ -80,7 +105,7 @@
                 <small>This is a required field:</small>
             </span>
             <span class="form-error-notice" ng-show="adminRegistrationForm.email.$error.pattern">
-                <small>Email: you@example.com</small>
+                <small>This is not a valid email</small>
             </span>
         </div>
 

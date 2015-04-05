@@ -1,4 +1,5 @@
 var basic = require('../functions/basic.js');
+var forms = require('../functions/forms.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var cuid = require('cuid');
 var Stats = require("../database/stats/stats_model.js");
@@ -104,7 +105,7 @@ module.exports = {
         var module = "checkIfFullyRegistered";
         var theUser = getTheUser(req);
 
-        if (theUser.username && theUser.displayName && theUser.email) {
+        if (theUser.username && theUser.firstName && theUser.lastName && theUser.email) {
             res.status(200).send({
                 msg: "Fully registered"
             });
@@ -121,7 +122,7 @@ module.exports = {
                 loginErrorType: 'user',
                 updatePassword: updatePassword,
                 availableDetails: {
-                    displayName: theUser.displayName,
+                    displayName: theUser.firstName,
                     username: theUser.username,
                     email: theUser.email
                 }
@@ -219,127 +220,134 @@ module.exports = {
 
     updateUserDetails: function (req, res) {
         var module = "updateUserDetails";
-        var displayName = req.body.displayName;
+        var firstName = req.body.firstName;
+        var lastName = req.body.lastName;
         var username = req.body.username;
         var email = req.body.email;
         var password = req.body.password1;
         var theUser = getTheUser(req);
 
-        //check that nobody is using that username
-        userDB.findUserWithUsername(username, errorFindingUsername, errorFindingUsername, resolveUsernameAvailability);
+        //this function validates the form and calls formValidated on success
+        forms.validateRegistrationForm(req, res, firstName, lastName, username, email, password, req.body.password2, formValidated);
 
-        //here, the application tries to find the username given. If it exists, then the function return (-1,theUser),
-        // theUser being theUser with the wanted username. This means that the username is already taken this the user should be notified
-        //NB.HERE I also check if the retrieved user's uniqueCuid is the same as the one of the user requesting a change of username
-        //if it is, then this means it's the same user, he just did not change his/her username
+        function formValidated() {
+            //check that nobody is using that username
+            userDB.findUserWithUsername(username, errorFindingUsername, errorFindingUsername, resolveUsernameAvailability);
 
-        function errorFindingUsername(status, err) {
-            res.status(401).send({
-                code: 401,
-                registrationBanner: true,
-                bannerClass: 'alert alert-dismissible alert-warning',
-                msg: 'Failed to log you in. Please try again',
-                reason: errorLogger(module, 'Could not retrieve user', err)
-            });
-            consoleLogger(errorLogger(module, 'Could not retrieve user', err));
-        }
+            //here, the application tries to find the username given. If it exists, then the function return (-1,theUser),
+            // theUser being theUser with the wanted username. This means that the username is already taken this the user should be notified
+            //NB.HERE I also check if the retrieved user's uniqueCuid is the same as the one of the user requesting a change of username
+            //if it is, then this means it's the same user, he just did not change his/her username
 
-        function resolveUsernameAvailability(status, retrievedUser) {
-            //1 means username is already in use, -1 means the new user can use the username
-            if (status == -1) {
-                if (retrievedUser.uniqueCuid == theUser.uniqueCuid) {
-                    //means it's the same user, so just continue and update the username
-                    continueUpdating();
-                } else {
-                    //means it's a different user wanting a username that's already in use. notify the user
-                    res.status(401).send({
-                        code: 401,
-                        registrationBanner: true,
-                        bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: 'The username you entered is already in use. Please choose a different one',
-                        reason: errorLogger(module, 'username entered is already in use')
-                    });
-                    consoleLogger(errorLogger(module, 'username entered is already in use'));
-                }
-            } else {
-                //means username is available
-                continueUpdating();
+            function errorFindingUsername(status, err) {
+                consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+                res.status(401).send({
+                    code: 401,
+                    registrationBanner: true,
+                    bannerClass: 'alert alert-dismissible alert-warning',
+                    msg: 'Failed to log you in. Please try again',
+                    reason: errorLogger(module, 'Could not retrieve user', err)
+                });
             }
 
-            function continueUpdating() {
-                //update update the user
-
-                //check if there is no realName
-                if (!theUser.realName) {
-                    theUser.realName = displayName;
-                }
-                //check if there is no email
-                if (!theUser.realEmail) {
-                    theUser.realEmail = email
-                }
-                theUser.displayName = displayName;
-                theUser.username = username;
-                theUser.email = email;
-
-                userDB.saveUser(theUser, error, error, successSave);
-
-                function successSave() {
-                    //check if the user requires a password update
-
-                    if (req.body.updatePassword) {
-
-                        bcrypt.hash(password, 10, function (err, hash) {
-                            if (err) {
-                                consoleLogger(errorLogger(module, 'error hashing password', err));
-                                res.status(401).send({
-                                    code: 401,
-                                    registrationBanner: true,
-                                    bannerClass: 'alert alert-dismissible alert-warning',
-                                    msg: 'We could not log you in. Please check your details and try again',
-                                    reason: errorLogger(module, 'error hashing password')
-                                });
-                            } else {
-                                continueWithPasswordHash(hash);
-                            }
-                        });
-
-                        function continueWithPasswordHash(passwordHash) {
-                            userDB.updatePassword(req.user.openId, passwordHash, errorUpdatingPassword, errorUpdatingPassword, success4);
-                            function errorUpdatingPassword() {
-                                consoleLogger(errorLogger(module, 'error updating password', err));
-                                res.status(401).send({
-                                    code: 401,
-                                    registrationBanner: true,
-                                    bannerClass: 'alert alert-dismissible alert-warning',
-                                    msg: 'We could not log you in. Please check your details and try again',
-                                    reason: errorLogger(module, 'error updating password')
-                                });
-                            }
-                        }
+            function resolveUsernameAvailability(status, retrievedUser) {
+                //1 means username is already in use, -1 means the new user can use the username
+                if (status == -1) {
+                    if (retrievedUser.uniqueCuid == theUser.uniqueCuid) {
+                        //means it's the same user, so just continue and update the username
+                        continueUpdating();
                     } else {
-                        success4();
-                    }
-
-                    function success4() {
-                        res.status(200).send({
-                            code: 200,
-                            redirect: true,
-                            redirectPage: '/clientLogin.html'
+                        //means it's a different user wanting a username that's already in use. notify the user
+                        res.status(401).send({
+                            code: 401,
+                            registrationBanner: true,
+                            bannerClass: 'alert alert-dismissible alert-warning',
+                            msg: 'The username you entered is already in use. Please choose a different one',
+                            reason: errorLogger(module, 'username entered is already in use')
                         });
-
-                        //send a welcome email
-                        emailModule.sendWelcomeEmail(theUser);
+                        consoleLogger(errorLogger(module, 'username entered is already in use'));
                     }
+                } else {
+                    //means username is available
+                    continueUpdating();
                 }
 
-                function error() {
-                    res.status(401).send({
-                        code: 401,
-                        registrationBanner: true,
-                        bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: 'We could not log you in. Please check your details and try again',
-                        reason: errorLogger(module, 'username entered is already in use')
-                    });
+                function continueUpdating() {
+                    //update update the user
+
+                    //check if there is no displayName
+                    if (!theUser.displayName) {
+                        theUser.displayName = firstName + " " + lastName;
+                    }
+                    //check if there is no email
+                    if (!theUser.realEmail) {
+                        theUser.realEmail = email
+                    }
+                    theUser.firstName = firstName;
+                    theUser.lastName = lastName;
+                    theUser.username = username;
+                    theUser.email = email;
+
+                    userDB.saveUser(theUser, error, error, successSave);
+
+                    function successSave() {
+                        //check if the user requires a password update
+
+                        if (req.body.updatePassword) {
+
+                            bcrypt.hash(password, 10, function (err, hash) {
+                                if (err) {
+                                    consoleLogger(errorLogger(module, 'error hashing password', err));
+                                    res.status(401).send({
+                                        code: 401,
+                                        registrationBanner: true,
+                                        bannerClass: 'alert alert-dismissible alert-warning',
+                                        msg: 'We could not log you in. Please check your details and try again',
+                                        reason: errorLogger(module, 'error hashing password')
+                                    });
+                                } else {
+                                    continueWithPasswordHash(hash);
+                                }
+                            });
+
+                            function continueWithPasswordHash(passwordHash) {
+                                userDB.updatePassword(req.user.openId, passwordHash, errorUpdatingPassword, errorUpdatingPassword, success4);
+                                function errorUpdatingPassword() {
+                                    consoleLogger(errorLogger(module, 'error updating password', err));
+                                    res.status(401).send({
+                                        code: 401,
+                                        registrationBanner: true,
+                                        bannerClass: 'alert alert-dismissible alert-warning',
+                                        msg: 'We could not log you in. Please check your details and try again',
+                                        reason: errorLogger(module, 'error updating password')
+                                    });
+                                }
+                            }
+                        } else {
+                            success4();
+                        }
+
+                        function success4() {
+                            res.status(200).send({
+                                code: 200,
+                                redirect: true,
+                                redirectPage: '/clientLogin.html'
+                            });
+
+                            //send a welcome email
+                            emailModule.sendWelcomeEmail(theUser);
+                        }
+                    }
+
+                    function error() {
+                        res.status(401).send({
+                            code: 401,
+                            registrationBanner: true,
+                            bannerClass: 'alert alert-dismissible alert-warning',
+                            msg: 'We could not log you in. Please check your details and try again',
+                            reason: errorLogger(module, 'username entered is already in use')
+                        });
+                    }
                 }
             }
         }

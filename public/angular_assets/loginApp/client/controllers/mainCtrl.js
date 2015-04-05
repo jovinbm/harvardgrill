@@ -154,7 +154,8 @@ angular.module('clientLoginApp')
 
             //******************registration details and functions
             $scope.registrationDetails = {
-                displayName: "",
+                firstName: "",
+                lastName: "",
                 username: "",
                 email: "",
                 updatePassword: false,
@@ -192,7 +193,7 @@ angular.module('clientLoginApp')
                     if (errResponse.loginErrorType == 'user') {
                         //then user is not logged in
                         $scope.isFullyRegistered = false;
-                        $scope.registrationDetails.displayName = errResponse.availableDetails.displayName;
+                        $scope.registrationDetails.displayName = errResponse.availableDetails.firstName;
                         $scope.registrationDetails.username = errResponse.availableDetails.username;
                         $scope.registrationDetails.email = errResponse.availableDetails.email;
                         if (errResponse.updatePassword) {

@@ -27,7 +27,7 @@ module.exports = {
                 timeUniqueCuid: currentGrillStatus.timeUniqueCuid,
                 //orderIndex taken care of by autoIncrement plugin
                 clientName: theUser.username,
-                clientDisplayName: theUser.displayName,
+                clientDisplayName: theUser.firstName,
                 clientUniqueCuid: theUser.uniqueCuid,
                 clientSocketRoom: theUser.socketRoom,
                 //orderTime: default is date.now

@@ -26,6 +26,7 @@ var consoleLogger = require('../functions/basic.js').consoleLogger;
 var userDB = require('../db/user_db.js');
 var User = require("../database/users/user_model.js");
 var bcrypt = require('bcrypt');
+var forms = require('../functions/forms.js');
 
 module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
     passport.use(new OpenIDStrategy({
@@ -42,7 +43,6 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var socketRoom = cuid();
             var isAdmin = 'no';
             var displayName = profile.displayName || "";
-            var realName = profile.displayName || "";
             var email = profile.emails[0].value || "";
             var realEmail = profile.emails[0].value || "";
 
@@ -60,7 +60,6 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                         isAdmin: isAdmin,
                         uniqueCuid: uniqueCuid,
                         socketRoom: socketRoom,
-                        realName: realName,
                         displayName: displayName,
                         realEmail: realEmail,
                         email: email
@@ -89,7 +88,8 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var module = 'LocalStrategy';
             receivedLogger(module);
 
-            if (username.length > 0 && password.length > 0) {
+            var formValidationState = forms.passportValidateUsernameAndPassword(username, password);
+            if (formValidationState == 1) {
                 //this function returns a status of 1 if the user does not exist, and (-1,theUser) if the
                 //user exists
                 //else (-1,err) if there was an error while executing db operations
@@ -183,7 +183,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
             } else {
                 consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed, username and(or) password required'));
-                done('Username and(or) password required. Please try again', false, 'Username and(or) password required. Please try again');
+                done('Username and(or) password required. Please check if you have entered valid data and try again', false, 'Username and(or) password required. Please try again');
             }
         }));
 
