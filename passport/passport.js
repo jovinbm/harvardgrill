@@ -15,10 +15,10 @@ var errorLogger = function (module, text, err) {
 
 
 //harvard openId config
-//var returnURL = "https://harvardgrill.herokuapp.com/harvardId";
-//var realmURL = "https://harvardgrill.herokuapp.com";
-var returnURL = "http://localhost:4000/harvardId";
-var realmURL = "http://localhost:4000/";
+var returnURL = "http://www.harvardgrill.com/harvardId";
+var realmURL = "http://www./harvardgrill.com";
+//var returnURL = "http://localhost:4000/harvardId";
+//var realmURL = "http://localhost:4000/";
 
 var cuid = require('cuid');
 var basic = require('../functions/basic.js');
