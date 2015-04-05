@@ -33,7 +33,7 @@ function getTheUser(req) {
 module.exports = {
     sendWelcomeEmail: function (theUser) {
         transporter.sendMail({
-            from: 'admin@harvardgrill.com',
+            from: '"HarvardGrill" <admin@mg.harvardgrill.com>',
             to: theUser.email,
             subject: 'Welcome to HarvardGrill!',
             html: {
