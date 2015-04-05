@@ -15,10 +15,10 @@ var errorLogger = function (module, text, err) {
 
 
 //harvard openId config
-var returnURL = "http://www.harvardgrill.com/harvardId";
-var realmURL = "http://www.harvardgrill.com";
-//var returnURL = "http://localhost:4000/harvardId";
-//var realmURL = "http://localhost:4000/";
+//var returnURL = "http://www.harvardgrill.com/harvardId";
+//var realmURL = "http://www.harvardgrill.com";
+var returnURL = "http://localhost:4000/harvardId";
+var realmURL = "http://localhost:4000/";
 
 var cuid = require('cuid');
 var basic = require('../functions/basic.js');
@@ -43,8 +43,8 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var isAdmin = 'no';
             var displayName = profile.displayName || "";
             var realName = profile.displayName || "";
-            var email = profile.email || "";
-            var realEmail = profile.email || "";
+            var email = profile.emails[0].value || "";
+            var realEmail = profile.emails[0].value || "";
 
             userDB.findUser(openId, error, error, success);
 
