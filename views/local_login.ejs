@@ -136,7 +136,7 @@
                    placeholder="Enter your username here"
                    ng-model="masterLocalLoginForm.username"
                    ng-minlength="4"
-                   ng-maxlength="7"
+                   ng-maxlength="10"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable"
@@ -148,7 +148,7 @@
                 <small>Minimum length required is 4:</small>
             </span>
             <span class="form-error-notice" ng-show="localLoginForm.username.$error.maxlength">
-                <small>Minimum length required is 7:</small>
+                <small>Maximum length required is 10:</small>
             </span>
             <span class="form-error-notice" ng-show="localLoginForm.username.$error.pattern">
                 <small>Only letters, numbers and underscores allowed:</small>
@@ -176,7 +176,7 @@
                         <small>Minimum length required is 4:</small>
                     </span>
                     <span class="form-error-notice" ng-show="localLoginForm.password.$error.maxlength">
-                        <small>Minimum length required is 20:</small>
+                        <small>Maximum length required is 20:</small>
                     </span>
                     <span class="form-error-notice" ng-show="localLoginForm.password.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
@@ -187,8 +187,7 @@
             <button type="submit"
                     class="btn btn-default btn-danger btn-lg btn-block"
                     ng-disabled="localLoginForm.$invalid"
-                    ng-click="submitLocalLoginForm()"
-                    id="harvardID">SIGN IN
+                    ng-click="submitLocalLoginForm()">SIGN IN
             </button>
         </div>
     </form>
@@ -198,25 +197,25 @@
 
 <!--start of available grills-->
 <div class="container ng-cloak">
-    <p><strong>Available grills</strong></p>
+    <p><strong>Quick overview</strong></p>
 
-    <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12 col-xs-12 ng-cloak"
+    <div class="alert alert-warning col_no_padding col-lg-12 col-md-12 col-sm-12 col-xs-12 ng-cloak"
          ng-if="allGrillStatuses.length ==  0">
         <strong>Oops! There are currently no grills in operation</strong>
     </div>
 
-    <div ng-repeat="(grillName, grillStatus) in allGrillStatusesModel"
+    <div ng-repeat="grill in allGrillStatuses"
          ng-if="allGrillStatuses.length > 0"
-         class="form-group clearfix ng-cloak">
+         class="form-group col_no_padding col-lg-4 col-md-4 col-sm-6 col-xs-12 clearfix ng-cloak">
 
-        <div class="alert alert-success col-lg-6 col-md-6 col-sm-6 col-xs-12"
-             ng-if="grillStatus.grillStatus == 'open'">
-            <strong>{{grillName}}:</strong> Open
+        <div class="alert alert-success"
+             ng-if="grill.grillStatus == 'open'">
+            <strong>{{grill.grillName}}:</strong> Open
         </div>
 
-        <div class="alert alert-warning col-lg-6 col-md-6 col-sm-6 col-xs-12"
-             ng-if="grillStatus.grillStatus == 'closed'">
-            <strong>{{grillName}}:</strong> Closed
+        <div class="alert alert-warning"
+             ng-if="grill.grillStatus == 'closed'">
+            <strong>{{grill.grillName}}:</strong> Closed
         </div>
     </div>
 </div>

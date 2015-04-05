@@ -33,7 +33,7 @@
                 <small>Minimum length required is 4:</small>
             </span>
             <span class="form-error-notice" ng-show="adminRegistrationForm.displayName.$error.maxlength">
-                <small>Minimum length required is 30:</small>
+                <small>Maximum length required is 30:</small>
             </span>
         </div>
 
@@ -46,7 +46,7 @@
                    placeholder="Enter your username here"
                    ng-model="registrationDetails.username"
                    ng-minlength="4"
-                   ng-maxlength="7"
+                   ng-maxlength="10"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable"
@@ -58,7 +58,7 @@
                 <small>Minimum length required is 4:</small>
             </span>
             <span class="form-error-notice" ng-show="adminRegistrationForm.username.$error.maxlength">
-                <small>Minimum length required is 7:</small>
+                <small>Maximum length required is 10:</small>
             </span>
             <span class="form-error-notice" ng-show="adminRegistrationForm.username.$error.pattern">
                 <small>Only letters, numbers and underscores allowed:</small>
@@ -78,12 +78,6 @@
                    name="email">
             <span class="form-error-notice" ng-show="adminRegistrationForm.email.$error.required">
                 <small>This is a required field:</small>
-            </span>
-            <span class="form-error-notice" ng-show="adminRegistrationForm.email.$error.minlength">
-                <small>Minimum length required is 4:</small>
-            </span>
-            <span class="form-error-notice" ng-show="adminRegistrationForm.email.$error.maxlength">
-                <small>Minimum length required is 15:</small>
             </span>
             <span class="form-error-notice" ng-show="adminRegistrationForm.email.$error.pattern">
                 <small>Email: you@example.com</small>
@@ -113,7 +107,7 @@
                         <small>Minimum length required is 4:</small>
                     </span>
                     <span class="form-error-notice" ng-show="adminRegistrationForm.password1.$error.maxlength">
-                        <small>Minimum length required is 20:</small>
+                        <small>Maximum length required is 20:</small>
                     </span>
                     <span class="form-error-notice" ng-show="adminRegistrationForm.password1.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
@@ -145,7 +139,7 @@
                         <small>Minimum length required is 4:</small>
                     </span>
                     <span class="form-error-notice" ng-show="adminRegistrationForm.password2.$error.maxlength">
-                        <small>Minimum length required is 20:</small>
+                        <small>Maximum length required is 20:</small>
                     </span>
                     <span class="form-error-notice" ng-show="adminRegistrationForm.password2.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
@@ -162,8 +156,7 @@
             <button type="submit"
                     class="btn btn-default btn-danger btn-lg btn-block"
                     ng-disabled="adminRegistrationForm.$invalid || isLoading || universalDisable"
-                    ng-click="submitUpdatedDetails()"
-                    id="harvardID">LOGIN
+                    ng-click="submitUpdatedDetails()">LOGIN
             </button>
         </div>
 
@@ -173,8 +166,7 @@
             <button type="submit"
                     class="btn btn-default btn-danger btn-lg btn-block"
                     ng-disabled="registrationDetails.password1 != registrationDetails.password2 || adminRegistrationForm.$invalid || isLoading || universalDisable"
-                    ng-click="submitUpdatedDetails()"
-                    id="harvardID">LOGIN
+                    ng-click="submitUpdatedDetails()">LOGIN
             </button>
         </div>
     </form>
