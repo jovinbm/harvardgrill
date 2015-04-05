@@ -16,7 +16,7 @@ var errorLogger = function (module, text, err) {
 
 //harvard openId config
 var returnURL = "http://www.harvardgrill.com/harvardId";
-var realmURL = "http://www./harvardgrill.com";
+var realmURL = "http://www.harvardgrill.com";
 //var returnURL = "http://localhost:4000/harvardId";
 //var realmURL = "http://localhost:4000/";
 
