@@ -43,58 +43,126 @@ module.exports = {
     logoutClientSession: function (req, res) {
         var module = 'logoutClientSession';
         receivedLogger(module);
-        //the logout_api toggles the customLoggedInStatus -- respond with a success, angular client will redirect
-        res.status(200).send({
-            code: 200,
-            notify: false,
-            redirect: true,
-            redirectPage: "/clientLogin.html"
-        });
-        consoleLogger(successLogger(module));
+        var theUser = getTheUser(req);
+        //change the user's grill to default
+        userDB.updateGrillName(theUser.openId, 'default', error, error, success);
+
+        function success() {
+            //the logout_api toggles the customLoggedInStatus -- respond with a success, angular client will redirect
+            res.status(200).send({
+                code: 200,
+                notify: false,
+                redirect: true,
+                redirectPage: "/clientLogin.html"
+            });
+            consoleLogger(successLogger(module));
+        }
+
+        function error(status, err) {
+            consoleLogger(errorLogger(module, err, err));
+            res.status(500).send({
+                code: 500,
+                notify: true,
+                type: 'error',
+                msg: 'An error occurred while trying to log you out. Please try again',
+                reason: errorLogger(module, err, err)
+            });
+        }
     },
 
 
     logoutClientFull: function (req, res) {
         var module = 'logoutClientFull';
         receivedLogger(module);
-        //delete the harvard cs50 ID session
-        req.logout();
-        //send a success so that the user will be logged out and redirected to login by clientAngular
-        res.status(200).send({
-            code: 200,
-            notify: false,
-            redirect: true,
-            redirectPage: "/login.html"
-        });
-        consoleLogger(successLogger(module));
+        var theUser = getTheUser(req);
+        //change the user's grill to default
+        userDB.updateGrillName(theUser.openId, 'default', error, error, success);
+
+        function success() {
+            //delete the harvard cs50 ID session
+            req.logout();
+            consoleLogger(successLogger(module));
+            //send a success so that the user will be logged out and redirected to login by clientAngular
+            res.status(200).send({
+                code: 200,
+                notify: false,
+                redirect: true,
+                redirectPage: "/login.html"
+            });
+        }
+
+        function error(status, err) {
+            consoleLogger(errorLogger(module, err, err));
+            res.status(500).send({
+                code: 500,
+                notify: true,
+                type: 'error',
+                msg: 'An error occurred while trying to log you out. Please try again',
+                reason: errorLogger(module, err, err)
+            });
+        }
     },
 
     logoutAdminSession: function (req, res) {
         var module = 'logoutAdminSession';
         receivedLogger(module);
-        //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
-        res.status(200).send({
-            code: 200,
-            notify: false,
-            redirect: true,
-            redirectPage: "/adminLogin.html"
-        });
-        consoleLogger(successLogger(module));
+        var theUser = getTheUser(req);
+
+        //change the user's grill to default
+        userDB.updateGrillName(theUser.openId, 'default', error, error, success);
+        function success() {
+            consoleLogger(successLogger(module));
+            //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
+            res.status(200).send({
+                code: 200,
+                notify: false,
+                redirect: true,
+                redirectPage: "/adminLogin.html"
+            });
+        }
+
+        function error(status, err) {
+            consoleLogger(errorLogger(module, err, err));
+            res.status(500).send({
+                code: 500,
+                notify: true,
+                type: 'error',
+                msg: 'An error occurred while trying to log you out. Please try again',
+                reason: errorLogger(module, err, err)
+            });
+        }
     },
 
 
     logoutAdminFull: function (req, res) {
         var module = 'logoutAdminFull';
         receivedLogger(module);
-        //the logout_api toggles the customLoggedInStatus -- respond with a success, client will redirect
-        req.logout();
-        res.status(200).send({
-            code: 200,
-            notify: false,
-            redirect: true,
-            redirectPage: "/localLogin.html"
-        });
-        consoleLogger(successLogger(module));
+        var theUser = getTheUser(req);
+
+        //change the user's grill to default
+        userDB.updateGrillName(theUser.openId, 'default', error, error, success);
+
+        function success() {
+            req.logout();
+            res.status(200).send({
+                code: 200,
+                notify: false,
+                redirect: true,
+                redirectPage: "/localLogin.html"
+            });
+            consoleLogger(successLogger(module));
+        }
+
+        function error(status, err) {
+            consoleLogger(errorLogger(module, err, err));
+            res.status(500).send({
+                code: 500,
+                notify: true,
+                type: 'error',
+                msg: 'An error occurred while trying to log you out. Please try again',
+                reason: errorLogger(module, err, err)
+            });
+        }
     }
 
 
