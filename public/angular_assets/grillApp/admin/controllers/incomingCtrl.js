@@ -69,6 +69,16 @@ angular.module('grillApp')
 
             //*****************admin order actions*********************
 
+            $scope.increaseComponentQuantity = function (orderIndex, componentIndex) {
+                $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] = $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] + 1;
+            };
+
+            $scope.decreaseComponentQuantity = function (orderIndex, componentIndex) {
+                if ($scope.processedOrderModels[orderIndex][componentIndex]['quantity'] > 1) {
+                    $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] = $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] - 1;
+                }
+            };
+
             $scope.markOrderAsDone = function (orderUniqueCuid, orderIndex) {
                 $scope.isLoadingTrue();
 
@@ -79,8 +89,11 @@ angular.module('grillApp')
 
                     if ($scope.processedOrderModels[orderIndex].hasOwnProperty(componentIndex)) {
 
-                        if ($scope.processedOrderModels[orderIndex][componentIndex] == 'yes') {
-                            processedOrderComponents.push(componentIndex);
+                        if ($scope.processedOrderModels[orderIndex][componentIndex]['isSelected'] == 'yes') {
+                            processedOrderComponents.push({
+                                componentIndex: componentIndex,
+                                quantity: $scope.processedOrderModels[orderIndex][componentIndex]['quantity']
+                            });
                         }
 
                     }
@@ -184,11 +197,18 @@ angular.module('grillApp')
 
                     //updates the processedOrderModels
                     $scope.processedOrderModels[order.orderIndex] = {};
-                    order.orderComponents.forEach(function (componentIndex) {
+                    order.orderComponents.forEach(function (componentIndexCarrierObject) {
+                        //the "componentIndexCarrierObject" in the orderComponents array has the format {componentIndex: 1, quantity: 1}
 
                         //set the default to yes, as this makes it easy for thr admin to un-check unavailable
                         //than available
-                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'yes';
+                        if (!$scope.processedOrderModels[order.orderIndex][componentIndexCarrierObject.componentIndex]) {
+                            $scope.processedOrderModels[order.orderIndex][componentIndexCarrierObject.componentIndex] = {};
+                        }
+                        $scope.processedOrderModels[order.orderIndex][componentIndexCarrierObject.componentIndex] = {
+                            isSelected: 'yes',
+                            quantity: componentIndexCarrierObject.quantity
+                        };
                     });
 
                     //momentJS time is time it was ordered e.g. Sun, Mar 17..
@@ -197,6 +217,8 @@ angular.module('grillApp')
                     //theTimeAgo is interval from the time it was ordered eg 10 mins ago
                     order.theTimeAgo = $filter('timeago')(order.orderTime);
                 });
+
+                //REFRESH THE WHOLE CURRENTINCOMINGORDERS
                 $scope.currentIncomingOrders = data;
             });
 
@@ -206,11 +228,18 @@ angular.module('grillApp')
 
                     //updates the processedOrderModels
                     $scope.processedOrderModels[order.orderIndex] = {};
-                    order.orderComponents.forEach(function (componentIndex) {
+                    order.orderComponents.forEach(function (componentIndexCarrierObject) {
+                        //the "componentIndexCarrierObject" in the orderComponents array has the format {componentIndex: 1, quantity: 1}
 
-                        //set the default to yes, as this makes it easy for thr admin to uncheck unavailable
+                        //set the default to yes, as this makes it easy for thr admin to un-check unavailable
                         //than available
-                        $scope.processedOrderModels[order.orderIndex][componentIndex] = 'yes';
+                        if (!$scope.processedOrderModels[order.orderIndex][componentIndexCarrierObject.componentIndex]) {
+                            $scope.processedOrderModels[order.orderIndex][componentIndexCarrierObject.componentIndex] = {};
+                        }
+                        $scope.processedOrderModels[order.orderIndex][componentIndexCarrierObject.componentIndex] = {
+                            isSelected: 'yes',
+                            quantity: componentIndexCarrierObject.quantity
+                        };
                     });
 
                     order.theTimeAgo = $filter('timeago')(order.orderTime);
@@ -218,6 +247,7 @@ angular.module('grillApp')
                     order.theTimeAgo = $filter('timeago')(order.orderTime);
                 });
 
+                //HERE WE DONT REFRESH, WE JUST PUSH THE NEW DATA
                 //push the one order, which is of course the first element of the array received
                 //only push if the data contains some order, to avoid pushing null
                 if (data.length > 0) {

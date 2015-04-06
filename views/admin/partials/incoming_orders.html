@@ -3,7 +3,7 @@
     <h1 class="column-heading"><i class="fa fa-list-alt"></i> INCOMING ORDERS
     </h1>
 
-    <!--pregress banner that awaits new orders-->
+    <!--progress banner that awaits new orders-->
     <div class="alert alert-info ng-cloak"
          ng-if="currentIncomingOrders.length == 0">
         <strong>Awaiting new orders</strong><br/>
@@ -23,24 +23,48 @@
 
             <div class="card">
 
-                <div class="card-content ng-cloak">
+                <div class="card-content ng-cloak clearfix">
                     <h2>{{order.momentJsTime}}<br/>
                         <small>{{order.theTimeAgo}}</small>
                     </h2>
 
-                    <ul class="list-unstyled">
+                    <div class="col_no_padding col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
 
-                        <li class="list-unstyled clearfix"
-                            ng-repeat="component in order.orderComponents">
-                            <input type="checkbox"
-                                   ng-disabled="isLoading || universalDisable"
-                                   ng-model="processedOrderModels[order.orderIndex][component]"
-                                   ng-true-value="'yes'"
-                                   ng-false-value="'no'"> {{allComponentsIndexNames[component]}}
-                        </li>
-
-                    </ul>
-
+                        <div class="table-responsive clearfix">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Quantity</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="componentCarrierObject in order.orderComponents">
+                                    <td><input type="checkbox"
+                                               ng-disabled="isLoading || universalDisable"
+                                               ng-model="processedOrderModels[order.orderIndex][componentCarrierObject.componentIndex]['isSelected']"
+                                               ng-true-value="'yes'"
+                                               ng-false-value="'no'">
+                                        {{allComponentsIndexNames[componentCarrierObject.componentIndex]}} x
+                                        {{processedOrderModels[order.orderIndex][componentCarrierObject.componentIndex]['quantity']}}
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-sm btn-default"
+                                                ng-click="increaseComponentQuantity(order.orderIndex, componentCarrierObject.componentIndex)">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-sm btn-default"
+                                                ng-click="decreaseComponentQuantity(order.orderIndex, componentCarrierObject.componentIndex)">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-action clearfix ng-cloak">

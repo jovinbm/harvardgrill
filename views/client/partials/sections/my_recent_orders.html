@@ -16,25 +16,28 @@
 
                 <ul class="list-unstyled"
                     ng-if="recentOrder.status == 'processing'"
-                    ng-repeat="componentIndex in recentOrder.orderComponents">
+                    ng-repeat="componentCarrierObject in recentOrder.orderComponents">
                     <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
-                        {{allAvailableCombinedObject[componentIndex].name}}
+                        {{allAvailableCombinedObject[componentCarrierObject.componentIndex].name}} x
+                        {{componentCarrierObject.quantity}}
                     </li>
                 </ul>
 
                 <ul class="list-unstyled"
                     ng-if="recentOrder.status == 'declined'"
-                    ng-repeat="componentIndex in recentOrder.orderComponents">
+                    ng-repeat="componentCarrierObject in recentOrder.orderComponents">
                     <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
-                        {{allAvailableCombinedObject[componentIndex].name}}
+                        {{allAvailableCombinedObject[componentCarrierObject.componentIndex].name}} x
+                        {{componentCarrierObject.quantity}}
                     </li>
                 </ul>
 
                 <ul class="list-unstyled"
                     ng-if="recentOrder.status == 'done'"
-                    ng-repeat="componentIndex in recentOrder.processedOrderComponents">
+                    ng-repeat="componentCarrierObject in recentOrder.processedOrderComponents">
                     <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
-                        {{allAvailableCombinedObject[componentIndex].name}}
+                        {{allAvailableCombinedObject[componentCarrierObject.componentIndex].name}} x
+                        {{componentCarrierObject.quantity}}
                     </li>
                 </ul>
 

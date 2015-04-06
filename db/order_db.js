@@ -13,9 +13,9 @@ module.exports = {
         function success2() {
             //update each component's total orders and last order time
             //it is hard to poll these when needed.
-            theOrder.forEach(function (componentIndex) {
+            theOrder.forEach(function (carrierObject) {
                 //note that no success is been provided here
-                qUpdates.componentUpdateComponentTotalOrdersAndLastOrderTime(grillName, componentIndex, error_neg_1, error_0);
+                qUpdates.componentUpdateComponentTotalOrdersAndLastOrderTime(grillName, carrierObject['componentIndex'], carrierObject['quantity'], error_neg_1, error_0);
             });
 
             //save the new order

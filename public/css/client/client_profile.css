@@ -10,3 +10,7 @@
     margin-bottom: 5px;
     font-size: 12px;
 }
+
+.col_no_padding {
+    padding-left: 0;
+}

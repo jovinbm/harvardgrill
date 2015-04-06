@@ -11,7 +11,7 @@
             </h4>
         </div>
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Order Components</h6>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
@@ -20,7 +20,7 @@
                     <label>
                         <input type="checkbox"
                                ng-disabled="isLoading || universalDisable"
-                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-model="myNewOrder[component.componentIndex]['isSelected']"
                                ng-true-value="'yes'"
                                ng-false-value="'no'"> {{component.name}}
                     </label>
@@ -30,7 +30,7 @@
         </div>
 
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Omelets</h6>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
@@ -39,7 +39,7 @@
                     <label>
                         <input type="checkbox"
                                ng-disabled="isLoading || universalDisable"
-                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-model="myNewOrder[component.componentIndex]['isSelected']"
                                ng-true-value="'yes'"
                                ng-false-value="'no'"> {{component.name}}
                     </label>
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Extras</h6>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
@@ -56,7 +56,7 @@
                     <label>
                         <input type="checkbox"
                                ng-disabled="isLoading || universalDisable"
-                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-model="myNewOrder[component.componentIndex]['isSelected']"
                                ng-true-value="'yes'"
                                ng-false-value="'no'"> {{component.name}}
                     </label>
@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Weekly Special</h6>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
@@ -73,11 +73,60 @@
                     <label>
                         <input type="checkbox"
                                ng-disabled="isLoading || universalDisable"
-                               ng-model="myNewOrder[component.componentIndex]"
+                               ng-model="myNewOrder[component.componentIndex]['isSelected']"
                                ng-true-value="'yes'"
                                ng-false-value="'no'"> {{component.name}}
                     </label>
                 </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
+            <h6><strong>CONFIRM</strong></h6>
+
+            <div class="table-responsive clearfix">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="component in availableOrderComponents"
+                        ng-if="myNewOrder[component.componentIndex]['isSelected'] == 'yes'">
+                        <td>{{component.name}} x {{myNewOrder[component.componentIndex]['quantity']}}</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-sm btn-default"
+                                    ng-click="increaseComponentQuantity(component.componentIndex)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-default"
+                                    ng-click="decreaseComponentQuantity(component.componentIndex)">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="component in availableWeeklySpecials"
+                        ng-if="myNewOrder[component.componentIndex]['isSelected'] == 'yes'">
+                        <td>{{component.name}} x {{myNewOrder[component.componentIndex]['quantity']}}</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-sm btn-default"
+                                    ng-click="increaseComponentQuantity(component.componentIndex)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-default"
+                                    ng-click="decreaseComponentQuantity(component.componentIndex)">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

@@ -173,6 +173,7 @@ angular.module('grillApp')
             //and it's values can either be yes, or no, depending on whether the user has checked the checkbox on the main
             //order card. The act as ng-models for the checkboxes
             //n.b. initially, all values are set to 'no', and after ordering, all values should be set to no again
+            //UPDATE: its keys = indexes, its values by default are {isSelected: 'no', quantity: '1'}
             $scope.myNewOrder = {};
 
             //request available components;
@@ -190,8 +191,13 @@ angular.module('grillApp')
                         });
 
                         if (refreshMyNewOrder) {
-                            $scope.availableExtras.forEach(function (component) {
-                                $scope.myNewOrder[component.componentIndex] = 'no';
+                            $scope.availableOrderComponents.forEach(function (component) {
+                                //check if the object is already set, if not, set it to {} first
+                                if (!$scope.myNewOrder[component.componentIndex]) {
+                                    $scope.myNewOrder[component.componentIndex] = {};
+                                }
+                                $scope.myNewOrder[component.componentIndex]['isSelected'] = 'no';
+                                $scope.myNewOrder[component.componentIndex]['quantity'] = 1;
                             });
                         }
                         $scope.responseStatusHandler(orderComponents);
@@ -211,8 +217,13 @@ angular.module('grillApp')
                         });
 
                         if (refreshMyNewOrder) {
-                            $scope.availableExtras.forEach(function (component) {
-                                $scope.myNewOrder[component.componentIndex] = 'no';
+                            $scope.availableOmelets.forEach(function (component) {
+                                //check if the object is already set, if not, set it to {} first
+                                if (!$scope.myNewOrder[component.componentIndex]) {
+                                    $scope.myNewOrder[component.componentIndex] = {};
+                                }
+                                $scope.myNewOrder[component.componentIndex]['isSelected'] = 'no';
+                                $scope.myNewOrder[component.componentIndex]['quantity'] = 1;
                             });
                         }
 
@@ -234,8 +245,13 @@ angular.module('grillApp')
                         });
 
                         if (refreshMyNewOrder) {
-                            $scope.availableExtras.forEach(function (component) {
-                                $scope.myNewOrder[component.componentIndex] = 'no';
+                            $scope.availableWeeklySpecials.forEach(function (component) {
+                                //check if the object is already set, if not, set it to {} first
+                                if (!$scope.myNewOrder[component.componentIndex]) {
+                                    $scope.myNewOrder[component.componentIndex] = {};
+                                }
+                                $scope.myNewOrder[component.componentIndex]['isSelected'] = 'no';
+                                $scope.myNewOrder[component.componentIndex]['quantity'] = 1;
                             });
                         }
                         $scope.responseStatusHandler(orderComponents);
@@ -256,7 +272,12 @@ angular.module('grillApp')
 
                         if (refreshMyNewOrder) {
                             $scope.availableExtras.forEach(function (component) {
-                                $scope.myNewOrder[component.componentIndex] = 'no';
+                                //check if the object is already set, if not, set it to {} first
+                                if (!$scope.myNewOrder[component.componentIndex]) {
+                                    $scope.myNewOrder[component.componentIndex] = {};
+                                }
+                                $scope.myNewOrder[component.componentIndex]['isSelected'] = 'no';
+                                $scope.myNewOrder[component.componentIndex]['quantity'] = 1;
                             });
                         }
 
@@ -291,6 +312,17 @@ angular.module('grillApp')
 
 
             //***************************functions that deal with sending new orders
+
+            $scope.increaseComponentQuantity = function (componentIndex) {
+                $scope.myNewOrder[componentIndex]['quantity'] = $scope.myNewOrder[componentIndex]['quantity'] + 1;
+            };
+
+            $scope.decreaseComponentQuantity = function (componentIndex) {
+                if ($scope.myNewOrder[componentIndex]['quantity'] > 1) {
+                    $scope.myNewOrder[componentIndex]['quantity'] = $scope.myNewOrder[componentIndex]['quantity'] - 1;
+                }
+            };
+
             $scope.placeMyNewOrderOrder = function () {
                 $scope.isLoadingTrue();
                 var orderComponentIndexArray = [];
@@ -300,14 +332,17 @@ angular.module('grillApp')
 
                     if ($scope.myNewOrder.hasOwnProperty(componentIndex)) {
 
-                        if ($scope.myNewOrder[componentIndex] == 'yes') {
-                            orderComponentIndexArray.push(componentIndex);
+                        if ($scope.myNewOrder[componentIndex]['isSelected'] == 'yes') {
+                            //this is gonna push the selected component together with it's quantity
+                            orderComponentIndexArray.push({
+                                componentIndex: componentIndex,
+                                quantity: $scope.myNewOrder[componentIndex]['quantity']
+                            });
                         }
 
                     }
 
                 }
-
 
                 if (orderComponentIndexArray.length > 0) {
                     ComponentService.placeMyNewOrder(orderComponentIndexArray)

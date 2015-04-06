@@ -90,3 +90,7 @@ div.increase_margin_for__mobile {
 .edit-section > h4 {
     font-size: 1.2em;
 }
+
+.col_no_padding {
+    padding-left: 0;
+}

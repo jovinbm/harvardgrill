@@ -117,3 +117,7 @@ div.alert.grill_open_or_close_top_banner {
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+.col_no_padding {
+    padding-left: 0;
+}

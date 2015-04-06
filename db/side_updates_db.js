@@ -126,13 +126,13 @@ function userUpdateUserTotalUnattendedOrders(openId, error_neg_1, error_0, succe
 }
 
 
-function componentUpdateComponentTotalOrdersAndLastOrderTime(grillName, componentIndex, error_neg_1, error_0, success) {
+function componentUpdateComponentTotalOrdersAndLastOrderTime(grillName, componentIndex, quantity, error_neg_1, error_0, success) {
     Component.update({
             grillName: grillName,
             componentIndex: componentIndex
         }, {
             $inc: {
-                totalOrders: 1
+                totalOrders: quantity
             },
             $currentDate: {
                 lastOrderTime: true
@@ -185,8 +185,8 @@ module.exports = {
         userUpdateUserTotalUnattendedOrders(openId, error_neg_1, error_0, success);
     },
 
-    componentUpdateComponentTotalOrdersAndLastOrderTime: function (grillName, componentIndex, error_neg_1, error_0, success) {
-        componentUpdateComponentTotalOrdersAndLastOrderTime(grillName, componentIndex, error_neg_1, error_0, success);
+    componentUpdateComponentTotalOrdersAndLastOrderTime: function (grillName, componentIndex, quantity, error_neg_1, error_0, success) {
+        componentUpdateComponentTotalOrdersAndLastOrderTime(grillName, componentIndex, quantity, error_neg_1, error_0, success);
     },
 
     componentUpdateComponentRates: function (grillName, componentIndex, amount, error_neg_1, error_0, success) {
