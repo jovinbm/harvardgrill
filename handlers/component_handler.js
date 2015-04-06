@@ -110,8 +110,9 @@ module.exports = {
     },
 
 
-    deleteComponent: function (req, res, theUser, currentGrillStatus, componentIndex) {
+    deleteComponent: function (req, res, componentIndex) {
         var module = 'deleteComponent';
+        var theUser = getTheUser(req);
         receivedLogger(module);
         componentDB.deleteComponent(theUser.grillName, theUser, componentIndex, error, error, success);
 

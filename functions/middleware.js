@@ -94,7 +94,7 @@ module.exports = {
         var module = "addUserGrillStatus";
         //skip if the grillName is 'profile' because the user will be heading to see their profile
 
-        if (req.customData.theUser.grillName == 'profile') {
+        if (req.customData.theUser.grillName == 'default') {
             //put empty grillStatus
             req.customData.currentGrillStatus = [];
             consoleLogger(successLogger(module));
@@ -109,9 +109,32 @@ module.exports = {
             }
 
             function error(status, err) {
-                if (status == 0) {
-                    //means the grill the user is looking for is not found. This is a big error
-                    //redirect the user to clientLogin
+                //means the grill the user is looking for is not found. This is a big error
+                //redirect the user to clientLogin
+
+                //logout user
+                userDB.updateCuCls(req.customData.theUser.openId, req.customData.theUser.username, 0, errorLogout, errorLogout, success1);
+                function success1() {
+                    userDB.updateGrillName(req.customData.theUser.openId, 'default', errorLogout, errorLogout, success2);
+                }
+
+                function errorLogout() {
+                    req.logout();
+                    res.status(500).send({
+                        code: 500,
+                        notify: true,
+                        type: 'warning',
+                        msg: 'We could not find the grill you were currently in. Please reload this page',
+                        reason: errorLogger(module, 'error logout user'),
+                        disable: true,
+                        redirect: true,
+                        redirectPage: '/login.html'
+                    });
+                    consoleLogger(errorLogger(module, 'error logout user', err));
+                }
+
+                function success2() {
+                    req.logout();
                     res.status(500).send({
                         code: 500,
                         notify: true,
@@ -125,15 +148,6 @@ module.exports = {
                         redirectPage: '/login.html'
                     });
                     consoleLogger(errorLogger(module, 'GrillStatus Not found', err));
-                } else {
-                    res.status(500).send({
-                        code: 500,
-                        notify: true,
-                        type: 'error',
-                        msg: 'An error occurred while retrieving grill info. Please reload the page',
-                        reason: errorLogger(module, 'error finding grill status')
-                    });
-                    consoleLogger(errorLogger(module, 'error finding grillStatus', err));
                 }
             }
         }

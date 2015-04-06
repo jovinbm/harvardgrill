@@ -14,7 +14,7 @@ var userSchema = new Schema({
     email: {type: String, default: "", unique: false, index: true},
     password: {type: String, default: "", unique: false, index: true},
     customLoggedInStatus: {type: Number, default: 0, unique: false, index: true},
-    grillName: {type: String, required: true, default: "profile", unique: false, index: true},
+    grillName: {type: String, required: true, default: "default", unique: false, index: true},
     totalOrders: {type: Number, default: 0, unique: false, index: true},
     totalUnattendedOrders: {type: Number, default: 0, unique: false, index: true},
     favouriteOrdersIndexes: {type: Array, "default": [], unique: false, index: true},
