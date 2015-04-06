@@ -1,6 +1,7 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var Stats = require("../database/stats/stats_model.js");
+var Component = require("../database/order_components/component_model.js");
 var cuid = require('cuid');
 var qUpdates = require("./side_updates_db.js");
 
@@ -72,7 +73,17 @@ module.exports = {
                     if (err) {
                         error_neg_1(-1, err);
                     } else {
-                        success();
+                        Component.
+                            remove({
+                                grillName: grillName
+                            })
+                            .exec(function (err) {
+                                if (err) {
+                                    error_neg_1(-1, err);
+                                } else {
+                                    success();
+                                }
+                            });
                     }
                 })
         }
