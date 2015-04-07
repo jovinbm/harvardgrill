@@ -77,17 +77,14 @@ module.exports = {
 
         function errorIndexes(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not retrieve componentIndexesSuccess', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not retrieve componentIndexesSuccess', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not retrieve componentIndexesSuccess', err));
             }
         }
     },

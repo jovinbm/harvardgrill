@@ -53,8 +53,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page",
-                    reason: errorLogger(module, 'Could not open grill', err)
+                    msg: "A problem has occurred while trying to open grill. Please try again. If the problem persists, please reload this page"
                 });
             }
         }
@@ -85,8 +84,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page",
-                    reason: errorLogger(module, 'Could not close grill', err)
+                    msg: "A problem has occurred while trying to close grill. Please try again. If the problem persists, please reload this page"
                 });
             }
         }
@@ -118,8 +116,7 @@ module.exports = {
                         code: 500,
                         notify: true,
                         type: 'warning',
-                        msg: "An error occurred while creating the new grill. Please try again",
-                        reason: errorLogger(module, 'Error creating grill', err)
+                        msg: "An error occurred while creating the new grill. Please try again"
                     });
                 }
 
@@ -130,8 +127,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "A grill with a similar name exists. Use a different name",
-                    reason: errorLogger(module, 'Grill with similar name exists')
+                    msg: "A grill with a similar name exists. Use a different name"
                 });
             }
         }
@@ -142,8 +138,7 @@ module.exports = {
                 code: 500,
                 notify: true,
                 type: 'warning',
-                msg: "An error occurred while creating the new grill. Please try again",
-                reason: errorLogger(module, 'Error creating grill', err)
+                msg: "An error occurred while creating the new grill. Please try again"
             });
         }
     },
@@ -174,8 +169,7 @@ module.exports = {
                         code: 500,
                         notify: true,
                         type: 'warning',
-                        msg: "An error occurred while deleting. Please try again",
-                        reason: errorLogger(module, 'Error deleting grill', err)
+                        msg: "An error occurred while deleting. Please try again"
                     });
                 }
             } else {
@@ -185,8 +179,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "We could not find the grill. Please try again or refresh this page",
-                    reason: errorLogger(module, 'Did not find grill')
+                    msg: "We could not find the grill. Please try again or refresh this page"
                 });
             }
         }
@@ -197,8 +190,7 @@ module.exports = {
                 code: 500,
                 notify: true,
                 type: 'warning',
-                msg: "An error occurred while deleting. Please try again",
-                reason: errorLogger(module, 'Error deleting grill', err)
+                msg: "An error occurred while deleting. Please try again"
             });
         }
     },
@@ -237,8 +229,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: 'Update failed, please try again. If problem persists please reload this page',
-                    reason: errorLogger(module, 'Could not update available components', err)
+                    msg: 'Update failed, please try again. If problem persists please reload this page'
                 });
             }
         }

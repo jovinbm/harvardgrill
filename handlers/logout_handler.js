@@ -64,8 +64,7 @@ module.exports = {
                 code: 500,
                 notify: true,
                 type: 'error',
-                msg: 'An error occurred while trying to log you out. Please try again',
-                reason: errorLogger(module, err, err)
+                msg: 'An error occurred while trying to log you out. Please try again'
             });
         }
     },
@@ -97,8 +96,7 @@ module.exports = {
                 code: 500,
                 notify: true,
                 type: 'error',
-                msg: 'An error occurred while trying to log you out. Please try again',
-                reason: errorLogger(module, err, err)
+                msg: 'An error occurred while trying to log you out. Please try again'
             });
         }
     },
@@ -127,8 +125,7 @@ module.exports = {
                 code: 500,
                 notify: true,
                 type: 'error',
-                msg: 'An error occurred while trying to log you out. Please try again',
-                reason: errorLogger(module, err, err)
+                msg: 'An error occurred while trying to log you out. Please try again'
             });
         }
     },
@@ -159,8 +156,7 @@ module.exports = {
                 code: 500,
                 notify: true,
                 type: 'error',
-                msg: 'An error occurred while trying to log you out. Please try again',
-                reason: errorLogger(module, err, err)
+                msg: 'An error occurred while trying to log you out. Please try again'
             });
         }
     }

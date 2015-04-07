@@ -66,8 +66,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: 'Failed to add, please try again. If problem persists, please reload this page',
-                    reason: errorLogger(module, 'Could not add component', err)
+                    msg: 'Failed to add, please try again. If problem persists, please reload this page'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not add component', err));
             }
@@ -98,11 +97,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: 'Failed to save, please try again. If problem persists, please reload this page',
-                    reason: errorLogger(module, 'Could not save component', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    msg: 'Failed to save, please try again. If problem persists, please reload this page'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not save component', err));
             }
@@ -133,8 +128,7 @@ module.exports = {
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: 'Failed to delete, please try again. If problem persists, please reload this page',
-                    reason: errorLogger(module, 'Could not delete component', err)
+                    msg: 'Failed to delete, please try again. If problem persists, please reload this page'
                 });
                 consoleLogger(errorLogger(module, 'Failed! Could not delete component', err));
             }
@@ -179,7 +173,6 @@ module.exports = {
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
-                    reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
                     redirect: false,
                     redirectPage: '/error/500.html'
@@ -228,7 +221,6 @@ module.exports = {
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page:",
-                    reason: errorLogger(module, 'Could not retrieve components', err),
                     disable: true,
                     redirect: false,
                     redirectPage: '/error/500.html'

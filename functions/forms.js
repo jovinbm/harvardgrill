@@ -91,8 +91,7 @@ module.exports = {
                 code: 401,
                 registrationBanner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: errorMessage,
-                reason: errorLogger(module, errorMessage)
+                msg: errorMessage
             });
         }
     },
@@ -124,8 +123,7 @@ module.exports = {
                 code: 401,
                 registrationBanner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: errorMessage,
-                reason: errorLogger(module, errorMessage)
+                msg: errorMessage
             });
         }
     },
@@ -149,8 +147,7 @@ module.exports = {
                 code: 401,
                 registrationBanner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: errorMessage,
-                reason: errorLogger(module, errorMessage)
+                msg: errorMessage
             });
         }
     },

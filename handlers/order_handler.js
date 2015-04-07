@@ -48,17 +48,13 @@ module.exports = {
 
         function errorSavingOrder(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not save new order', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "Your order could not be sent. Please try again. If this problem persists, please reload this page",
-                    reason: errorLogger(module, 'Could not save new order', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    msg: "Your order could not be sent. Please try again. If this problem persists, please reload this page"
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not save new order', err));
             }
         }
     },
@@ -82,17 +78,13 @@ module.exports = {
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve client orders', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
-                    msg: 'A problem has occurred. Please reload page',
-                    reason: errorLogger(module, 'Could not retrieve client orders', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    msg: 'A problem has occurred. Please reload page'
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not retrieve client orders', err));
             }
         }
     },
@@ -115,17 +107,14 @@ module.exports = {
 
         function error(status, err) {
             if (status == -1) {
+                consoleLogger(errorLogger(module, 'Failed! Could not get recent orders', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not get recent orders', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    disable: true
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not get recent orders', err));
             }
         }
     },
@@ -152,17 +141,13 @@ module.exports = {
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not get recent orders', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "Could not mark order as done. Please try again. If problem persists, please reload this page",
-                    reason: errorLogger(module, 'Could not mark order as done', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    msg: "Could not mark order as done. Please try again. If problem persists, please reload this page"
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not get recent orders', err));
             }
         }
     },
@@ -190,17 +175,13 @@ module.exports = {
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not mark order as declined', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
-                    msg: "Could not mark order as declined. Please try again. If problem persists, please reload this page",
-                    reason: errorLogger(module, 'Could not mark order as declined', err),
-                    disable: false,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    msg: "Could not mark order as declined. Please try again. If problem persists, please reload this page"
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not mark order as declined', err));
             }
         }
     }

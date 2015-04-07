@@ -48,17 +48,14 @@ module.exports = {
 
         function errorToggle(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
             }
         }
     },
@@ -75,17 +72,14 @@ module.exports = {
 
         function errorToggle(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please try again",
-                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
             }
         }
     },
@@ -102,17 +96,14 @@ module.exports = {
 
         function errorToggle(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please reload the page",
-                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
             }
         }
     },
@@ -129,17 +120,14 @@ module.exports = {
 
         function errorToggle(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: "A problem has occurred. Please try again",
-                    reason: errorLogger(module, 'Could not toggle customLoggedIn status', err),
-                    disable: true,
-                    redirect: false,
-                    redirectPage: '/error/500.html'
+                    disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not toggle customLoggedIn status', err));
             }
         }
     }

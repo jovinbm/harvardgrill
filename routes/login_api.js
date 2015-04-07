@@ -88,15 +88,14 @@ module.exports = {
 
         function errorAllGrillStatus(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: 'An error occurred. Please reload this page',
-                    reason: errorLogger(module, 'Could not retrieve allGrillStatuses', err),
                     disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
             }
         }
     },
@@ -116,9 +115,9 @@ module.exports = {
                 //this will instruct the clientLogin angular to initiate a registration
                 updatePassword = true;
             }
+            consoleLogger(successLogger(module));
             res.status(401).send({
                 code: 401,
-                reason: errorLogger(module, 'req.isAuthenticated: user not logged in'),
                 loginErrorType: 'user',
                 updatePassword: updatePassword,
                 availableDetails: {
@@ -127,7 +126,6 @@ module.exports = {
                     email: theUser.email
                 }
             });
-            consoleLogger(successLogger(module));
         }
     },
 
@@ -174,8 +172,7 @@ module.exports = {
                     code: 500,
                     banner: true,
                     bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: info || err,
-                    reason: errorLogger(module, info || err, err)
+                    msg: info || err
                 });
             }
             if (!user) {
@@ -183,8 +180,7 @@ module.exports = {
                     code: 401,
                     banner: true,
                     bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: info || err,
-                    reason: errorLogger(module, info || err, err)
+                    msg: info || err
                 });
             }
             req.logIn(user, function (err) {
@@ -195,8 +191,7 @@ module.exports = {
                         code: 500,
                         banner: true,
                         bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: "A problem occurred when trying to log you in. Please try again",
-                        reason: errorLogger(module, 'Failed! req.login()', err)
+                        msg: "A problem occurred when trying to log you in. Please try again"
                     });
                 } else {
                     successLogger(module);
@@ -206,10 +201,7 @@ module.exports = {
                     }
                     return res.status(200).send({
                         code: 200,
-                        notify: false,
-                        type: 'success',
                         msg: "You have successfully logged in",
-                        reason: successLogger(module, 'localUserLogin Success'),
                         redirect: true,
                         redirectPage: redirectPage
                     });
@@ -245,8 +237,7 @@ module.exports = {
                     code: 401,
                     registrationBanner: true,
                     bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'Failed to log you in. Please try again',
-                    reason: errorLogger(module, 'Could not retrieve user', err)
+                    msg: 'Failed to log you in. Please try again'
                 });
             }
 
@@ -257,15 +248,14 @@ module.exports = {
                         //means it's the same user, so just continue and update the username
                         continueUpdating();
                     } else {
+                        consoleLogger(errorLogger(module, 'username entered is already in use'));
                         //means it's a different user wanting a username that's already in use. notify the user
                         res.status(401).send({
                             code: 401,
                             registrationBanner: true,
                             bannerClass: 'alert alert-dismissible alert-warning',
-                            msg: 'The username you entered is already in use. Please choose a different one',
-                            reason: errorLogger(module, 'username entered is already in use')
+                            msg: 'The username you entered is already in use. Please choose a different one'
                         });
-                        consoleLogger(errorLogger(module, 'username entered is already in use'));
                     }
                 } else {
                     //means username is available
@@ -302,8 +292,7 @@ module.exports = {
                                         code: 401,
                                         registrationBanner: true,
                                         bannerClass: 'alert alert-dismissible alert-warning',
-                                        msg: 'We could not log you in. Please check your details and try again',
-                                        reason: errorLogger(module, 'error hashing password')
+                                        msg: 'We could not log you in. Please check your details and try again'
                                     });
                                 } else {
                                     continueWithPasswordHash(hash);
@@ -318,8 +307,7 @@ module.exports = {
                                         code: 401,
                                         registrationBanner: true,
                                         bannerClass: 'alert alert-dismissible alert-warning',
-                                        msg: 'We could not log you in. Please check your details and try again',
-                                        reason: errorLogger(module, 'error updating password')
+                                        msg: 'We could not log you in. Please check your details and try again'
                                     });
                                 }
                             }
@@ -344,8 +332,7 @@ module.exports = {
                             code: 401,
                             registrationBanner: true,
                             bannerClass: 'alert alert-dismissible alert-warning',
-                            msg: 'We could not log you in. Please check your details and try again',
-                            reason: errorLogger(module, 'username entered is already in use')
+                            msg: 'We could not log you in. Please check your details and try again'
                         });
                     }
                 }
@@ -369,8 +356,7 @@ module.exports = {
                 code: 401,
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: 'Failed to log you in. Please try again',
-                reason: errorLogger(module, 'error finding password', err)
+                msg: 'Failed to log you in. Please try again'
             });
         }
 
@@ -381,22 +367,20 @@ module.exports = {
                 code: 401,
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: 'Failed to log you in. Please try again',
-                reason: errorLogger(module, 'comparing passwords', err)
+                msg: 'Failed to log you in. Please try again'
             });
         }
 
         function successPassword(status) {
             if (status == -1) {
+                consoleLogger(errorLogger(module, 'Password does not check'));
                 //means passwords don't match
                 res.status(401).send({
                     code: 401,
                     banner: true,
                     bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'The password you entered is incorrect. Please try again',
-                    reason: errorLogger(module, 'Password does not check')
+                    msg: 'The password you entered is incorrect. Please try again'
                 });
-                consoleLogger(errorLogger(module, 'Password does not check'));
             } else {
                 //means passwords check
                 //update the user with the current info
@@ -432,14 +416,13 @@ module.exports = {
                 }
 
                 function errorSaveUser(status, err) {
+                    consoleLogger(errorLogger(module, 'error saving updated user', err));
                     res.status(401).send({
                         code: 401,
                         banner: true,
                         bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: 'Failed to log you in. Please try again',
-                        reason: errorLogger(module, 'error saving updated user', err)
+                        msg: 'Failed to log you in. Please try again'
                     });
-                    consoleLogger(errorLogger(module, 'error saving updated user', err));
                 }
             }
         }
@@ -460,8 +443,7 @@ module.exports = {
                 code: 401,
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: 'Failed to log you in. Please try again',
-                reason: errorLogger(module, 'error finding password', err)
+                msg: 'Failed to log you in. Please try again'
             });
         }
 
@@ -472,8 +454,7 @@ module.exports = {
                 code: 401,
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: 'Failed to log you in. Please try again',
-                reason: errorLogger(module, 'error comparing passwords', err)
+                msg: 'Failed to log you in. Please try again'
             });
         }
 
@@ -485,8 +466,7 @@ module.exports = {
                     code: 401,
                     banner: true,
                     bannerClass: 'alert alert-dismissible alert-warning',
-                    msg: 'The password you entered is incorrect. Please try again',
-                    reason: errorLogger(module, 'Password does not check')
+                    msg: 'The password you entered is incorrect. Please try again'
                 });
                 consoleLogger(errorLogger(module, 'Password does not check'));
             } else {
@@ -528,8 +508,7 @@ module.exports = {
                         code: 401,
                         banner: true,
                         bannerClass: 'alert alert-dismissible alert-warning',
-                        msg: 'Failed to log you in. Please try again',
-                        reason: errorLogger(module, 'error saving updated user', err)
+                        msg: 'Failed to log you in. Please try again'
                     });
                     consoleLogger(errorLogger(module, 'error saving updated user', err));
                 }
@@ -552,15 +531,14 @@ module.exports = {
 
         function errorAllGrillStatus(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: 'An error occurred. Please reload this page',
-                    reason: errorLogger(module, 'Could not retrieve allGrillStatuses', err),
                     disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
             }
         }
     },
@@ -579,15 +557,14 @@ module.exports = {
 
         function errorAllGrillStatus(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'error',
                     msg: 'An error occurred. Please reload this page',
-                    reason: errorLogger(module, 'Could not retrieve allGrillStatuses', err),
                     disable: true
                 });
-                consoleLogger(errorLogger(module, 'Could not retrieve allGrillStatuses', err));
             }
         }
     }

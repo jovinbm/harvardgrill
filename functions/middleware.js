@@ -54,7 +54,6 @@ module.exports = {
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
                 msg: 'You are not logged in. Please reload page',
-                reason: errorLogger(module, 'user not logged in'),
                 disable: true,
                 redirect: true,
                 redirectPage: '/login.html'
@@ -83,8 +82,7 @@ module.exports = {
                 code: 500,
                 notify: true,
                 type: 'error',
-                msg: 'An error occurred while retrieving your personalized info. Please reload the page',
-                reason: errorLogger(module, 'error retrieving user data', err)
+                msg: 'An error occurred while retrieving your personalized info. Please reload the page'
             });
             consoleLogger(errorLogger(module, 'error retrieving user data', err));
         }
@@ -125,7 +123,6 @@ module.exports = {
                         notify: true,
                         type: 'warning',
                         msg: 'We could not find the grill you were currently in. Please reload this page',
-                        reason: errorLogger(module, 'error logout user'),
                         disable: true,
                         redirect: true,
                         redirectPage: '/login.html'
@@ -142,7 +139,6 @@ module.exports = {
                         banner: true,
                         bannerClass: 'alert alert-dismissible alert-warning',
                         msg: 'This grill is not available. Redirecting you to login',
-                        reason: errorLogger(module, 'error grill status'),
                         disable: true,
                         redirect: true,
                         redirectPage: '/login.html'
@@ -165,7 +161,6 @@ module.exports = {
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
                 msg: 'You are not logged in. Refresh the page to do so',
-                reason: errorLogger(module, 'User not logged in'),
                 disable: true
             });
             consoleLogger(errorLogger(module, 'User not logged in'));
@@ -194,8 +189,7 @@ module.exports = {
                 code: 401,
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
-                msg: 'Authorization required. Please reload page to log in',
-                reason: errorLogger(module, 'User is not admin'),
+                msg: 'Authorization required. Please reload page to log in'
             });
             consoleLogger(errorLogger(module, 'User is not admin'));
         }
@@ -212,8 +206,7 @@ module.exports = {
                 code: 401,
                 notify: true,
                 type: 'warning',
-                msg: 'The grill is currently closed',
-                reason: errorLogger(module, 'Grill is closed'),
+                msg: 'The grill is currently closed'
             });
             consoleLogger(errorLogger(module, 'Grill is closed'));
         }
@@ -230,8 +223,7 @@ module.exports = {
                 code: 401,
                 notify: true,
                 type: 'warning',
-                msg: 'The grill is currently still open',
-                reason: errorLogger(module, 'Grill is still open'),
+                msg: 'The grill is currently still open'
             });
             consoleLogger(errorLogger(module, 'Grill is still open'));
         }
