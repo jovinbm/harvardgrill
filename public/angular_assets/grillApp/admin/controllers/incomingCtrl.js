@@ -70,13 +70,17 @@ angular.module('grillApp')
             //*****************admin order actions*********************
 
             $scope.increaseComponentQuantity = function (orderIndex, componentIndex) {
-                $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] = $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] + 1;
+                ++$scope.processedOrderModels[orderIndex][componentIndex]['quantity'];
             };
 
             $scope.decreaseComponentQuantity = function (orderIndex, componentIndex) {
                 if ($scope.processedOrderModels[orderIndex][componentIndex]['quantity'] > 1) {
-                    $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] = $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] - 1;
+                    --$scope.processedOrderModels[orderIndex][componentIndex]['quantity'];
                 }
+            };
+
+            $scope.resetComponentQuantity = function (orderIndex, componentIndex) {
+                $scope.processedOrderModels[orderIndex][componentIndex]['quantity'] = 1;
             };
 
             $scope.markOrderAsDone = function (orderUniqueCuid, orderIndex) {

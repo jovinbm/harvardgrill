@@ -35,7 +35,7 @@
                                 <thead>
                                 <tr>
                                     <th>Order</th>
-                                    <th>Quantity</th>
+                                    <th>Add/Remove</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -58,6 +58,11 @@
                                                 class="btn btn-sm btn-default"
                                                 ng-click="decreaseComponentQuantity(order.orderIndex, componentCarrierObject.componentIndex)">
                                             <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-sm btn-default"
+                                                ng-click="resetComponentQuantity(order.orderIndex, componentCarrierObject.componentIndex)">
+                                            x 1
                                         </button>
                                     </td>
                                 </tr>

@@ -121,3 +121,8 @@ div.alert.grill_open_or_close_top_banner {
 .col_no_padding {
     padding-left: 0;
 }
+
+/*removing table row borders*/
+.table th, .table td {
+    border-top: none !important;
+}

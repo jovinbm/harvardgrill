@@ -94,3 +94,8 @@ div.increase_margin_for__mobile {
 .col_no_padding {
     padding-left: 0;
 }
+
+/*removing table borders*/
+.table th, .table td {
+    border-top: none !important;
+}
