@@ -12,51 +12,7 @@ body {
     padding-top: 70px;
 }
 
-/*forms*/
-.form-error-notice {
-    color: rgb(169, 68, 66);
-    margin-top: 0.9em;
-    margin-bottom: 0.9em;
-    font-size: 0.9em;
-}
-
-/*columns*/
-.column-heading {
-    font-size: 1.5em;
-    margin-top: 1.5em;
-}
-
-.card_date {
-    font-size: 1.5em;
-}
-
-.card_content_main_heading {
-    font-size: 1.5em;
-}
-
-.heading_1_2 {
-    font-size: 1.2em;
-}
-
-.margin_t_p_0_5 {
-    margin-bottom: 0.5em;
-    margin-top: 0.5em;
-}
-
-.col_no_padding {
-    padding-left: 0;
-}
-
-div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-}
-
 /*removing table row borders*/
 .table th, .table td {
     border-top: none !important;
-}
-
-.center_text {
-    text-align: center;
 }
