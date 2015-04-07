@@ -68,10 +68,10 @@ module.exports = {
         receivedLogger(module);
         var temporarySocketRoom = cuid();
 
+        consoleLogger(successLogger(module));
         res.status(200).send({
             temporarySocketRoom: temporarySocketRoom
         });
-        consoleLogger(successLogger(module));
 
     },
 
@@ -80,10 +80,10 @@ module.exports = {
         getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success);
 
         function success(allGrillStatuses) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 allGrillStatuses: allGrillStatuses
             });
-            consoleLogger(successLogger(module));
         }
 
         function errorAllGrillStatus(status, err) {
@@ -105,10 +105,10 @@ module.exports = {
         var theUser = getTheUser(req);
 
         if (theUser.username && theUser.firstName && theUser.lastName && theUser.email) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 msg: "Fully registered"
             });
-            consoleLogger(successLogger(module));
         } else {
             var updatePassword = false;
             if (theUser.password == "" || theUser.password == undefined || theUser.password == null) {
@@ -135,14 +135,14 @@ module.exports = {
             var module = 'app.post /harvardId';
 
             if (err) {
-                errorLogger(module, err, err);
+                consoleLogger(errorLogger(module, err, err));
                 return res.render('login', {
                     errorCode: 1,
                     errorMessage: "Authentication failed. Please try again"
                 })
             }
             if (!user) {
-                errorLogger(module, "Authentication failed. Please try again", err);
+                consoleLogger(errorLogger(module, "Authentication failed. Please try again"));
                 return res.render('login', {
                     errorCode: 1,
                     errorMessage: "Authentication failed. Please try again"
@@ -150,7 +150,7 @@ module.exports = {
             }
             req.logIn(user, function (err) {
                 if (err) {
-                    errorLogger(module, err, err);
+                    consoleLogger(errorLogger(module, err, err));
                     return res.render('login', {
                         errorCode: 1,
                         errorMessage: "Authentication failed. Please try again"
@@ -185,8 +185,7 @@ module.exports = {
             }
             req.logIn(user, function (err) {
                 if (err) {
-                    errorLogger('req.login', err, err);
-
+                    consoleLogger(errorLogger('req.login', err, err));
                     return res.status(500).send({
                         code: 500,
                         banner: true,
@@ -194,7 +193,7 @@ module.exports = {
                         msg: "A problem occurred when trying to log you in. Please try again"
                     });
                 } else {
-                    successLogger(module);
+                    consoleLogger(successLogger(module));
                     var redirectPage = '/clientLogin.html';
                     if (user.isAdmin == 'yes') {
                         redirectPage = 'adminLogin.html'
@@ -302,7 +301,7 @@ module.exports = {
                             function continueWithPasswordHash(passwordHash) {
                                 userDB.updatePassword(req.user.openId, passwordHash, errorUpdatingPassword, errorUpdatingPassword, success4);
                                 function errorUpdatingPassword() {
-                                    consoleLogger(errorLogger(module, 'error updating password', err));
+                                    consoleLogger(errorLogger(module, 'error updating password'));
                                     res.status(401).send({
                                         code: 401,
                                         registrationBanner: true,
@@ -460,7 +459,7 @@ module.exports = {
 
         function successPassword(status) {
             if (status == -1) {
-                consoleLogger("YESS");
+                consoleLogger(errorLogger(module, 'Password does not check'));
                 //means passwords don't match
                 res.status(401).send({
                     code: 401,
@@ -468,7 +467,6 @@ module.exports = {
                     bannerClass: 'alert alert-dismissible alert-warning',
                     msg: 'The password you entered is incorrect. Please try again'
                 });
-                consoleLogger(errorLogger(module, 'Password does not check'));
             } else {
                 //means passwords check
                 //update the user with the current info
@@ -504,13 +502,13 @@ module.exports = {
                 }
 
                 function errorSaveUser(status, err) {
+                    consoleLogger(errorLogger(module, 'error saving updated user', err));
                     res.status(401).send({
                         code: 401,
                         banner: true,
                         bannerClass: 'alert alert-dismissible alert-warning',
                         msg: 'Failed to log you in. Please try again'
                     });
-                    consoleLogger(errorLogger(module, 'error saving updated user', err));
                 }
             }
         }
@@ -523,10 +521,10 @@ module.exports = {
         getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success);
 
         function success(allGrillStatuses) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 allGrillStatuses: allGrillStatuses
             });
-            consoleLogger(successLogger(module));
         }
 
         function errorAllGrillStatus(status, err) {
@@ -549,10 +547,10 @@ module.exports = {
         getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success);
 
         function success(allGrillStatuses) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 allGrillStatuses: allGrillStatuses
             });
-            consoleLogger(successLogger(module));
         }
 
         function errorAllGrillStatus(status, err) {

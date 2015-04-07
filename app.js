@@ -193,9 +193,9 @@ app.use(function (req, res, next) {
 
 // error handlers
 app.use(function (err, req, res, next) {
+    consoleLogger(errorLogger('404 Handler', 'New 404 DEVELOPMENT error'));
     res.status(err.status);
     res.sendFile(path.join(__dirname, './public/error/', '404.html'));
-    errorLogger('404 Handler', 'New 404 DEVELOPMENT error');
 });
 
 

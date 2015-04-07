@@ -177,7 +177,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 }
 
                 function errorDbUsername() {
-                    consoleLogger(errorLogger(module, 'Error while trying to find user', err));
+                    consoleLogger(errorLogger(module, 'Error while trying to find user'));
                     done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
                 }
 

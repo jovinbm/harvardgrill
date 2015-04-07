@@ -35,6 +35,7 @@ module.exports = {
         orderDB.saveNewOrder(theUser.grillName, theOrder, theUser, currentGrillStatus, errorSavingOrder, errorSavingOrder, orderSaved);
 
         function orderSaved(theSavedOrder) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 savedOrder: theSavedOrder,
                 code: 200,
@@ -43,7 +44,6 @@ module.exports = {
                 msg: 'Your order has been placed'
             });
             ioJs.emitToOne('adminSocketRoom', 'newOrders', 'update now!');
-            consoleLogger(successLogger(module));
         }
 
         function errorSavingOrder(status, err) {
@@ -70,10 +70,10 @@ module.exports = {
         orderDB.getAdminClientOrders(theUser.grillName, theUser, currentGrillStatus, amount, 1, skipOrders, currentOrdersToBeSkipped, error, error, success);
 
         function success(orders) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 orders: orders
             });
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
@@ -99,10 +99,10 @@ module.exports = {
         orderDB.getMyRecentOrders(theUser.grillName, theUser, currentGrillStatus, 10, -1, error, error, success);
 
         function success(myRecentOrders) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 myRecentOrders: myRecentOrders
             });
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
@@ -127,6 +127,7 @@ module.exports = {
         orderDB.markOrderAsDone(theUser.grillName, theUser, orderUniqueCuid, processedOrderComponents, error, error, success);
 
         function success(theUpdatedOrder) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 code: 200,
                 notify: true,
@@ -136,7 +137,6 @@ module.exports = {
             ioJs.emitToOne(theUpdatedOrder.clientSocketRoom, 'orderStatusChange', {
                 status: theUpdatedOrder.status
             });
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
@@ -160,6 +160,7 @@ module.exports = {
         orderDB.markOrderAsDeclined(theUser.grillName, theUser, orderUniqueCuid, error, error, success);
 
         function success(theUpdatedOrder) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 code: 200,
                 notify: true,
@@ -169,7 +170,6 @@ module.exports = {
             ioJs.emitToOne(theUpdatedOrder.clientSocketRoom, 'orderStatusChange', {
                 status: theUpdatedOrder.status
             });
-            consoleLogger(successLogger(module));
 
         }
 

@@ -31,13 +31,13 @@ module.exports = {
         var module = 'getSocketRoom';
         receivedLogger(module);
         var theUser = req.customData.theUser;
+        consoleLogger(successLogger(module));
         res.status(200).send({
             socketRoom: theUser.socketRoom,
             grillName: theUser.grillName,
             username: theUser.username,
             uniqueCuid: theUser.uniqueCuid
         });
-        consoleLogger(successLogger(module));
     },
 
 

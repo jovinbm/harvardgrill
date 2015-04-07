@@ -32,11 +32,11 @@ module.exports = {
         receivedLogger(module);
         //delete the harvard cs50 ID session
         req.logout();
+        consoleLogger(successLogger(module));
         //send a success so that the user will be logged out and redirected to login by angular responseHandler
         res.status(200).send({
             msg: 'LogoutHarvardLogin success'
         });
-        consoleLogger(successLogger(module));
     },
 
 
@@ -48,6 +48,7 @@ module.exports = {
         userDB.updateGrillName(theUser.openId, 'default', error, error, success);
 
         function success() {
+            consoleLogger(successLogger(module));
             //the logout_api toggles the customLoggedInStatus -- respond with a success, angular client will redirect
             res.status(200).send({
                 code: 200,
@@ -55,7 +56,6 @@ module.exports = {
                 redirect: true,
                 redirectPage: "/clientLogin.html"
             });
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
@@ -141,13 +141,13 @@ module.exports = {
 
         function success() {
             req.logout();
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 code: 200,
                 notify: false,
                 redirect: true,
                 redirectPage: "/localLogin.html"
             });
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {

@@ -29,18 +29,18 @@ module.exports = {
     adminStartUp: function (req, res) {
         var module = 'adminStartup';
         receivedLogger(module);
+        consoleLogger(successLogger(module));
         res.status(200).send({
             currentGrillStatus: req.customData.currentGrillStatus
         });
-        consoleLogger(successLogger(module));
     },
 
     clientStartUp: function (req, res) {
         var module = 'clientStartup';
         receivedLogger(module);
+        consoleLogger(successLogger(module));
         res.status(200).send({
             currentGrillStatus: req.customData.currentGrillStatus
         });
-        consoleLogger(successLogger(module));
     }
 };

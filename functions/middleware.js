@@ -36,8 +36,8 @@ module.exports = {
             consoleLogger(successLogger(module));
             next();
         } else {
-            res.redirect('login.html');
             consoleLogger(errorLogger(module, 'user authentication failed'));
+            res.redirect('login.html');
         }
     },
 
@@ -47,6 +47,7 @@ module.exports = {
             consoleLogger(successLogger(module));
             next();
         } else {
+            consoleLogger(errorLogger(module, 'user authentication failed'));
             res.status(401).send({
                 code: 401,
                 notify: true,
@@ -58,7 +59,6 @@ module.exports = {
                 redirect: true,
                 redirectPage: '/login.html'
             });
-            consoleLogger(errorLogger(module, 'user authentication failed'));
         }
     },
 
@@ -78,13 +78,13 @@ module.exports = {
         }
 
         function error(status, err) {
+            consoleLogger(errorLogger(module, 'error retrieving user data', err));
             res.status(500).send({
                 code: 500,
                 notify: true,
                 type: 'error',
                 msg: 'An error occurred while retrieving your personalized info. Please reload the page'
             });
-            consoleLogger(errorLogger(module, 'error retrieving user data', err));
         }
     },
 
@@ -118,6 +118,7 @@ module.exports = {
 
                 function errorLogout() {
                     req.logout();
+                    consoleLogger(errorLogger(module, 'error logout user', err));
                     res.status(500).send({
                         code: 500,
                         notify: true,
@@ -127,11 +128,11 @@ module.exports = {
                         redirect: true,
                         redirectPage: '/login.html'
                     });
-                    consoleLogger(errorLogger(module, 'error logout user', err));
                 }
 
                 function success2() {
                     req.logout();
+                    consoleLogger(errorLogger(module, 'GrillStatus Not found', err));
                     res.status(500).send({
                         code: 500,
                         notify: true,
@@ -143,7 +144,6 @@ module.exports = {
                         redirect: true,
                         redirectPage: '/login.html'
                     });
-                    consoleLogger(errorLogger(module, 'GrillStatus Not found', err));
                 }
             }
         }
@@ -156,6 +156,7 @@ module.exports = {
             consoleLogger(successLogger(module));
             next();
         } else {
+            consoleLogger(errorLogger(module, 'User not logged in'));
             res.status(401).send({
                 code: 401,
                 banner: true,
@@ -163,7 +164,6 @@ module.exports = {
                 msg: 'You are not logged in. Refresh the page to do so',
                 disable: true
             });
-            consoleLogger(errorLogger(module, 'User not logged in'));
         }
     },
 
@@ -185,13 +185,13 @@ module.exports = {
             consoleLogger(successLogger(module));
             next();
         } else {
+            consoleLogger(errorLogger(module, 'User is not admin'));
             res.status(401).send({
                 code: 401,
                 banner: true,
                 bannerClass: 'alert alert-dismissible alert-warning',
                 msg: 'Authorization required. Please reload page to log in'
             });
-            consoleLogger(errorLogger(module, 'User is not admin'));
         }
     },
 
@@ -202,13 +202,13 @@ module.exports = {
             consoleLogger(successLogger(module));
             next();
         } else {
+            consoleLogger(errorLogger(module, 'Grill is closed'));
             res.status(401).send({
                 code: 401,
                 notify: true,
                 type: 'warning',
                 msg: 'The grill is currently closed'
             });
-            consoleLogger(errorLogger(module, 'Grill is closed'));
         }
     },
 
@@ -219,13 +219,13 @@ module.exports = {
             consoleLogger(successLogger(module));
             next();
         } else {
+            consoleLogger(errorLogger(module, 'Grill is still open'));
             res.status(401).send({
                 code: 401,
                 notify: true,
                 type: 'warning',
                 msg: 'The grill is currently still open'
             });
-            consoleLogger(errorLogger(module, 'Grill is still open'));
         }
     }
 };

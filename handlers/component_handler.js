@@ -49,6 +49,7 @@ module.exports = {
         componentDB.addComponent(theUser.grillName, theUser, newComponent, error, error, success);
 
         function success(theSavedComponent) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 savedComponent: theSavedComponent,
                 code: 200,
@@ -57,18 +58,17 @@ module.exports = {
                 msg: 'Saved'
             });
             ioJs.emitToAll('adminChanges', 'changes');
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not add component', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
                     msg: 'Failed to add, please try again. If problem persists, please reload this page'
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not add component', err));
             }
         }
     },
@@ -81,6 +81,7 @@ module.exports = {
         componentDB.saveEditedComponent(theUser.grillName, theUser, theComponent.componentIndex, theComponent.name, error, error, success);
 
         function success() {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 code: 200,
                 notify: true,
@@ -88,18 +89,17 @@ module.exports = {
                 msg: 'Saved'
             });
             ioJs.emitToAll('adminChanges', 'changes');
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not save component', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
                     msg: 'Failed to save, please try again. If problem persists, please reload this page'
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not save component', err));
             }
         }
     },
@@ -112,6 +112,7 @@ module.exports = {
         componentDB.deleteComponent(theUser.grillName, theUser, componentIndex, error, error, success);
 
         function success() {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 code: 200,
                 notify: true,
@@ -119,18 +120,17 @@ module.exports = {
                 msg: 'Successfully removed'
             });
             ioJs.emitToAll('adminChanges', 'changes');
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not delete component', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
                     type: 'warning',
                     msg: 'Failed to delete, please try again. If problem persists, please reload this page'
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not delete component', err));
             }
         }
     },
@@ -160,14 +160,15 @@ module.exports = {
         }
 
         function success(allComponents) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 allComponents: allComponents
             });
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
@@ -177,7 +178,6 @@ module.exports = {
                     redirect: false,
                     redirectPage: '/error/500.html'
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
             }
         }
     },
@@ -208,14 +208,15 @@ module.exports = {
         }
 
         function success(availableComponents) {
+            consoleLogger(successLogger(module));
             res.status(200).send({
                 availableComponents: availableComponents
             });
-            consoleLogger(successLogger(module));
         }
 
         function error(status, err) {
             if (status == -1 || status == 0) {
+                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
                 res.status(500).send({
                     code: 500,
                     notify: true,
@@ -225,7 +226,6 @@ module.exports = {
                     redirect: false,
                     redirectPage: '/error/500.html'
                 });
-                consoleLogger(errorLogger(module, 'Failed! Could not retrieve components', err));
             }
         }
     }
