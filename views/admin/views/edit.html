@@ -61,43 +61,45 @@
 
                 <!--start of available order components-->
                 <h6>Available now</h6>
-                <table class="table table-striped table-hover ng-cloak">
-                    <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Details</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="orderComponent in allOrderComponents">
-                        <td>{{orderComponent.componentIndex}}</td>
 
-                        <td ng-if="!editViewReference[orderComponent.componentIndex].componentEditingMode"
-                            class="text-outputs">
-                            {{orderComponent.name}}
-                            <div class="pull-right">
-                                <button ng-class="editViewReference[orderComponent.componentIndex].editButtonClass"
-                                        ng-click="editComponent(orderComponent.componentIndex)"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable">
-                                    <i class="fa fa-pencil"></i> EDIT
-                                </button>
-                                <button ng-class="editViewReference[orderComponent.componentIndex].deleteButtonClass"
-                                        ng-click="deleteComponent(orderComponent.componentIndex, 'oc')"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable">
-                                    <i class="fa fa-times"></i> DELETE
-                                </button>
-                            </div>
-                        </td>
+                <div class="table-responsive clearfix">
+                    <table class="table table-striped table-hover ng-cloak">
+                        <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Details</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="orderComponent in allOrderComponents">
+                            <td>{{orderComponent.componentIndex}}</td>
 
-                        <td ng-if="editViewReference[orderComponent.componentIndex].componentEditingMode">
+                            <td ng-if="!editViewReference[orderComponent.componentIndex].componentEditingMode"
+                                class="text-outputs">
+                                {{orderComponent.name}}
+                                <div class="pull-right">
+                                    <button ng-class="editViewReference[orderComponent.componentIndex].editButtonClass"
+                                            ng-click="editComponent(orderComponent.componentIndex)"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable">
+                                        <i class="fa fa-pencil"></i> EDIT
+                                    </button>
+                                    <button ng-class="editViewReference[orderComponent.componentIndex].deleteButtonClass"
+                                            ng-click="deleteComponent(orderComponent.componentIndex, 'oc')"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable">
+                                        <i class="fa fa-times"></i> DELETE
+                                    </button>
+                                </div>
+                            </td>
 
-                            <!--order component edit form-->
-                            <div class="input-group">
+                            <td ng-if="editViewReference[orderComponent.componentIndex].componentEditingMode">
 
-                                <input type="text"
-                                       class="form-control"
-                                       ng-model="orderComponent.name"
-                                       aria-describedby="EditOrderComponentButton">
+                                <!--order component edit form-->
+                                <div class="input-group">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="orderComponent.name"
+                                           aria-describedby="EditOrderComponentButton">
 
                             <span class="input-group-addon" id="EditOrderComponentButton">
 
@@ -113,13 +115,14 @@
                                 </button>
 
                             </span>
-                            </div>
-                            <!--end of order edit form-->
-                        </td>
+                                </div>
+                                <!--end of order edit form-->
+                            </td>
 
-                    </tr>
-                    </tbody>
-                </table>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!--end of available order components-->
             </div>
 
@@ -153,42 +156,44 @@
 
                 <!--start of available omelets-->
                 <h6>Available now</h6>
-                <table class="table table-striped table-hover ng-cloak">
-                    <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Details</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="omelet in allOmelets">
 
-                        <td>{{omelet.componentIndex}}</td>
+                <div class="table-responsive clearfix">
+                    <table class="table table-striped table-hover ng-cloak">
+                        <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Details</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="omelet in allOmelets">
 
-                        <td ng-if="!editViewReference[omelet.componentIndex].componentEditingMode"
-                            class="text-outputs">
-                            {{omelet.name}}
-                            <div class="pull-right">
-                                <button ng-class="editViewReference[omelet.componentIndex].editButtonClass"
-                                        ng-click="editComponent(omelet.componentIndex)"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable">
-                                    <i class="fa fa-pencil"></i> EDIT
-                                </button>
-                                <button ng-class="editViewReference[omelet.componentIndex].deleteButtonClass"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable"
-                                        ng-click="deleteComponent(omelet.componentIndex, 'oo')">
-                                    <i class="fa fa-times"></i> DELETE
-                                </button>
-                            </div>
-                        </td>
+                            <td>{{omelet.componentIndex}}</td>
 
-                        <td ng-if="editViewReference[omelet.componentIndex].componentEditingMode">
-                            <!--omelet edit form-->
-                            <div class="input-group">
-                                <input type="text"
-                                       class="form-control"
-                                       ng-model="omelet.name"
-                                       aria-describedby="EditOmeletButton">
+                            <td ng-if="!editViewReference[omelet.componentIndex].componentEditingMode"
+                                class="text-outputs">
+                                {{omelet.name}}
+                                <div class="pull-right">
+                                    <button ng-class="editViewReference[omelet.componentIndex].editButtonClass"
+                                            ng-click="editComponent(omelet.componentIndex)"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable">
+                                        <i class="fa fa-pencil"></i> EDIT
+                                    </button>
+                                    <button ng-class="editViewReference[omelet.componentIndex].deleteButtonClass"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable"
+                                            ng-click="deleteComponent(omelet.componentIndex, 'oo')">
+                                        <i class="fa fa-times"></i> DELETE
+                                    </button>
+                                </div>
+                            </td>
+
+                            <td ng-if="editViewReference[omelet.componentIndex].componentEditingMode">
+                                <!--omelet edit form-->
+                                <div class="input-group">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="omelet.name"
+                                           aria-describedby="EditOmeletButton">
 
                             <span class="input-group-addon" id="EditOmeletButton">
 
@@ -204,12 +209,13 @@
                                 </button>
 
                             </span>
-                            </div>
-                            <!--end of omelet edit form-->
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                                </div>
+                                <!--end of omelet edit form-->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!--end of available omelets-->
             </section>
 
@@ -237,43 +243,45 @@
 
                 <!--start of available weekly specials-->
                 <h6>Available now</h6>
-                <table class="table table-striped table-hover ng-cloak">
-                    <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Details</th>
-                    </tr>
-                    </thead>
-                    <tbody>
 
-                    <tr ng-repeat="weeklySpecial in allWeeklySpecials">
+                <div class="table-responsive clearfix">
+                    <table class="table table-striped table-hover ng-cloak">
+                        <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Details</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                        <td>{{weeklySpecial.componentIndex}}</td>
+                        <tr ng-repeat="weeklySpecial in allWeeklySpecials">
 
-                        <td ng-if="!editViewReference[weeklySpecial.componentIndex].componentEditingMode"
-                            class="text-outputs">
-                            {{weeklySpecial.name}}
-                            <div class="pull-right">
-                                <button ng-class="editViewReference[weeklySpecial.componentIndex].editButtonClass"
-                                        ng-click="editComponent(weeklySpecial.componentIndex)"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable">
-                                    <i class="fa fa-pencil"></i> EDIT
-                                </button>
-                                <button ng-class="editViewReference[weeklySpecial.componentIndex].deleteButtonClass"
-                                        ng-click="deleteComponent(weeklySpecial.componentIndex, 'ws')"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable">
-                                    <i class="fa fa-times"></i> DELETE
-                                </button>
-                            </div>
-                        </td>
+                            <td>{{weeklySpecial.componentIndex}}</td>
 
-                        <td ng-if="editViewReference[weeklySpecial.componentIndex].componentEditingMode">
-                            <!--weeklySpecial edit form-->
-                            <div class="input-group">
-                                <input type="text"
-                                       class="form-control"
-                                       ng-model="weeklySpecial.name"
-                                       aria-describedby="EditWeeklySpecialButton">
+                            <td ng-if="!editViewReference[weeklySpecial.componentIndex].componentEditingMode"
+                                class="text-outputs">
+                                {{weeklySpecial.name}}
+                                <div class="pull-right">
+                                    <button ng-class="editViewReference[weeklySpecial.componentIndex].editButtonClass"
+                                            ng-click="editComponent(weeklySpecial.componentIndex)"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable">
+                                        <i class="fa fa-pencil"></i> EDIT
+                                    </button>
+                                    <button ng-class="editViewReference[weeklySpecial.componentIndex].deleteButtonClass"
+                                            ng-click="deleteComponent(weeklySpecial.componentIndex, 'ws')"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable">
+                                        <i class="fa fa-times"></i> DELETE
+                                    </button>
+                                </div>
+                            </td>
+
+                            <td ng-if="editViewReference[weeklySpecial.componentIndex].componentEditingMode">
+                                <!--weeklySpecial edit form-->
+                                <div class="input-group">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="weeklySpecial.name"
+                                           aria-describedby="EditWeeklySpecialButton">
 
                             <span class="input-group-addon" id="EditWeeklySpecialButton">
 
@@ -289,13 +297,14 @@
                                 </button>
 
                             </span>
-                            </div>
-                            <!--end of weeklySpecial edit form-->
+                                </div>
+                                <!--end of weeklySpecial edit form-->
 
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!--end of available weekly specials-->
             </section>
 
@@ -328,45 +337,46 @@
                 <!--start of available extras-->
                 <h6>Available now</h6>
 
-                <table class="table table-striped table-hover ng-cloak">
+                <div class="table-responsive clearfix">
+                    <table class="table table-striped table-hover ng-cloak">
 
-                    <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Details</th>
-                    </tr>
+                        <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Details</th>
+                        </tr>
 
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
 
-                    <tr ng-repeat="extra in allExtras">
+                        <tr ng-repeat="extra in allExtras">
 
-                        <td>{{extra.componentIndex}}</td>
+                            <td>{{extra.componentIndex}}</td>
 
-                        <td ng-if="!editViewReference[extra.componentIndex].componentEditingMode"
-                            class="text-outputs">
-                            {{extra.name}}
-                            <div class="pull-right">
-                                <button ng-class="editViewReference[extra.componentIndex].editButtonClass"
-                                        ng-click="editComponent(extra.componentIndex)"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable">
-                                    <i class="fa fa-pencil"></i> EDIT
-                                </button>
-                                <button ng-class="editViewReference[extra.componentIndex].deleteButtonClass"
-                                        ng-click="deleteComponent(extra.componentIndex, 'oe')"
-                                        ng-disabled="editViewReference.isInEditingMode || universalDisable">
-                                    <i class="fa fa-times"></i> DELETE
-                                </button>
-                            </div>
-                        </td>
+                            <td ng-if="!editViewReference[extra.componentIndex].componentEditingMode"
+                                class="text-outputs">
+                                {{extra.name}}
+                                <div class="pull-right">
+                                    <button ng-class="editViewReference[extra.componentIndex].editButtonClass"
+                                            ng-click="editComponent(extra.componentIndex)"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable">
+                                        <i class="fa fa-pencil"></i> EDIT
+                                    </button>
+                                    <button ng-class="editViewReference[extra.componentIndex].deleteButtonClass"
+                                            ng-click="deleteComponent(extra.componentIndex, 'oe')"
+                                            ng-disabled="editViewReference.isInEditingMode || universalDisable">
+                                        <i class="fa fa-times"></i> DELETE
+                                    </button>
+                                </div>
+                            </td>
 
-                        <td ng-if="editViewReference[extra.componentIndex].componentEditingMode">
-                            <!--extra edit form-->
-                            <div class="input-group">
-                                <input type="text"
-                                       class="form-control"
-                                       ng-model="extra.name"
-                                       aria-describedby="EditExtraButton">
+                            <td ng-if="editViewReference[extra.componentIndex].componentEditingMode">
+                                <!--extra edit form-->
+                                <div class="input-group">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="extra.name"
+                                           aria-describedby="EditExtraButton">
 
                             <span class="input-group-addon" id="EditExtraButton">
 
@@ -382,13 +392,14 @@
                                 </button>
 
                             </span>
-                            </div>
-                            <!--end of weeklySpecial edit form-->
-                        </td>
+                                </div>
+                                <!--end of weeklySpecial edit form-->
+                            </td>
 
-                    </tr>
-                    </tbody>
-                </table>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!--end of available extras-->
             </section>
         </div>
