@@ -11,13 +11,9 @@ body {
 /*forms*/
 .form-error-notice {
     color: rgb(169, 68, 66);
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 12px;
-}
-
-.displayName {
-    color: cyan;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+    font-size: 0.9em;
 }
 
 .jumbotron {
@@ -38,4 +34,30 @@ h1.jumbo-header {
 
 .col_no_padding {
     padding-left: 0;
+}
+
+.card_date {
+    font-size: 1.5em;
+}
+
+.card_content_main_heading {
+    font-size: 1.5em;
+}
+
+.heading_1_2 {
+    font-size: 1.2em;
+}
+
+.margin_t_p_0_5 {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.center_text {
+    text-align: center;
 }

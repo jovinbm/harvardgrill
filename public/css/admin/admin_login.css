@@ -8,10 +8,6 @@ body {
     padding-bottom: 140px;
 }
 
-.displayName {
-    color: cyan;
-}
-
 .jumbotron {
     background-image: url(/public/imgs/waffles-1.jpg);
     background-size: cover;
@@ -32,9 +28,40 @@ h1.jumbo-header {
     padding-left: 0;
 }
 
+/*forms*/
 .form-error-notice {
     color: rgb(169, 68, 66);
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 12px;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+    font-size: 0.9em;
+}
+
+.card_date {
+    font-size: 1.5em;
+}
+
+.card_content_main_heading {
+    font-size: 1.5em;
+}
+
+.heading_1_2 {
+    font-size: 1.2em;
+}
+
+.margin_t_p_0_5 {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+.col_no_padding {
+    padding-left: 0;
+}
+
+div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.center_text {
+    text-align: center;
 }

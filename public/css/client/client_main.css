@@ -3,7 +3,6 @@
     display: none !important;
 }
 
-/*defaults*/
 html {
     padding: 0;
     margin: 0;
@@ -11,118 +10,58 @@ html {
 
 body {
     padding-top: 70px;
-    font-size: 12px;
 }
 
 /*forms*/
 .form-error-notice {
     color: rgb(169, 68, 66);
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 12px;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+    font-size: 0.9em;
 }
-
-/*****************styling the mobile navigation*****************/
 
 li.mobile_nav_tabs.col-xs-4 {
     padding: 0;
     text-align: center;
 }
 
-/******************end of styling the mobile nav*****************/
-
-/****************main div after nav***************/
-
-div.increase_margin_for__mobile {
-    /*increase the top margin to make it appear well on mobile, because of second nav*/
-    margin-top: 5px;
-}
-
-/*************main div after nav*******************/
-
-/****************styling the banners***************/
-
-div.alert.grill_open_or_close_top_banner {
-    /*increase the top margin to make it appear well on mobile, because of second nav*/
-    margin-top: 5px;
-}
-
-/*************end of styling banners*******************/
-
-.text-outputs {
-    word-wrap: break-word;
-}
-
-/*navigation*/
-#mobile-nav-header {
-    height: 30px;
-    margin-bottom: 0;
-}
-
 /*columns*/
 .column-heading {
-    font-size: 17px;
+    font-size: 1.5em;
+    margin-top: 1.5em;
 }
 
-#brand-name {
-    font-size: 18px;
+.card_date {
+    font-size: 1.5em;
 }
 
-.form-error-notice {
-    color: rgb(169, 68, 66);
-    font-weight: bold;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 12px;
+.card_content_main_heading {
+    font-size: 1.5em;
 }
 
-/*input field/moda i.e. textwrangler*/
-.ta-editor {
-    min-height: 200px;
-    height: auto;
-    overflow: auto;
-    font-family: inherit;
-    font-size: 100%;
-    margin: 10px 0 10px 0;
+.heading_1_2 {
+    font-size: 1.2em;
 }
 
-/*alerts*/
-.alert-new-post-sentence:hover {
-    text-decoration: none;
-}
-
-/*buttons*/
-.btn {
-    font-size: 10px;
-}
-
-.btn.pull-right {
-    margin-right: 3px;
-}
-
-/*order card styling*/
-.card-content > h2, .card-content > h3 {
-    font-size: 20px;
-}
-
-/*main order card styling*/
-.main-order-card {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.card-image {
-    height: 150px;
-    background-image: url(/public/imgs/waffles-1.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
+.margin_t_p_0_5 {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
 }
 
 .col_no_padding {
     padding-left: 0;
 }
 
+div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
 /*removing table row borders*/
 .table th, .table td {
     border-top: none !important;
+}
+
+.center_text {
+    text-align: center;
 }

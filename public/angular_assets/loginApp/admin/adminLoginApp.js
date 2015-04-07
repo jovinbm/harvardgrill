@@ -1,9 +1,5 @@
 angular.module('adminLoginApp', [
-    'ngAnimate',
-    'textAngular',
-    'ngSanitize',
     'ui.bootstrap',
-    'ngRoute',
     'angular-loading-bar',
     'angulartics',
     'angulartics.google.analytics',

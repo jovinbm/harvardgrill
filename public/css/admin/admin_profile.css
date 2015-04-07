@@ -6,9 +6,9 @@
 /*forms*/
 .form-error-notice {
     color: rgb(169, 68, 66);
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 12px;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+    font-size: 0.9em;
 }
 
 .col_no_padding {

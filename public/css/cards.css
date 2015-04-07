@@ -4,6 +4,7 @@
 
 .card {
     margin-top: 10px;
+    margin-bottom: 10px;
     box-sizing: border-box;
     border-radius: 2px;
     background-clip: padding-box;
@@ -44,7 +45,6 @@
 
 .card .card-content p {
     margin: 0;
-    color: inherit;
 }
 
 .card .card-action {

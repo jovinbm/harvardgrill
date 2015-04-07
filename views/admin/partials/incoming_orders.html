@@ -24,9 +24,14 @@
             <div class="card">
 
                 <div class="card-content ng-cloak clearfix">
-                    <h2>{{order.momentJsTime}} <strong class="pull-right">{{order.orderIndex}}</strong><br/>
-                        <small>{{order.theTimeAgo}}</small>
-                    </h2>
+                    <div class="col_no_padding col-lg-9 col-md-8 col-sm-8 col-xs-8">
+                        <h2 class="card_date">{{order.momentJsTime}}<br/>
+                            <small>{{order.theTimeAgo}}</small>
+                        </h2>
+                    </div>
+                    <div class="col_no_padding  center_text col-lg-3 col-md-4 col-sm-4 col-xs-4">
+                        <h3>{{order.orderIndex}}</h3>
+                    </div>
 
                     <div class="col_no_padding col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
 
@@ -34,8 +39,11 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Add/Remove</th>
+                                    <th class="col_no_padding col-lg-9 col-md-8 col-sm-7">Order
+                                    </th>
+                                    <th class="col_no_padding center_text col-lg-3 col-md-4 col-sm-5">
+                                        Add/Remove
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -48,7 +56,7 @@
                                         {{allComponentsIndexNames[componentCarrierObject.componentIndex]}} x
                                         {{processedOrderModels[order.orderIndex][componentCarrierObject.componentIndex]['quantity']}}
                                     </td>
-                                    <td>
+                                    <td class="center_text">
                                         <button type="button"
                                                 class="btn btn-sm btn-default"
                                                 ng-click="increaseComponentQuantity(order.orderIndex, componentCarrierObject.componentIndex)">

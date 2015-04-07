@@ -3,7 +3,6 @@
     display: none !important;
 }
 
-/*defaults*/
 html {
     padding: 0;
     margin: 0;
@@ -11,91 +10,58 @@ html {
 
 body {
     padding-top: 70px;
-    font-size: 12px;
 }
 
 /*forms*/
 .form-error-notice {
     color: rgb(169, 68, 66);
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 12px;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+    font-size: 0.9em;
 }
-
-/*****************styling the mobile navigation --top&bottom footer*****************/
 
 li.mobile_nav_tabs.col-xs-4 {
     padding: 0;
     text-align: center;
 }
 
-.footer_group_heading {
-    text-decoration: underline;
-}
-
-/******************end of styling the mobile nav*****************/
-
-/****************main div after nav***************/
-
-div.increase_margin_for__mobile {
-    /*increase the top margin to make it appear well on mobile, because of second nav*/
-    margin-top: 5px;
-}
-
-/*************main div after nav*******************/
-
-.text-outputs {
-    word-wrap: break-word;
-}
-
 /*columns*/
 .column-heading {
-    font-size: 17px;
+    font-size: 1.5em;
+    margin-top: 1.5em;
 }
 
-#brand-name {
-    font-size: 18px;
+.card_date {
+    font-size: 1.5em;
 }
 
-/*input field/moda i.e. textwrangler*/
-.ta-editor {
-    min-height: 200px;
-    height: auto;
-    overflow: auto;
-    font-family: inherit;
-    font-size: 100%;
-    margin: 10px 0 10px 0;
+.card_content_main_heading {
+    font-size: 1.5em;
 }
 
-/*alerts*/
-.alert-new-post-sentence:hover {
-    text-decoration: none;
-}
-
-/*buttons*/
-.btn {
-    font-size: 10px;
-}
-
-.btn.pull-right {
-    margin-right: 3px;
-}
-
-/*card heading styling*/
-.card-content > h2, .card-content > h3 {
-    font-size: 20px;
-}
-
-/*edit view page*/
-.edit-section > h4 {
+.heading_1_2 {
     font-size: 1.2em;
+}
+
+.margin_t_p_0_5 {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
 }
 
 .col_no_padding {
     padding-left: 0;
 }
 
-/*removing table borders*/
+div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/*removing table row borders*/
 .table th, .table td {
     border-top: none !important;
+}
+
+.center_text {
+    text-align: center;
 }
