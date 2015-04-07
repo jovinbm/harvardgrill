@@ -198,7 +198,6 @@ angular.module('localLoginApp')
             //refresh everything on orderStatusChange
             $rootScope.$on('adminChanges', function () {
                 globals.allGrillStatuses(null, true, true);
-                $scope.showToast('success', 'This page has been refreshed to reflect changes in the system');
             });
 
             //receives grill status

@@ -10,8 +10,9 @@ module.exports = {
         qUpdates.userUpdateUserLastActivity(theUser.openId, error_neg_1, error_0, success2);
 
         function success2() {
+            //get all, because client displays all recent orders independent of the grillname
             Component
-                .find({grillName: grillName}, {componentIndex: 1, name: 1})
+                .find({}, {componentIndex: 1, name: 1})
                 .sort({componentIndex: sort})
                 .exec(function (err, ComponentsIndexNames) {
                     if (err) {

@@ -1,6 +1,29 @@
 angular.module('grillApp')
-    .controller('MainController', ['$filter', '$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'ComponentService',
-        function ($filter, $log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, ComponentService) {
+    .controller('MainController', ['$filter', '$log', '$interval', '$window', '$location', '$scope', '$rootScope', 'socket', 'mainService', 'socketService', 'globals', 'ComponentService', 'logoutService',
+        function ($filter, $log, $interval, $window, $location, $scope, $rootScope, socket, mainService, socketService, globals, ComponentService, logoutService) {
+
+            //***********quick logout helpers**********
+            $scope.logoutSession = function () {
+                logoutService.logoutClientSession()
+                    .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    });
+            };
+
+            $scope.logoutFull = function () {
+                logoutService.logoutClientFull()
+                    .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    });
+            };
+            //**************end of quick logout helpers
+
 
             //*************request error handler****************
 
@@ -163,11 +186,31 @@ angular.module('grillApp')
             $scope.availableWeeklySpecials = [];
             $scope.availableExtras = [];
 
-            //this object holds a combination of all the available components. It is used to check the availability
-            //of components after a quick refresh and as ng-model in the recent order cards. Can be used for other purposes too. Keys are componentIndexes, and values
-            //are the full components
-            //it is updated on every state change therefore no need to store it in factory
-            $scope.allAvailableCombinedObject = {};
+            //***************functions to deal with all key component indexes
+
+            //allComponentsIndexNames is a variable that caries all references to the names of all component index
+            //the key is the componentIndex, and value is it's name. It is updated by the function 'getAllComponentsIndexNames'
+            //updated on every state change by the getAllComponentsIndexNames() function when controller restarts
+            $scope.allComponentsIndexNames = {};
+
+
+            //gets the index names of all components
+            function getAllComponentsIndexNames() {
+                socketService.getAllComponentsIndexNames()
+                    .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
+                        resp.allComponentsIndexNames.forEach(function (componentReference) {
+                            $scope.allComponentsIndexNames[componentReference.componentIndex] = componentReference.name;
+                        });
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    })
+            }
+
+            getAllComponentsIndexNames();
+
+            //*******************end of functions concerned with allComponent indexes
 
             //this object is updated when all orders are loaded. It's keys are indexes of every order component,
             //and it's values can either be yes, or no, depending on whether the user has checked the checkbox on the main
@@ -185,10 +228,6 @@ angular.module('grillApp')
                 ComponentService.getAvailableComponents('oc')
                     .success(function (orderComponents) {
                         $scope.availableOrderComponents = orderComponents.availableComponents;
-
-                        $scope.availableOrderComponents.forEach(function (component) {
-                            $scope.allAvailableCombinedObject[component.componentIndex] = component;
-                        });
 
                         if (refreshMyNewOrder) {
                             $scope.availableOrderComponents.forEach(function (component) {
@@ -211,10 +250,6 @@ angular.module('grillApp')
                 ComponentService.getAvailableComponents('oo')
                     .success(function (orderComponents) {
                         $scope.availableOmelets = orderComponents.availableComponents;
-
-                        $scope.availableOmelets.forEach(function (component) {
-                            $scope.allAvailableCombinedObject[component.componentIndex] = component;
-                        });
 
                         if (refreshMyNewOrder) {
                             $scope.availableOmelets.forEach(function (component) {
@@ -240,10 +275,6 @@ angular.module('grillApp')
                     .success(function (orderComponents) {
                         $scope.availableWeeklySpecials = orderComponents.availableComponents;
 
-                        $scope.availableWeeklySpecials.forEach(function (component) {
-                            $scope.allAvailableCombinedObject[component.componentIndex] = component;
-                        });
-
                         if (refreshMyNewOrder) {
                             $scope.availableWeeklySpecials.forEach(function (component) {
                                 //check if the object is already set, if not, set it to {} first
@@ -265,10 +296,6 @@ angular.module('grillApp')
                 ComponentService.getAvailableComponents('oe')
                     .success(function (orderComponents) {
                         $scope.availableExtras = orderComponents.availableComponents;
-
-                        $scope.availableExtras.forEach(function (component) {
-                            $scope.allAvailableCombinedObject[component.componentIndex] = component;
-                        });
 
                         if (refreshMyNewOrder) {
                             $scope.availableExtras.forEach(function (component) {

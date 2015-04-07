@@ -53,12 +53,11 @@ module.exports = {
         //update user's last activity
         qUpdates.userUpdateUserLastActivity(theUser.openId, error_neg_1, error_0, success2);
 
+        //updated to getting all recent orders in all dinings
         function success2() {
             Order
                 .find({
-                    grillName: grillName,
                     clientUniqueCuid: theUser.uniqueCuid,
-                    timeUniqueCuid: currentGrillStatus.timeUniqueCuid
                 })
                 .sort({orderIndex: sort})
                 .limit(amount)

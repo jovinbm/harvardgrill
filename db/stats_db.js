@@ -73,17 +73,8 @@ module.exports = {
                     if (err) {
                         error_neg_1(-1, err);
                     } else {
-                        Component.
-                            remove({
-                                grillName: grillName
-                            })
-                            .exec(function (err) {
-                                if (err) {
-                                    error_neg_1(-1, err);
-                                } else {
-                                    success();
-                                }
-                            });
+                        //don't delete the component indexes since they carry important info such as index names, calories etc
+                        success();
                     }
                 })
         }

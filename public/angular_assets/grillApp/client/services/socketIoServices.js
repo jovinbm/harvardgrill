@@ -72,7 +72,11 @@ angular.module('grillApp')
 
                 getCurrentGrillStatus: function () {
                     return $http.post('/api/getCurrentGrillStatus');
-                }
+                },
+
+                getAllComponentsIndexNames: function () {
+                    return $http.post('/api/getAllComponentsIndexNames');
+                },
             }
         }
     ])

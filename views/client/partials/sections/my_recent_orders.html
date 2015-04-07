@@ -1,80 +1,95 @@
-<h1 class="column-heading">
-    <i class="fa fa-list-alt"></i> MY RECENT ORDERS
-</h1>
+<div class="ng-cloak"
+     ng-if="myRecentOrders.length > 0">
+    <h1 class="column-heading">
+        <i class="fa fa-list-alt"></i> MY RECENT ORDERS
+    </h1>
 
-<ul class="list-unstyled animated fadeIn ng-cloak">
-    <li class="list-unstyled clearfix"
-        ng-repeat="recentOrder in myRecentOrders">
-        <div class="card">
+    <ul class="list-unstyled animated fadeIn ng-cloak">
+        <li class="list-unstyled clearfix"
+            ng-repeat="recentOrder in myRecentOrders">
+            <div class="card">
 
-            <div class="card-content ng-cloak">
-                <h2>{{recentOrder.momentJsTime}}<br/>
-                    <small>{{recentOrder.theTimeAgo}}</small>
-                </h2>
+                <div class="card-content ng-cloak">
+                    <h2>{{recentOrder.momentJsTime}} <strong class="pull-right">{{recentOrder.orderIndex}}</strong><br/>
+                        <small>{{recentOrder.theTimeAgo}}</small>
+                        <br/>
+                        <small><strong>{{recentOrder.grillName}}</strong></small>
+                    </h2>
 
-                <h3>Processed items</h3>
+                    <h3>Processed items</h3>
 
-                <ul class="list-unstyled"
-                    ng-if="recentOrder.status == 'processing'"
-                    ng-repeat="componentCarrierObject in recentOrder.orderComponents">
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
-                        {{allAvailableCombinedObject[componentCarrierObject.componentIndex].name}} x
-                        {{componentCarrierObject.quantity}}
-                    </li>
-                </ul>
+                    <ul class="list-unstyled"
+                        ng-if="recentOrder.status == 'processing'"
+                        ng-repeat="componentCarrierObject in recentOrder.orderComponents">
+                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
+                            {{allComponentsIndexNames[componentCarrierObject.componentIndex]}} x
+                            {{componentCarrierObject.quantity}}
+                        </li>
+                    </ul>
 
-                <ul class="list-unstyled"
-                    ng-if="recentOrder.status == 'declined'"
-                    ng-repeat="componentCarrierObject in recentOrder.orderComponents">
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
-                        {{allAvailableCombinedObject[componentCarrierObject.componentIndex].name}} x
-                        {{componentCarrierObject.quantity}}
-                    </li>
-                </ul>
+                    <ul class="list-unstyled"
+                        ng-if="recentOrder.status == 'declined'"
+                        ng-repeat="componentCarrierObject in recentOrder.orderComponents">
+                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
+                            {{allComponentsIndexNames[componentCarrierObject.componentIndex]}} x
+                            {{componentCarrierObject.quantity}}
+                        </li>
+                    </ul>
 
-                <ul class="list-unstyled"
-                    ng-if="recentOrder.status == 'done'"
-                    ng-repeat="componentCarrierObject in recentOrder.processedOrderComponents">
-                    <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
-                        {{allAvailableCombinedObject[componentCarrierObject.componentIndex].name}} x
-                        {{componentCarrierObject.quantity}}
-                    </li>
-                </ul>
+                    <ul class="list-unstyled"
+                        ng-if="recentOrder.status == 'done'"
+                        ng-repeat="componentCarrierObject in recentOrder.processedOrderComponents">
+                        <li class="list-unstyled clearfix"><i class="fa fa-spoon"></i>
+                            {{allComponentsIndexNames[componentCarrierObject.componentIndex]}} x
+                            {{componentCarrierObject.quantity}}
+                        </li>
+                    </ul>
 
+                </div>
+
+                <div class="card-action clearfix ng-cloak">
+                    <div class="alert alert-info ng-cloak"
+                         ng-if="recentOrder.status == 'processing' && mainCurrentGrillStatus.timeUniqueCuid == recentOrder.timeUniqueCuid && mainCurrentGrillStatus.grillName == recentOrder.grillName">
+                        <strong>Order status:</strong> Processing
+                    </div>
+
+                    <div class="alert alert-success ng-cloak"
+                         ng-if="recentOrder.status == 'done' && mainCurrentGrillStatus.timeUniqueCuid == recentOrder.timeUniqueCuid  && mainCurrentGrillStatus.grillName == recentOrder.grillName">
+                        <strong>Order status:</strong> This order is ready: {{recentOrder.readyTimeAgo}}
+                    </div>
+
+                    <div class="alert alert-warning ng-cloak"
+                         ng-if="recentOrder.status == 'declined' && mainCurrentGrillStatus.timeUniqueCuid == recentOrder.timeUniqueCuid  && mainCurrentGrillStatus.grillName == recentOrder.grillName">
+                        <strong>Order status:</strong> This order has been declined: {{recentOrder.declineTimeAgo}}
+                    </div>
+
+                    <div class="alert alert-info ng-cloak"
+                         ng-if="mainCurrentGrillStatus.timeUniqueCuid != recentOrder.timeUniqueCuid  && mainCurrentGrillStatus.grillName == recentOrder.grillName">
+                        <strong>Order status:</strong> Archived
+                    </div>
+
+                    <div class="alert alert-info ng-cloak"
+                         ng-if="mainCurrentGrillStatus.grillName != recentOrder.grillName">
+                        <strong>Order status:</strong> Head back to
+                        <a href="#" target="_self" class="alert-link"
+                           ng-click="logoutSession()">{{recentOrder.grillName}}</a>
+                        to view this order's status.
+                    </div>
+
+                    <h6 ng-if="recentOrder.status != 'declined'">
+                        <strong>Order ID:</strong> {{recentOrder.orderIndex}}<br/>
+                        <strong>Name on order:</strong> {{recentOrder.clientName}}
+                    </h6>
+
+                    <small>This order is subject to changes depending on the current available components from the
+                        grill, or
+                        decline
+                        from the
+                        grill Admin
+                    </small>
+
+                </div>
             </div>
-
-            <div class="card-action clearfix ng-cloak">
-                <div class="alert alert-info ng-cloak"
-                     ng-if="recentOrder.status == 'processing'">
-                    <strong>Order status:</strong> Processing
-                </div>
-
-                <div class="alert alert-success ng-cloak"
-                     ng-if="recentOrder.status == 'done'">
-                    <strong>Order status:</strong> This order is ready: {{recentOrder.readyTimeAgo}}
-                </div>
-
-                <div class="alert alert-warning ng-cloak"
-                     ng-if="recentOrder.status == 'declined'">
-                    <strong>Order status:</strong> This order has been declined: {{recentOrder.declineTimeAgo}}
-                </div>
-
-                <h6 ng-if="recentOrder.status != 'declined'">
-                    <strong>Order ID:</strong> {{recentOrder.orderUniqueCuid}}<br/>
-                    <strong>Name on order:</strong> {{recentOrder.clientName}}
-                </h6>
-
-                <small>This order is subject to changes depending on the current available components from the grill, or
-                    decline
-                    from the
-                    grill Admin
-                </small>
-
-            </div>
-        </div>
-    </li>
-</ul>
-
-<small>The orders shown here consist of your orders in this grill's instance, that is, from the time this grill was
-    opened. Your orders from past grill instances are not shown.
-</small>
+        </li>
+    </ul>
+</div>

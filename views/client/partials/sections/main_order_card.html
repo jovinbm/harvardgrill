@@ -1,4 +1,4 @@
-<div class="card main-order-card ng-cloak">
+<div class="card main-order-card animated fadeIn ng-cloak">
 
     <div class="card-content clearfix"
          ng-if="myRecentOrders[0].status != 'processing'">
@@ -13,6 +13,8 @@
 
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Order Components</h6>
+
+            <small ng-if="availableOrderComponents.length == 0">No order components available</small>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableOrderComponents">
@@ -33,6 +35,8 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Omelets</h6>
 
+            <small ng-if="availableOmelets.length == 0">No omelets available</small>
+
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableOmelets">
                 <div>
@@ -50,6 +54,8 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Extras</h6>
 
+            <small ng-if="availableExtras.length == 0">No extras available</small>
+
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableExtras">
                 <div>
@@ -66,6 +72,8 @@
 
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
             <h6>Weekly Special</h6>
+
+            <small ng-if="availableWeeklySpecials.length == 0">No weekly specials available</small>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ng-cloak"
                  ng-repeat="component in availableWeeklySpecials">

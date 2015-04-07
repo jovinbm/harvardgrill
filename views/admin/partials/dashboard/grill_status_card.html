@@ -24,6 +24,10 @@
     </div>
 
     <div class="card-action clearfix ng-cloak">
+        <div class="alert alert-info ng-cloak"
+             ng-if="currentGrillStatus.grillStatus != 'open' && currentGrillStatus.grillStatus != 'closed'">
+            <p><strong>Checking grill status...</strong></p>
+        </div>
         <div ng-class="grillStatusReference.grillStatusAlertClass">
             <strong>Grill status:</strong> {{grillStatusReference.grillStatusAlertText}}
         </div>

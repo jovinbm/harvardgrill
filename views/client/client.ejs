@@ -74,6 +74,11 @@
         <strong>{{bannerMessage}}</strong>
     </div>
 
+    <div class="alert alert-info ng-cloak"
+         ng-if="mainCurrentGrillStatus.grillStatus != 'open' && mainCurrentGrillStatus.grillStatus != 'closed'">
+        <p><strong>Checking grill status...</strong></p>
+    </div>
+
     <div class="alert alert-success ng-cloak"
          ng-if="mainCurrentGrillStatus.grillStatus == 'open'">
         <p><strong>Grill Status: Open and accepting orders</strong></p>
