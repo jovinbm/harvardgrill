@@ -504,6 +504,7 @@ angular.module('grillApp')
                 globals.currentGrillStatus(null, true, true);
                 getAllAvailable(true);
                 $scope.showToast('success', 'This page has been refreshed to reflect changes in the system');
+                getAllComponentsIndexNames();
             });
 
             //receives grill status
@@ -516,6 +517,7 @@ angular.module('grillApp')
                 getMyRecentOrders();
                 globals.currentGrillStatus(null, true, true);
                 getAllAvailable(true);
+                getAllComponentsIndexNames();
             });
 
             $log.info('MainController booted successfully');
