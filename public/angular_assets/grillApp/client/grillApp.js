@@ -14,7 +14,6 @@ angular.module('grillApp', [
         $http.get('views/client/partials/navs/client_top_nav.html', {cache: $templateCache});
         //partials->sections
         $http.get('views/client/partials/sections/my_recent_orders.html', {cache: $templateCache});
-        $http.get('views/client/partials/sections/recent_order_stream.html', {cache: $templateCache});
         $http.get('views/client/partials/sections/main_order_card.html', {cache: $templateCache});
         //partials->modals
     })

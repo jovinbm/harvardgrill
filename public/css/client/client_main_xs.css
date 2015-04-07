@@ -20,6 +20,11 @@ body {
     font-size: 0.9em;
 }
 
+li.mobile_nav_tabs.col-xs-4 {
+    padding: 0;
+    text-align: center;
+}
+
 /*columns*/
 .column-heading {
     font-size: 1.5em;

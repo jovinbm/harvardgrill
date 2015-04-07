@@ -1,6 +1,6 @@
 {
   "name": "grill",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "authors": [
     "Jovin Mwilanga <jovinbeda@hotmail.com>"
   ],
@@ -17,11 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "normalize.css": "~3.0.2",
     "toastr": "~2.1.0",
-    "bootstrap": "~3.3.2",
-    "angular-loading-bar": "~0.6.0",
-    "angulartics": "~0.17.2",
     "angular-moment": "~0.9.2"
   }
 }
