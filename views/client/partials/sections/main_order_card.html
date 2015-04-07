@@ -97,7 +97,7 @@
                     <thead>
                     <tr>
                         <th class="col_no_padding col-lg-9 col-md-9 col-sm-8">Order</th>
-                        <th class="col_no_padding center_text col-lg-3 col-md-3 col-sm-4">Add/Remove</th>
+                        <th class="col_no_padding center_text col-lg-3 col-md-3 col-sm-4">Increase/Decrease</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -132,6 +132,16 @@
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                         </td>
+                    </tr>
+                    <tr ng-repeat="component in availableOmelets"
+                        ng-if="myNewOrder[component.componentIndex]['isSelected'] == 'yes'">
+                        <td>{{component.name}} x {{myNewOrder[component.componentIndex]['quantity']}}</td>
+                        <td class="center_text"></td>
+                    </tr>
+                    <tr ng-repeat="component in availableExtras"
+                        ng-if="myNewOrder[component.componentIndex]['isSelected'] == 'yes'">
+                        <td>{{component.name}} x {{myNewOrder[component.componentIndex]['quantity']}}</td>
+                        <td class="center_text"></td>
                     </tr>
                     </tbody>
                 </table>
