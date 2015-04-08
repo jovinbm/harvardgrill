@@ -86,7 +86,7 @@ module.exports = {
                 code: 200,
                 notify: false,
                 redirect: true,
-                redirectPage: "/login.html"
+                redirectPage: "/index.html"
             });
         }
 
@@ -146,7 +146,7 @@ module.exports = {
                 code: 200,
                 notify: false,
                 redirect: true,
-                redirectPage: "/localLogin.html"
+                redirectPage: "/index.html"
             });
         }
 

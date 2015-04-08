@@ -125,9 +125,8 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 });
 
 //getting files
-app.get('/', routes.loginHtml);
-app.get('/login.html', routes.loginHtml);
-app.get('/localLogin.html', routes.local_login_Html);
+app.get('/', routes.index_Html);
+app.get('/index.html', routes.index_Html);
 app.get('/adminLogin.html', middleware.ensureAuthenticated, middleware.addUserData, routes.adminLogin_Html);
 app.get('/clientLogin.html', middleware.ensureAuthenticated, middleware.addUserData, routes.clientLogin_Html);
 app.get('/admin.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.admin_Html);
@@ -148,7 +147,7 @@ app.post('/api/clientLoginStartUp', middleware.ensureAuthenticatedAngular, middl
 
 
 //api inside the grill order
-//getMyRoom is also accessed from login therefore don't disable, ie, dont put customLoggedInStatus check
+//getMyRoom is also accessed from login therefore don't disable, ie, don't put customLoggedInStatus check
 app.get('/api/getMyRoom', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, basicAPI.getSocketRoom);
 app.post('/api/adminStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, middleware.checkCustomLoggedInStatusAngular, middleware.checkUserIsAdmin, basicAPI.adminStartUp);
 app.post('/api/clientStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, middleware.addUserGrillStatus, middleware.checkCustomLoggedInStatusAngular, basicAPI.clientStartUp);

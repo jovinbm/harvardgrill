@@ -37,7 +37,7 @@ module.exports = {
             next();
         } else {
             consoleLogger(errorLogger(module, 'user authentication failed'));
-            res.redirect('login.html');
+            res.redirect('index.html');
         }
     },
 
@@ -57,7 +57,7 @@ module.exports = {
                 msg: 'You are not logged in. Please reload page',
                 disable: true,
                 redirect: true,
-                redirectPage: '/login.html'
+                redirectPage: '/index.html'
             });
         }
     },
@@ -126,7 +126,7 @@ module.exports = {
                         msg: 'We could not find the grill you were currently in. Please reload this page',
                         disable: true,
                         redirect: true,
-                        redirectPage: '/login.html'
+                        redirectPage: '/index.html'
                     });
                 }
 
@@ -142,7 +142,7 @@ module.exports = {
                         msg: 'This grill is not available. Redirecting you to login',
                         disable: true,
                         redirect: true,
-                        redirectPage: '/login.html'
+                        redirectPage: '/index.html'
                     });
                 }
             }
@@ -174,7 +174,7 @@ module.exports = {
             consoleLogger(successLogger(module));
             next();
         } else {
-            res.redirect("login.html");
+            res.redirect("index.html");
         }
     },
 

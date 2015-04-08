@@ -5,6 +5,27 @@
     display: none !important;
 }
 
+body {
+    font-family: "Roboto Slab", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-transform: uppercase;
+    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+}
+
+.navbar-default .nav li a {
+    text-transform: uppercase;
+    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+}
+
 /*columns*/
 .column-heading {
     font-size: 1.5em;
@@ -59,4 +80,8 @@ div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
 
 .center_text {
     text-align: center;
+}
+
+.center_up_down {
+    vertical-align: middle;
 }

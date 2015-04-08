@@ -25,28 +25,14 @@ function getTheCurrentGrillStatus(req) {
 }
 
 module.exports = {
-    loginHtml: function (req, res) {
-        var module = 'loginHtml';
+    index_Html: function (req, res) {
+        var module = 'indexHtml';
         receivedLogger(module);
 
         if (req.user) {
             res.redirect("clientLogin.html");
         } else {
-            res.render('login', {
-                errorCode: 0,
-                errorMessage: "No errors"
-            })
-        }
-    },
-
-    local_login_Html: function (req, res) {
-        var module = 'local_login_Html';
-        receivedLogger(module);
-
-        if (req.user) {
-            res.redirect("clientLogin.html");
-        } else {
-            res.render('local_login', {
+            res.render('index', {
                 errorCode: 0,
                 errorMessage: "No errors"
             })
