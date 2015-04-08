@@ -194,7 +194,7 @@ header .local_login_heading {
 }
 
 section {
-    padding: 50px 0;
+    padding: 80px 0;
 }
 
 section h2.section-heading {
@@ -225,6 +225,12 @@ section h3.section-subheading {
 
 .img-centered {
     margin: 0 auto;
+}
+
+section#login {
+    background-color: #fed180;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 section#contact {
