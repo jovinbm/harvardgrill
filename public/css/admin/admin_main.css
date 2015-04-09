@@ -11,3 +11,10 @@ body {
 .table th, .table td {
     border-top: none !important;
 }
+
+@media (max-width: 767px) {
+    li.mobile_nav_tabs.col-xs-4 {
+        padding: 0;
+        text-align: center;
+    }
+}

@@ -11,3 +11,40 @@ body {
 .table th, .table td {
     border-top: none !important;
 }
+
+@media (max-width: 767px) {
+    body {
+        padding-top: 63px;
+    }
+
+    .nav-tabs {
+        background-color: #fed136;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .dropdown-menu {
+        background-color: #fed136;
+    }
+
+    .dropdown-menu li > a:hover,
+    .dropdown-menu li > a:focus,
+    .dropdown-submenu:hover > a {
+        color: #000;
+        background-color: #fed180;
+        background-image: none;
+        filter: none;
+    }
+
+    .dropdown-toggle:active,
+    .open
+    .dropdown-toggle {
+        background: #fed136 !important;
+        color: rgb(49, 135, 224) !important;
+    }
+
+    li.mobile_nav_tabs.col-xs-4 {
+        padding: 0;
+        text-align: center;
+    }
+}

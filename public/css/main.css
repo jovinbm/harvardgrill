@@ -191,6 +191,33 @@ div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
     }
 }
 
+@media (min-width: 768px) {
+
+    ul > li.dropdown.open > ul {
+        margin-top: 0;
+    }
+
+    .dropdown-menu {
+        background-color: #222;
+    }
+
+    .dropdown-menu li > a:hover,
+    .dropdown-menu li > a:focus,
+    .dropdown-submenu:hover > a {
+        color: #fed136;
+        background-color: #222;
+        background-image: none;
+        filter: none;
+    }
+
+    .dropdown-toggle:active,
+    .open
+    .dropdown-toggle {
+        background: #222 !important;
+        color: #fed136 !important;
+    }
+}
+
 footer {
     padding: 25px 0;
     text-align: center;
@@ -235,7 +262,6 @@ ul.social-buttons li a:focus,
 ul.social-buttons li a:active {
     background-color: #fed136;
 }
-
 
 .btn:focus,
 .btn:active,
