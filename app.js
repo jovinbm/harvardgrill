@@ -127,8 +127,8 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 //getting files
 app.get('/', routes.index_Html);
 app.get('/index.html', routes.index_Html);
-app.get('/adminLogin.html', middleware.ensureAuthenticated, middleware.addUserData, routes.adminLogin_Html);
-app.get('/clientLogin.html', middleware.ensureAuthenticated, middleware.addUserData, routes.clientLogin_Html);
+app.get('/adminHome.html', middleware.ensureAuthenticated, middleware.addUserData, routes.adminHome_Html);
+app.get('/clientHome.html', middleware.ensureAuthenticated, middleware.addUserData, routes.clientHome_Html);
 app.get('/admin.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.admin_Html);
 app.get('/adminProfile.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.admin_profile_Html);
 app.get('/client.html', middleware.ensureAuthenticated, middleware.addUserData, middleware.checkCustomLoggedInStatus, routes.client_Html);
@@ -142,8 +142,8 @@ app.post('/api/getAllGrillStatuses', loginAPI.getAllGrillStatuses);
 app.post('/createAccount', loginAPI.createAccount);
 app.post('/checkIfFullyRegistered', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.checkIfFullyRegistered);
 app.post('/updateUserDetails', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.updateUserDetails);
-app.post('/api/adminLoginStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.adminLoginStartUp);
-app.post('/api/clientLoginStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.clientLoginStartUp);
+app.post('/api/adminHomeStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.adminHomeStartUp);
+app.post('/api/clientHomeStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.clientHomeStartUp);
 //end of login api
 
 

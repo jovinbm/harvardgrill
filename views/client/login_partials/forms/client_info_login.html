@@ -1,5 +1,4 @@
-<div class="container ng-cloak"
-     ng-if="isFullyRegistered && isFullyRegistered != 'loading'">
+<div class="container ng-cloak">
 
     <div ng-class="bannerClass"
          ng-if="showBanner">
@@ -10,34 +9,6 @@
     <!--data-dv attributes for bootstrap validator plugin-->
     <form name="clientLoginForm"
           id="clientLoginForm">
-
-        <!--&lt;!&ndash;Username field&ndash;&gt;-->
-        <!--<div class="form-group ng-cloak">-->
-        <!--<label for="username">Username</label>-->
-        <!--<input type="text"-->
-        <!--class="form-control"-->
-        <!--id="username"-->
-        <!--placeholder="Enter your username here"-->
-        <!--ng-model="masterClientLoginForm.username"-->
-        <!--ng-minlength="4"-->
-        <!--ng-maxlength="7"-->
-        <!--ng-pattern="/^[a-zA-Z0-9_]*$/"-->
-        <!--required-->
-        <!--ng-disabled="isLoading || universalDisable"-->
-        <!--name="username">-->
-        <!--<span class="form-error-notice" ng-show="clientLoginForm.username.$error.required">-->
-        <!--<small>This is a required field:</small>-->
-        <!--</span>-->
-        <!--<span class="form-error-notice" ng-show="clientLoginForm.username.$error.minlength">-->
-        <!--<small>Minimum length required is 4:</small>-->
-        <!--</span>-->
-        <!--<span class="form-error-notice" ng-show="clientLoginForm.username.$error.maxlength">-->
-        <!--<small>Minimum length required is 7:</small>-->
-        <!--</span>-->
-        <!--<span class="form-error-notice" ng-show="clientLoginForm.username.$error.pattern">-->
-        <!--<small>Only letters, numbers and underscores allowed:</small>-->
-        <!--</span>-->
-        <!--</div>-->
 
         <h1 class="heading_1_2">Hello @{{myUsername}}</h1>
 
@@ -124,8 +95,7 @@
             <button type="submit"
                     class="btn btn-default btn-danger btn-lg btn-block"
                     ng-disabled="clientLoginForm.$invalid || !oneGrillIsSelected || isLoading || universalDisable"
-                    ng-click="submitClientLoginForm()"
-                    id="harvardID">LOGIN
+                    ng-click="submitClientLoginForm()">LOGIN
             </button>
         </div>
     </form>

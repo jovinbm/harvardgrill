@@ -113,7 +113,7 @@ module.exports = {
         } else {
             var updatePassword = false;
             if (theUser.password == "" || theUser.password == undefined || theUser.password == null) {
-                //this will instruct the clientLogin angular to initiate a registration
+                //this will instruct the clientHome angular to initiate a registration
                 updatePassword = true;
             }
             consoleLogger(successLogger(module));
@@ -157,7 +157,7 @@ module.exports = {
                         errorMessage: "Authentication failed. Please try again"
                     })
                 }
-                return res.redirect('clientLogin.html');
+                return res.redirect('clientHome.html');
             });
         })(req, res, next);
     },
@@ -195,9 +195,9 @@ module.exports = {
                     });
                 } else {
                     consoleLogger(successLogger(module));
-                    var redirectPage = '/clientLogin.html';
+                    var redirectPage = '/clientHome.html';
                     if (user.isAdmin == 'yes') {
-                        redirectPage = 'adminLogin.html'
+                        redirectPage = 'adminHome.html'
                     }
                     return res.status(200).send({
                         code: 200,
@@ -276,42 +276,61 @@ module.exports = {
                     }
 
                     function usernameAvailable() {
-                        var theUser = new User({
-                            email: email,
-                            firstName: firstName,
-                            lastName: lastName,
-                            username: username,
-                            password: password,
-                            openId: openId,
-                            uniqueCuid: uniqueCuid,
-                            socketRoom: socketRoom,
-                            isAdmin: isAdmin,
-                            realName: realName,
-                            displayName: displayName,
-                            realEmail: realEmail
-                        });
 
-                        //log this user into session
-                        req.logIn(theUser, function (err) {
+                        //hash the user's password
+                        bcrypt.hash(password, 10, function (err, hash) {
                             if (err) {
-                                consoleLogger(errorLogger('req.login', err, err));
-                                error();
+                                consoleLogger(errorLogger(module, 'error hashing password', err));
+                                res.status(401).send({
+                                    code: 401,
+                                    registrationBanner: true,
+                                    bannerClass: 'alert alert-dismissible alert-warning',
+                                    msg: 'We could create your account. Please check your details and try again'
+                                });
                             } else {
-                                //save the new user
-                                userDB.saveUser(theUser, error, error, successSave);
+                                continueWithHashedPassword(hash);
                             }
                         });
 
+                        function continueWithHashedPassword(hashedPassword) {
 
-                        function successSave() {
-                            res.status(200).send({
-                                code: 200,
-                                redirect: true,
-                                redirectPage: '/clientLogin.html'
+                            var theUser = new User({
+                                email: email,
+                                firstName: firstName,
+                                lastName: lastName,
+                                username: username,
+                                password: hashedPassword,
+                                openId: openId,
+                                uniqueCuid: uniqueCuid,
+                                socketRoom: socketRoom,
+                                isAdmin: isAdmin,
+                                realName: realName,
+                                displayName: displayName,
+                                realEmail: realEmail
                             });
 
-                            //send a welcome email
-                            emailModule.sendWelcomeEmail(theUser);
+                            //log this user into session
+                            req.logIn(theUser, function (err) {
+                                if (err) {
+                                    consoleLogger(errorLogger('req.login', err, err));
+                                    error();
+                                } else {
+                                    //save the new user
+                                    userDB.saveUser(theUser, error, error, successSave);
+                                }
+                            });
+
+
+                            function successSave() {
+                                res.status(200).send({
+                                    code: 200,
+                                    redirect: true,
+                                    redirectPage: '/clientHome.html'
+                                });
+
+                                //send a welcome email
+                                emailModule.sendWelcomeEmail(theUser);
+                            }
                         }
                     }
 
@@ -449,7 +468,7 @@ module.exports = {
                             res.status(200).send({
                                 code: 200,
                                 redirect: true,
-                                redirectPage: '/clientLogin.html'
+                                redirectPage: '/clientHome.html'
                             });
 
                             //send a welcome email
@@ -646,8 +665,8 @@ module.exports = {
 
     },
 
-    clientLoginStartUp: function (req, res) {
-        var module = 'clientLoginStartUp';
+    clientHomeStartUp: function (req, res) {
+        var module = 'clientHomeStartUp';
         receivedLogger(module);
         getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success);
 
@@ -672,8 +691,8 @@ module.exports = {
         }
     },
 
-    adminLoginStartUp: function (req, res) {
-        var module = 'adminLoginStartUp';
+    adminHomeStartUp: function (req, res) {
+        var module = 'adminHomeStartUp';
         receivedLogger(module);
         getAllGrillStatuses(errorAllGrillStatus, errorAllGrillStatus, success);
 

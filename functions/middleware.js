@@ -108,7 +108,7 @@ module.exports = {
 
             function error(status, err) {
                 //means the grill the user is looking for is not found. This is a big error
-                //redirect the user to clientLogin
+                //redirect the user to clientHome
 
                 //logout user
                 userDB.updateCuCls(req.customData.theUser.openId, req.customData.theUser.username, 0, errorLogout, errorLogout, success1);

@@ -30,7 +30,7 @@ module.exports = {
         receivedLogger(module);
 
         if (req.user) {
-            res.redirect("clientLogin.html");
+            res.redirect("clientHome.html");
         } else {
             res.render('index', {
                 errorCode: 0,
@@ -40,8 +40,8 @@ module.exports = {
     },
 
 
-    clientLogin_Html: function (req, res) {
-        var module = 'clientLogin_Html';
+    clientHome_Html: function (req, res) {
+        var module = 'clientHome_Html';
         receivedLogger(module);
         var theUser = getTheUser(req);
 
@@ -51,10 +51,10 @@ module.exports = {
             res.redirect('client.html');
         } else {
             if (theUser.isAdmin == 'yes') {
-                res.redirect('adminLogin.html');
+                res.redirect('adminHome.html');
             } else {
                 var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
-                res.render('client/client_login', {
+                res.render('client/client_home', {
                     gAnalyticsUserId: gaUserId
                 })
             }
@@ -62,8 +62,8 @@ module.exports = {
     },
 
 
-    adminLogin_Html: function (req, res) {
-        var module = 'admin_login_Html';
+    adminHome_Html: function (req, res) {
+        var module = 'admin_home_Html';
         receivedLogger(module);
         var theUser = getTheUser(req);
 
@@ -74,11 +74,11 @@ module.exports = {
         } else {
             if (theUser.isAdmin == 'yes') {
                 var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
-                res.render('admin/admin_login', {
+                res.render('admin/admin_home', {
                     gAnalyticsUserId: gaUserId
                 })
             } else {
-                res.redirect('clientLogin.html')
+                res.redirect('clientHome.html')
             }
         }
     },

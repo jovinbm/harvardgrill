@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="grillApp" ng-controller="MainController">
+<html lang="en" ng-app="adminHomeApp" ng-controller="MainController">
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no">
-    <meta name="description" content="Harvard dining grill order website"/>
+    <meta name="description" content="Harvard Grill Website"/>
     <meta name="author" content="Jovin Mwilanga"/>
+    <link rel="author" href="https://plus.google.com/+JovinMwilanga"/>
 
     <!--bootstrap-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/paper/bootstrap.min.css">
@@ -34,12 +34,7 @@
     <!-- loads custom css files -->
     <link rel="stylesheet" href="/public/css/cards.css">
     <link rel="stylesheet" href="/public/css/main.css">
-    <link rel="stylesheet" href="/public/css/client/client_main.css">
-
-    <!--custom css for small devices-->
-    <link rel="stylesheet"
-          media="only screen and (max-width: 767px)"
-          href="/public/css/client/client_main_xs.css"/>
+    <link rel="stylesheet" href="/public/css/admin/admin_home.css">
 
     <!--google analytics-->
     <script>
@@ -58,14 +53,16 @@
             })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
             ga('create', 'UA-58209445-2', 'auto');
-            <%- gAnalyticsUserId %>
             ga('require', 'linkid', 'linkid.js');
+            <%- gAnalyticsUserId %>
+            ga('send', 'pageview');
         }
     </script>
 
-    <title>HarvardGrill - Home</title>
 
+    <title>HarvardGrill - Login</title>
 </head>
+
 <body>
 
 <!--toast notifications-->
@@ -74,43 +71,13 @@
 
 
 <!--start of nav-->
-<div client-top-nav></div>
+<div admin-home-top-nav></div>
 <!--end of nav-->
 
-<div class="container ng-cloak">
 
-    <div ng-class="bannerClass"
-         ng-if="showBanner">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>{{bannerMessage}}</strong>
-    </div>
-
-    <div class="alert alert-info ng-cloak"
-         ng-if="mainCurrentGrillStatus.grillStatus != 'open' && mainCurrentGrillStatus.grillStatus != 'closed'">
-        <p><strong>Checking grill status...</strong></p>
-    </div>
-
-    <div class="alert alert-success ng-cloak"
-         ng-if="mainCurrentGrillStatus.grillStatus == 'open'">
-        <p><strong>Grill Status: Open and accepting orders</strong></p>
-    </div>
-
-    <div class="alert alert-warning ng-cloak"
-         ng-if="mainCurrentGrillStatus.grillStatus == 'closed'">
-        <p><strong>Grill Status: Closed!</strong><br/>
-            The grill is currently closed, please check in during normal dining hours. This section will be updated once
-            the administrators are ready to start processing orders
-        </p>
-    </div>
-
-    <!--all views loaded here by ui-router-->
-    <div ui-view></div>
-
-</div>
-
-<!--start of order input modal-->
-<div main-order-modal></div>
-<!--end of order input modal-->
+<!--start of admin login form-->
+<div admin-info-login></div>
+<!--end of admin login form-->
 
 <!-- JAVASCRIPT -->
 
@@ -167,16 +134,19 @@
 <script type="text/javascript"
         src="/bower_components/ngFx/dist/ngFx.min.js"></script>
 
-<script type="text/javascript" src="/public/js/client/client.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/grillApp.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/filters.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/directives.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/services/socketIoServices.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/services/mainFactory.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/services/globals.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/services/componentFactory.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/controllers/mainCtrl.js"></script>
-<script type="text/javascript" src="/public/angular_assets/grillApp/client/controllers/navBarCtrl.js"></script>
+
+<script type="text/javascript" src="/public/js/admin/admin_home.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/adminHomeApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/directives.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/filters.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/services/socketIoService.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/services/allGrillFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/services/mainFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/services/logoutFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/services/globals.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/services/referenceFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/homeApp/admin/controllers/navBarCtrl.js"></script>
 
 </body>
 </html>

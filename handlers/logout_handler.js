@@ -54,7 +54,7 @@ module.exports = {
                 code: 200,
                 notify: false,
                 redirect: true,
-                redirectPage: "/clientLogin.html"
+                redirectPage: "/clientHome.html"
             });
         }
 
@@ -115,7 +115,7 @@ module.exports = {
                 code: 200,
                 notify: false,
                 redirect: true,
-                redirectPage: "/adminLogin.html"
+                redirectPage: "/adminHome.html"
             });
         }
 
