@@ -42,9 +42,8 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var uniqueCuid = cuid();
             var socketRoom = cuid();
             var isAdmin = 'no';
-            var displayName = profile.displayName || "";
             var email = profile.emails[0].value || "";
-            var realEmail = profile.emails[0].value || "";
+            var fullName = profile.displayName || "";
 
             userDB.findUser(openId, error, error, success);
 
@@ -60,8 +59,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                         isAdmin: isAdmin,
                         uniqueCuid: uniqueCuid,
                         socketRoom: socketRoom,
-                        displayName: displayName,
-                        realEmail: realEmail,
+                        fullName: fullName,
                         email: email
                     });
 

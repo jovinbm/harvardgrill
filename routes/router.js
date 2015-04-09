@@ -110,7 +110,7 @@ module.exports = {
             var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
             res.render('client/client_profile.ejs', {
                 gAnalyticsUserId: gaUserId,
-                displayName: theUser.firstName
+                fullName: theUser.fullName
             });
         }
     },
@@ -139,7 +139,7 @@ module.exports = {
             var gaUserId = "ga('set', '&uid', " + "'" + theUser.uniqueCuid + "');";
             res.render('admin/admin_profile.ejs', {
                 gAnalyticsUserId: gaUserId,
-                displayName: theUser.firstName
+                fullName: theUser.fullName
             });
         } else if (theUser.isAdmin == 'no') {
             res.redirect('clientProfile.html');

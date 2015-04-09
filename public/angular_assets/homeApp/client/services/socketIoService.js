@@ -48,6 +48,14 @@ angular.module('clientHomeApp')
 
             return {
 
+                checkIfFullyRegistered: function () {
+                    return $http.post('/checkIfFullyRegistered');
+                },
+
+                updateUserDetails: function (details) {
+                    return $http.post('/updateUserDetails', details);
+                },
+
                 getSocketRoom: function () {
                     //no grillName required here since this is the very first request
                     return $http.get('/api/getMyRoom');

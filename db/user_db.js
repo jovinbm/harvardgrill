@@ -138,13 +138,13 @@ module.exports = {
         )
     },
 
-    updateDisplayName: function (openId, displayName, error_neg_1, error_0, success) {
+    updateFullName: function (openId, fullName, error_neg_1, error_0, success) {
         User
             .update({
                 openId: openId
             }, {
                 $set: {
-                    displayName: displayName
+                    fullName: fullName
                 }
             }, function (err) {
                 if (err) {

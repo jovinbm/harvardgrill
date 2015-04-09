@@ -135,26 +135,84 @@ angular.module('clientHomeApp')
             $scope.myUsername = globals.username();
             $scope.myUniqueCuid = globals.uniqueCuid();
 
+            //******************registration details and functions
+            $scope.registrationDetails = {
+                updatePassword: false,
+                firstName: "",
+                lastName: "",
+                username: "",
+                email: "",
+                password1: "",
+                password2: "",
+                invitationCode: ""
+            };
+            //variable set to 'loading' to prevent showing of both the registration form / login form while the content is being loaded
+            $scope.isFullyRegistered = 'loading';
+
+            $scope.submitUpdatedDetails = function () {
+                socketService.updateUserDetails($scope.registrationDetails)
+                    .success(function (resp) {
+                        //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        //hide password field since grill selection will be refreshed
+
+                        $scope.oneGrillIsSelected = false;
+                        globals.allGrillStatuses(null, true, true);
+                        $scope.masterClientLoginForm.password1 = "";
+                        $scope.masterClientLoginForm.password2 = "";
+                        $scope.masterClientLoginForm.invitationCode = "";
+                        $scope.responseStatusHandler(errResponse);
+                    })
+            };
+
+            //************end of registration details
+
             //initial requests
-            socketService.getSocketRoom()
+            socketService.checkIfFullyRegistered()
                 .success(function (resp) {
-                    $scope.mySocketRoom = globals.socketRoom(resp.socketRoom);
-                    $scope.myUsername = globals.username(resp.username);
-                    $scope.masterClientLoginForm.username = resp.username;
-                    $scope.myUniqueCuid = globals.uniqueCuid(resp.uniqueCuid);
-
-                    //join the random temporary socketRoom given
-                    socket.emit('joinRoom', {
-                        room: resp.socketRoom
-                    });
-
-                    //a success emit("joined") is picked up by "mainService" in mainFactory.js
-
-                    $scope.responseStatusHandler(resp);
+                    $scope.isFullyRegistered = true;
+                    continueSocketRoom();
                 })
                 .error(function (errResponse) {
-                    $scope.responseStatusHandler(errResponse);
+                    if (errResponse.loginErrorType == 'user') {
+                        //then user is not logged in
+                        $scope.isFullyRegistered = false;
+                        $scope.registrationDetails.fullName = errResponse.availableDetails.fullName;
+                        $scope.registrationDetails.username = errResponse.availableDetails.username;
+                        $scope.registrationDetails.email = errResponse.availableDetails.email;
+                        if (errResponse.updatePassword) {
+                            $scope.registrationDetails.updatePassword = true;
+                        }
+                    } else {
+                        $scope.responseStatusHandler(errResponse);
+                    }
+                    continueSocketRoom();
                 });
+
+            function continueSocketRoom() {
+                //initial requests
+                socketService.getSocketRoom()
+                    .success(function (resp) {
+                        $scope.mySocketRoom = globals.socketRoom(resp.socketRoom);
+                        $scope.myUsername = globals.username(resp.username);
+                        $scope.masterClientLoginForm.username = resp.username;
+                        $scope.myUniqueCuid = globals.uniqueCuid(resp.uniqueCuid);
+
+                        //join the random temporary socketRoom given
+                        socket.emit('joinRoom', {
+                            room: resp.socketRoom
+                        });
+
+                        //a success emit("joined") is picked up by "mainService" in mainFactory.js
+
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    });
+            }
 
 
             //************THE CLIENT INFO LOGIN FORM*****************
