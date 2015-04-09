@@ -13,12 +13,17 @@ angular.module('indexApp')
             $scope.bannerClass = "";
             $scope.bannerMessage = "";
 
+            $scope.showRegistrationBanner = false;
+            $scope.registrationBannerClass = "";
+            $scope.registrationBannerMessage = "";
+
             $scope.universalDisableTrue = function () {
                 $scope.universalDisable = true;
             };
             $scope.universalDisableFalse = function () {
                 $scope.universalDisable = false;
             };
+
             $scope.responseStatusHandler = function (resp) {
                 if (resp) {
                     if (resp.redirect) {
@@ -43,6 +48,13 @@ angular.module('indexApp')
                             $scope.bannerMessage = resp.msg;
                         }
                     }
+                    if (resp.registrationBanner) {
+                        if (resp.bannerClass && resp.msg) {
+                            $scope.showRegistrationBanner = true;
+                            $scope.registrationBannerClass = resp.bannerClass;
+                            $scope.registrationBannerMessage = resp.msg;
+                        }
+                    }
                     if (resp.reason) {
                         $log.warn(resp.reason);
                     }
@@ -58,8 +70,6 @@ angular.module('indexApp')
 
             //***************end of request error handler**************
 
-            //gets temp user's details (NB: THIS USER HAS NOT LOGGED IN, HELL IT MIGHT EVEN BE A HACKER)
-            $scope.temporarySocketRoom = globals.temporarySocketRoom();
 
             //*****************************isLoading functions to disable elements while content is loading or processing
             $scope.isLoading = false;
@@ -118,19 +128,6 @@ angular.module('indexApp')
 
             //****************************end of toastr show functions
 
-
-            //***********time functions*****************
-            $scope.currentTime = "";
-
-            //set current Date
-            $scope.currentTime = moment().format("ddd, MMM D, H:mm");
-            var updateCurrentTime = function () {
-                $scope.currentTime = moment().format("ddd, MMM D, H:mm");
-            };
-            $interval(updateCurrentTime, 20000, 0, true);
-
-            //***************end of time functions******************
-
             //initial requests
             socketService.getMyTemporarySocketRoom()
                 .success(function (resp) {
@@ -154,6 +151,13 @@ angular.module('indexApp')
             });
 
 
+            //variable to hold state between local login and creating a new account
+            //values =  signIn, register
+            $scope.userLoginState = 'signIn';
+            $scope.changeUserLoginState = function (newState) {
+                $scope.userLoginState = newState;
+            };
+
             //************THE LOCAL LOGIN FORM*****************
 
             $scope.masterLocalLoginForm = {
@@ -175,6 +179,35 @@ angular.module('indexApp')
             };
 
             //*************END OF LOCAL LOGIN FORM FUNCTIONS*********
+
+            //*******************REGISTRATION FORM
+            //******************registration details and functions
+            $scope.registrationDetails = {
+                email: "",
+                firstName: "",
+                lastName: "",
+                username: "",
+                password1: "",
+                password2: "",
+                invitationCode: ""
+            };
+
+            $scope.createAccount = function () {
+                socketService.createAccount($scope.registrationDetails)
+                    .success(function (resp) {
+                        //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        //hide password field since grill selection will be refreshed
+
+                        $scope.registrationDetails.password1 = "";
+                        $scope.registrationDetails.password2 = "";
+                        $scope.registrationDetails.invitationCode = "";
+                        $scope.responseStatusHandler(errResponse);
+                    })
+            };
+            //*******************END OF REGISTRATION FORM
 
 
             //*********crucial intervals

@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "toastr": "~2.1.0",
-    "angular-moment": "~0.9.2"
+    "angular-moment": "~0.9.2",
+    "ngFx": "~1.1.0"
   }
 }

@@ -97,83 +97,36 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
                 function successDbUsername(status, theUser) {
                     if (status == -1) {
+
                         //means the user exists
                         bcrypt.compare(password, theUser.password, function (err, res) {
                             if (err) {
+
                                 consoleLogger(errorLogger(module, 'error comparing passwords', err));
-                                done("A problem occurred when trying to log you in. Please try again", false, "error comparing password");
+                                done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
+
                             } else if (res) {
+
                                 //means the password checks with hash
-                                done(null, theUser, null)
+                                done(null, theUser, null);
+
                             } else {
+
                                 //passwords don't check
                                 consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
-                                done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again')
+                                done('The password you entered is incorrect. Please try again', false, 'The password you entered is incorrect. Please try again');
+
                             }
+
                         });
+
                     } else {
+
                         //means user does not exist(status here is 1, theUser is empty
-                        //proceed to create the new user while checking that they have used the passwords tempclient/hgadmin
-
-                        if (password == 'hgadmin') {
-                            var openId = cuid();
-                            var uniqueCuid = cuid();
-
-                            var user = new User({
-                                openId: openId,
-                                isAdmin: 'yes',
-                                uniqueCuid: uniqueCuid,
-                                socketRoom: 'adminSocketRoom',
-                                realName: '',
-                                displayName: '',
-                                username: username
-                            });
-
-                            userDB.saveUser(user, saveError, saveError, saveSuccess);
-
-                            function saveSuccess(theSavedUser) {
-                                done(null, theSavedUser, null)
-                            }
-
-                            function saveError(status, err) {
-                                consoleLogger(errorLogger(module, 'Error saving user', err));
-                                done("A problem occurred while trying to log you in. Please try again", false, "A problem occurred while trying to log you in. Please try again");
-                            }
-
-                        } else if (password == 'tempclient') {
-
-                            //these are for development only, used to imitate a client
-
-                            var openIdTemp = cuid();
-                            var uniqueCuidTemp = cuid();
-                            var socketRoomTemp = 'tempClient' + cuid();
-
-                            var userTemp = new User({
-                                openId: openIdTemp,
-                                isAdmin: 'no',
-                                uniqueCuid: uniqueCuidTemp,
-                                socketRoom: socketRoomTemp,
-                                realName: '',
-                                displayName: '',
-                                username: username
-                            });
-
-                            userDB.saveUser(userTemp, saveErrorTemp, saveErrorTemp, saveSuccessTemp);
-
-                            function saveSuccessTemp(theSavedUser) {
-                                done(null, theSavedUser, null)
-                            }
-
-                            function saveErrorTemp(status, err) {
-                                consoleLogger(errorLogger(module, 'Error saving user', err));
-                                done("A problem occurred when trying to log you in. Please try again", false, "A problem occurred when trying to log you in. Please try again");
-                            }
-
-                        } else {
-                            consoleLogger(errorLogger(module, 'Failed! User local strategy authentication failed'));
-                            done('You have entered incorrect credentials. Please try again', false, 'You have entered incorrect credentials. Please try again');
-                        }
+                        consoleLogger(errorLogger(module, 'Failed! the account the user tried to sign in to was not found'));
+                        done('We could not find a registered user with the credentials you provided. Please check and try again', false, 'We could not find a registered user with the credentials you provided. Please check and try again');
                     }
+
                 }
 
                 function errorDbUsername() {

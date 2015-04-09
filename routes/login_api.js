@@ -3,6 +3,7 @@ var forms = require('../functions/forms.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var cuid = require('cuid');
 var Stats = require("../database/stats/stats_model.js");
+var User = require("../database/users/user_model.js");
 var userDB = require('../db/user_db.js');
 var passport = require('passport');
 var OpenIDStrategy = require('passport-openid').Strategy;
@@ -207,6 +208,136 @@ module.exports = {
                 }
             });
         })(req, res, next);
+    },
+
+
+    createAccount: function (req, res) {
+        var module = "createAccount";
+
+        var invitationCode = req.body.invitationCode;
+        var isAdmin = 'no';
+
+        if (invitationCode == 'tempclient' || invitationCode == 'hgadmin') {
+
+            if (invitationCode == 'hgadmin') {
+                isAdmin = 'yes';
+            }
+
+            var email = req.body.email;
+            var firstName = req.body.firstName;
+            var lastName = req.body.lastName;
+            var username = req.body.username;
+            var password = req.body.password1;
+
+            var openId = cuid();
+            var uniqueCuid = cuid();
+            var socketRoom = cuid();
+            var realName = firstName + " " + lastName;
+            var displayName = firstName + " " + lastName;
+            var realEmail = req.body.email;
+
+
+            //this function validates the form and calls formValidated on success
+            forms.validateRegistrationForm(req, res, firstName, lastName, username, email, password, req.body.password2, formValidated);
+
+            function formValidated() {
+                //check that nobody is using that username
+                userDB.findUserWithUsername(username, errorFindingUsername, errorFindingUsername, resolveUsernameAvailability);
+
+                //here, the application tries to find the username given. If it exists, then the function return (-1,theUser),
+                // theUser being theUser with the wanted username. This means that the username is already taken this the user should be notified
+
+                function errorFindingUsername(status, err) {
+                    consoleLogger(errorLogger(module, 'Could not retrieve user', err));
+                    res.status(401).send({
+                        code: 401,
+                        registrationBanner: true,
+                        bannerClass: 'alert alert-dismissible alert-warning',
+                        msg: 'Failed to create your account. Please try again'
+                    });
+                }
+
+                function resolveUsernameAvailability(status, retrievedUser) {
+                    //1 means username is already in use, -1 means the new user can use the username
+                    if (status == -1) {
+                        consoleLogger(errorLogger(module, 'username entered is already in use'));
+
+                        //means it's a different user wanting a username that's already in use. notify the user
+                        res.status(401).send({
+                            code: 401,
+                            registrationBanner: true,
+                            bannerClass: 'alert alert-dismissible alert-warning',
+                            msg: 'The username you entered is already in use. Please choose a different one'
+                        });
+
+                    } else {
+                        //means username is available
+                        usernameAvailable();
+                    }
+
+                    function usernameAvailable() {
+                        var theUser = new User({
+                            email: email,
+                            firstName: firstName,
+                            lastName: lastName,
+                            username: username,
+                            password: password,
+                            openId: openId,
+                            uniqueCuid: uniqueCuid,
+                            socketRoom: socketRoom,
+                            isAdmin: isAdmin,
+                            realName: realName,
+                            displayName: displayName,
+                            realEmail: realEmail
+                        });
+
+                        //log this user into session
+                        req.logIn(theUser, function (err) {
+                            if (err) {
+                                consoleLogger(errorLogger('req.login', err, err));
+                                error();
+                            } else {
+                                //save the new user
+                                userDB.saveUser(theUser, error, error, successSave);
+                            }
+                        });
+
+
+                        function successSave() {
+                            res.status(200).send({
+                                code: 200,
+                                redirect: true,
+                                redirectPage: '/clientLogin.html'
+                            });
+
+                            //send a welcome email
+                            emailModule.sendWelcomeEmail(theUser);
+                        }
+                    }
+
+                    function error() {
+                        //log the user out
+                        if (req.isAuthenticated()) {
+                            req.logout();
+                        }
+                        res.status(401).send({
+                            code: 401,
+                            registrationBanner: true,
+                            bannerClass: 'alert alert-dismissible alert-warning',
+                            msg: 'We could not create your account. Please check your details and try again'
+                        });
+                    }
+                }
+            }
+        } else {
+
+            res.status(401).send({
+                code: 401,
+                registrationBanner: true,
+                bannerClass: 'alert alert-dismissible alert-warning',
+                msg: 'It seems like you have entered a wrong invitation code. Please check and try again'
+            });
+        }
     },
 
     updateUserDetails: function (req, res) {

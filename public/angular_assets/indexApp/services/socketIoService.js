@@ -58,6 +58,10 @@ angular.module('indexApp')
                     return $http.post('/api/getAllGrillStatuses');
                 },
 
+                createAccount: function (details) {
+                    return $http.post('/createAccount', details);
+                },
+
                 localUserLogin: function (loginData) {
                     return $http.post('/localUserLogin', loginData);
                 }

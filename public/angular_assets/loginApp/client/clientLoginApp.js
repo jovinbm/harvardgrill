@@ -4,7 +4,10 @@ angular.module('clientLoginApp', [
     'angulartics',
     'angulartics.google.analytics',
     'angularMoment',
-    'ui.router'
+    'ui.router',
+    'duScroll',
+    'ngFx',
+    'ngAnimate'
 ])
 
     .run(function ($templateCache, $http) {

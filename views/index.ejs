@@ -11,6 +11,9 @@
     <!--bootstrap-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/paper/bootstrap.min.css">
 
+    <!--animate.css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css"/>
+
     <!--loads font awesome-->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
@@ -70,7 +73,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand"><i class="fa fa-spoon"></i>
+            <a href="#top"
+               du-smooth-scroll du-scrollspy
+               class="navbar-brand">
+                <i class="fa fa-spoon"></i>
                 HarvardGrill
             </a>
         </div>
@@ -79,129 +85,129 @@
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="#services" target="_self">Services</a>
+                    <a href="#services" du-smooth-scroll du-scrollspy>Services</a>
                 </li>
                 <li>
-                    <a href="#contact" target="_self">Contact</a>
+                    <a href="#login"
+                       du-smooth-scroll du-scrollspy
+                       ng-click="changeUserLoginState('register')">Register</a>
                 </li>
                 <li>
-                    <a href="#terms" target="_self">Terms</a>
+                    <a href="#login"
+                       du-smooth-scroll du-scrollspy
+                       ng-click="changeUserLoginState('signIn')">Sign In</a>
                 </li>
-                <li><a href="#login" target="_self">Login</a></li>
             </ul>
         </div>
     </div>
 </nav>
 <!--end of nav-->
 
-<header>
-    <div class="container">
-        <div class="intro-text">
-            <div class="intro-lead-in">GRILL ORDER //</div>
-            <div class="intro-heading">Lunch &amp; Dinner</div>
-            <a href="#login" target="_self" class="btn btn-xl">LOG IN</a>
-        </div>
-    </div>
-</header>
-
-<!-- Services Section -->
-<section id="services">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="section-heading">Services</h2>
-
-                <h3 class="section-subheading text-muted">OUR USERS ENJOY A DIVERSE ARRAY OF SERVICES.</h3>
+<div>
+    <header id="top">
+        <div class="container">
+            <div class="intro-text animated pulse">
+                <div class="intro-heading">GRILL ORDER //</div>
+                <div class="intro-lead-in">Lunch &amp; Dinner</div>
+                <a href="#login"
+                   du-smooth-scroll du-scrollspy
+                   class="btn btn-xl">REGISTER
+                </a>
+                <a href="#login"
+                   du-smooth-scroll du-scrollspy
+                   class="btn btn-xl">SIGN IN
+                </a>
             </div>
         </div>
-        <div class="row text-center">
-            <div class="col-md-4">
+    </header>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Services</h2>
+
+                    <h3 class="section-subheading text-muted">OUR USERS ENJOY A DIVERSE ARRAY OF SERVICES.</h3>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-cutlery fa-stack-1x fa-inverse"></i>
                     </span>
-                <h4 class="service-heading">ORDER ONLINE</h4>
+                    <h4 class="service-heading">ORDER ONLINE</h4>
 
-                <p class="text-muted">Place your orders online from your comfort zone. Anytime, Anywhere!</p>
-            </div>
-            <div class="col-md-4">
+                    <p class="text-muted">Place your orders online from your comfort zone. Anytime, Anywhere!</p>
+                </div>
+                <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa fa-eye fa-stack-1x fa-inverse"></i>
                     </span>
-                <h4 class="service-heading">Profiling</h4>
+                    <h4 class="service-heading">Profiling</h4>
 
-                <p class="text-muted">Keep an eye on what you eat. Enjoy personal records and keep track of the number
-                    of calories you eat every meal</p>
-            </div>
-            <div class="col-md-4">
+                    <p class="text-muted">Keep an eye on what you eat. Enjoy personal records and keep track of the
+                        number
+                        of calories you eat every meal</p>
+                </div>
+                <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i>
                     </span>
-                <h4 class="service-heading">Catering</h4>
+                    <h4 class="service-heading">Catering</h4>
 
-                <p class="text-muted">Whether it's a birthday party, or a graduation ceremony, we'll help you make it a
-                    unique and memorable event.</p>
+                    <p class="text-muted">Whether it's a birthday party, or a graduation ceremony, we'll help you make
+                        it a
+                        unique and memorable event.</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
+    <section id="login">
 
-<section id="login">
-    <div class="container">
+        <!--login form-->
+        <div class="container"
+             ng-if="userLoginState == 'signIn'">
 
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="section-heading">Sign In</h2>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="container text-center">
+            <div class="row">
                 <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Sign In</h2>
+                </div>
+            </div>
 
-                    <form action="/harvardId/login"
-                          method="post"
-                          id="harvardIdLoginForm">
+            <div class="row">
+                <div class="container text-center">
+                    <div class="col-lg-12 text-center">
 
-                        <input type="hidden" name="openid_identifier" value="https://id.cs50.net/"/>
+                        <div ng-class="bannerClass"
+                             class="ng-cloak"
+                             ng-if="showBanner">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <strong>{{bannerMessage}}</strong>
+                        </div>
 
-                        <button type="submit" class="btn btn-default btn-danger btn-lg" id="harvardID">Log in with
-                            Harvard
-                            PIN
-                        </button>
-                    </form>
-                    <div class="local_login_heading">
-                        OR
-                    </div>
+                        <!--data-dv attributes for bootstrap validator plugin-->
+                        <form name="localLoginForm"
+                              id="localLoginForm">
 
-                    <div ng-class="bannerClass"
-                         class="ng-cloak"
-                         ng-if="showBanner">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong>{{bannerMessage}}</strong>
-                    </div>
-
-                    <!--data-dv attributes for bootstrap validator plugin-->
-                    <form name="localLoginForm"
-                          id="localLoginForm">
-
-                        <!--Username field-->
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text"
-                                   class="form-control"
-                                   id="username"
-                                   placeholder="Enter your username here"
-                                   ng-model="masterLocalLoginForm.username"
-                                   ng-minlength="4"
-                                   ng-maxlength="10"
-                                   ng-pattern="/^[a-zA-Z0-9_]*$/"
-                                   required
-                                   ng-disabled="isLoading || universalDisable"
-                                   name="username">
+                            <!--Username field-->
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="username"
+                                       placeholder="Enter your username here"
+                                       ng-model="masterLocalLoginForm.username"
+                                       ng-minlength="4"
+                                       ng-maxlength="10"
+                                       ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                       required
+                                       ng-disabled="isLoading || universalDisable"
+                                       name="username">
                             <span class="form-error-notice" ng-show="localLoginForm.username.$error.required">
                                 <small>This is a required field:</small>
                             </span>
@@ -214,22 +220,22 @@
                             <span class="form-error-notice" ng-show="localLoginForm.username.$error.pattern">
                                 <small>Only letters, numbers and underscores allowed:</small>
                             </span>
-                        </div>
+                            </div>
 
-                        <!--password field-->
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password"
-                                   name="password"
-                                   class="form-control"
-                                   id="password"
-                                   placeholder="Enter password here"
-                                   ng-model="masterLocalLoginForm.password"
-                                   ng-minlength="4"
-                                   ng-maxlength="20"
-                                   ng-pattern="/^[a-zA-Z0-9_]*$/"
-                                   required
-                                   ng-disabled="isLoading || universalDisable">
+                            <!--password field-->
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password"
+                                       name="password"
+                                       class="form-control"
+                                       id="password"
+                                       placeholder="Enter password here"
+                                       ng-model="masterLocalLoginForm.password"
+                                       ng-minlength="4"
+                                       ng-maxlength="20"
+                                       ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                       required
+                                       ng-disabled="isLoading || universalDisable">
                             <span class="form-error-notice" ng-show="localLoginForm.password.$error.required">
                                 <small>This is a required field:</small>
                             </span>
@@ -242,87 +248,374 @@
                             <span class="form-error-notice" ng-show="localLoginForm.password.$error.pattern">
                                 <small>Only letters, numbers and underscores allowed:</small>
                             </span>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-default btn-danger btn-lg btn-block"
+                                        ng-disabled="localLoginForm.$invalid"
+                                        ng-click="submitLocalLoginForm()">SIGN IN
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="section-subheading">
+                            <h4>OR SIGN IN WITH</h4>
                         </div>
 
-                        <div class="form-group">
+                        <form action="/harvardId/login"
+                              method="post"
+                              id="harvardIdLoginForm">
+
+                            <input type="hidden"
+                                   name="openid_identifier"
+                                   value="https://id.cs50.net/"/>
+
                             <button type="submit"
-                                    class="btn btn-default btn-danger btn-lg btn-block"
-                                    ng-disabled="localLoginForm.$invalid"
-                                    ng-click="submitLocalLoginForm()">SIGN IN
+                                    class="btn btn-default btn-danger btn-lg"
+                                    id="harvardID">Harvard PIN
                             </button>
+                        </form>
+
+                        <div class="padding-top-20 padding-bottom-15">
+                            New to HarvardGrill?
+                        </div>
+
+                        <a class="btn btn-danger btn-create-account"
+                           href="#login"
+                           du-smooth-scroll du-scrollspy
+                           ng-click="changeUserLoginState('register')">CREATE AN ACCOUNT
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end of login form-->
+
+
+        <!--registration form-->
+        <div class="container"
+             ng-if="userLoginState == 'register'">
+
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading-small-20 padding-bottom-15 padding-top-20">Create an account using</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container text-center">
+
+                    <form action="/harvardId/login"
+                          method="post"
+                          id="harvardIdLoginForm"
+                          class="padding-bottom-15">
+
+                        <input type="hidden" name="openid_identifier" value="https://id.cs50.net/"/>
+
+                        <button type="submit" class="btn btn-default btn-danger btn-lg" id="harvardID">Harvard PIN
+                        </button>
+                    </form>
+
+                    <div>
+                        <h4 class="section-heading-small-20 padding-top-20">or create a new one here</h4>
+                    </div>
+
+                    <div class="col-lg-12 text-center">
+
+                        <div class="container">
+
+                            <div ng-class="registrationBannerClass"
+                                 ng-if="showRegistrationBanner">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong>{{registrationBannerMessage}}</strong>
+                            </div>
+
+                            <form name="clientRegistrationForm"
+                                  id="clientRegistrationForm">
+
+                                <!--Email field-->
+                                <div class="form-group ng-cloak">
+                                    <label for="email">Email</label>
+                                    <input type="email"
+                                           class="form-control"
+                                           id="email"
+                                           placeholder="username@domain.com"
+                                           ng-model="registrationDetails.email"
+                                           ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i"
+                                           required
+                                           ng-disabled="isLoading || universalDisable"
+                                           name="email">
+            <span class="form-error-notice" ng-show="clientRegistrationForm.email.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice" ng-show="adminRegistrationForm.email.$error.pattern">
+                <small>This is not a valid email</small>
+            </span>
+                                </div>
+
+
+                                <!--FirstName field-->
+                                <div class="form-group ng-cloak">
+                                    <label for="firstName">First name</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="firstName"
+                                           placeholder="Jane"
+                                           ng-model="registrationDetails.firstName"
+                                           ng-minlength="2"
+                                           ng-maxlength="30"
+                                           required
+                                           ng-disabled="isLoading || universalDisable"
+                                           name="firstName">
+            <span class="form-error-notice" ng-show="clientRegistrationForm.firstName.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.firstName.$error.minlength">
+                <small>Minimum length required is 2:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.firstName.$error.maxlength">
+                <small>Maximum length required is 30:</small>
+            </span>
+                                </div>
+
+                                <!--LastName field-->
+                                <div class="form-group ng-cloak">
+                                    <label for="LastName">Last name</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="LastName"
+                                           placeholder="Doe"
+                                           ng-model="registrationDetails.lastName"
+                                           ng-minlength="2"
+                                           ng-maxlength="30"
+                                           required
+                                           ng-disabled="isLoading || universalDisable"
+                                           name="lastName">
+            <span class="form-error-notice" ng-show="clientRegistrationForm.lastName.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.lastName.$error.minlength">
+                <small>Minimum length required is 2:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.lastName.$error.maxlength">
+                <small>Maximum length required is 30:</small>
+            </span>
+                                </div>
+
+                                <!--Username field-->
+                                <div class="form-group ng-cloak">
+                                    <label for="username">Public username</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="username"
+                                           placeholder="JaneDoe"
+                                           ng-model="registrationDetails.username"
+                                           ng-minlength="4"
+                                           ng-maxlength="10"
+                                           ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                           required
+                                           ng-disabled="isLoading || universalDisable"
+                                           name="username">
+            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.minlength">
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.maxlength">
+                <small>Maximum length required is 10:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.pattern">
+                <small>Only letters, numbers and underscores allowed:</small>
+            </span>
+                                </div>
+
+                                <!--password field-->
+                                <div class="form-group ng-cloak">
+                                    <label for="clientUpdatePassword1">New Password</label>
+                                    <input type="password"
+                                           name="password1"
+                                           class="form-control"
+                                           id="clientUpdatePassword1"
+                                           placeholder=""
+                                           ng-model="registrationDetails.password1"
+                                           ng-minlength="4"
+                                           ng-maxlength="20"
+                                           ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                           required
+                                           ng-disabled="isLoading || universalDisable">
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.required">
+                        <small>This is a required field:</small>
+                    </span>
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.minlength">
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.maxlength">
+                        <small>Maximum length required is 20:</small>
+                    </span>
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.pattern">
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationDetails.password1 != registrationDetails.password2">
+                        <small>Passwords do not match:</small>
+                    </span>
+                                </div>
+
+                                <!--confirm password-->
+                                <div class="form-group ng-cloak">
+                                    <label for="clientUpdatePassword2">Confirm Password</label>
+                                    <input type="password"
+                                           name="password2"
+                                           class="form-control"
+                                           id="clientUpdatePassword2"
+                                           placeholder=""
+                                           ng-model="registrationDetails.password2"
+                                           ng-minlength="4"
+                                           ng-maxlength="20"
+                                           ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                           required
+                                           ng-disabled="isLoading || universalDisable">
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.required">
+                        <small>This is a required field:</small>
+                    </span>
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.minlength">
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.maxlength">
+                        <small>Maximum length required is 20:</small>
+                    </span>
+                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.pattern">
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationDetails.password1 != registrationDetails.password2">
+                        <small>Passwords do not match:</small>
+                    </span>
+                                </div>
+
+                                <!--invitation code-->
+                                <div class="form-group ng-cloak">
+                                    <label for="code">Invitation code</label>
+                                    <input type="password"
+                                           class="form-control"
+                                           id="code"
+                                           ng-model="registrationDetails.invitationCode"
+                                           ng-minlength="4"
+                                           ng-maxlength="10"
+                                           ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                           required
+                                           ng-disabled="isLoading || universalDisable"
+                                           name="invitationCode">
+            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.required">
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.minlength">
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.maxlength">
+                <small>Maximum length required is 10:</small>
+            </span>
+            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.pattern">
+                <small>Only letters, numbers and underscores allowed:</small>
+            </span>
+                                </div>
+
+                                <div class="form-group ng-cloak">
+                                    <button class="btn btn-default btn-danger btn-lg btn-block"
+                                            ng-disabled="clientRegistrationForm.$invalid || isLoading || universalDisable"
+                                            ng-click="createAccount()">CREATE MY ACCOUNT
+                                    </button>
+                                </div>
+
+                            </form>
+
+                            <div class="padding-top-20 padding-bottom-15">
+                                Have an account?
+                            </div>
+
+                            <a class="btn btn-danger btn-create-account"
+                               href="#login"
+                               du-smooth-scroll du-scrollspy
+                               ng-click="changeUserLoginState('signIn')">SIGN IN
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end of registration form-->
+    </section>
+
+
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Contact Us</h2>
+
+                    <h3 class="section-subheading text-muted">We are here for you.</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="container text-center">
+                                <div class="col-lg-12 text-center">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Your Name *">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" placeholder="Your Email *">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" placeholder="Your Message *"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <button type="submit" class="btn btn-xl">Send Message</button>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
-<section id="contact">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="section-heading">Contact Us</h2>
-
-                <h3 class="section-subheading text-muted">We are here for you.</h3>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="copyright">Copyright &copy; HarvardGrill 2015</span>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline social-buttons">
+                        <li><a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline quicklinks">
+                        <li><a href="#">Privacy Policy</a>
+                        </li>
+                        <li><a href="#">Terms of Use</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <form id="contactForm">
-                    <div class="row">
-                        <div class="container text-center">
-                            <div class="col-lg-12 text-center">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Your Name *">
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Your Email *">
-                                </div>
-                                <div class="form-group">
-                                    <textarea class="form-control" placeholder="Your Message *"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 text-center">
-                            <button type="submit" class="btn btn-xl">Send Message</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+    </footer>
 
-
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <span class="copyright">Copyright &copy; HarvardGrill 2015</span>
-            </div>
-            <div class="col-md-4">
-                <ul class="list-inline social-buttons">
-                    <li><a href="#"><i class="fa fa-twitter"></i></a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-4">
-                <ul class="list-inline quicklinks">
-                    <li><a href="#">Privacy Policy</a>
-                    </li>
-                    <li><a href="#">Terms of Use</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</footer>
+</div>
 
 
 <!-- JAVASCRIPT -->
@@ -335,11 +628,10 @@
 
 <!--AngularJS SCRIPTS-->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.9/angular-route.min.js"></script>
 <script type="text/javascript"
         src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-animate.min.js"></script>
-<script type="text/javascript"
-        src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-sanitize.min.js"></script>
+
+<!--angular ui-->
 <script type="text/javascript"
         src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
 
@@ -363,10 +655,6 @@
 <script type="text/javascript"
         src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
 
-<!--text angular-->
-<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
-<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
-
 <!--toastr js-->
 <script src="/bower_components/toastr/toastr.min.js"></script>
 
@@ -375,6 +663,17 @@
         src="/bower_components/angular-moment/angular-moment.min.js"></script>
 <script type="text/javascript"
         src="/bower_components/moment/min/moment.min.js"></script>
+
+<!--angular scroll-spy-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.6.5/angular-scroll.min.js"></script>
+
+<!--ng-fx animations-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
+<script type="text/javascript"
+        src="/bower_components/ngFx/dist/ngFx.min.js"></script>
+
 
 <script type="text/javascript" src="/public/js/local_login/local_login.js"></script>
 <script type="text/javascript" src="/public/angular_assets/indexApp/indexApp.js"></script>

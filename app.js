@@ -139,6 +139,7 @@ app.get('/clientProfile.html', middleware.ensureAuthenticated, middleware.addUse
 //login api
 app.get('/api/getTemporarySocketRoom', loginAPI.getTemporarySocketRoom);
 app.post('/api/getAllGrillStatuses', loginAPI.getAllGrillStatuses);
+app.post('/createAccount', loginAPI.createAccount);
 app.post('/checkIfFullyRegistered', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.checkIfFullyRegistered);
 app.post('/updateUserDetails', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.updateUserDetails);
 app.post('/api/adminLoginStartUp', middleware.ensureAuthenticatedAngular, middleware.addUserData, loginAPI.adminLoginStartUp);
