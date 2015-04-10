@@ -355,8 +355,8 @@ module.exports = {
         }
     },
 
-    updateUserDetails: function (req, res) {
-        var module = "updateUserDetails";
+    completeAccountRegistration: function (req, res) {
+        var module = "completeAccountRegistration";
 
         var invitationCode = req.body.invitationCode;
         var isAdmin = 'no';

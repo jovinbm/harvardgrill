@@ -22,4 +22,12 @@ angular.module('adminHomeApp')
             link: function ($scope, $element, $attrs) {
             }
         }
+    }])
+    .directive('completeRegistration', [function () {
+        return {
+            templateUrl: 'views/admin/login_partials/forms/registration.html',
+            restrict: 'AEC',
+            link: function ($scope, $element, $attrs) {
+            }
+        }
     }]);

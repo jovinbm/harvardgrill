@@ -18,7 +18,7 @@ var consoleLogger = require('../functions/basic.js').consoleLogger;
 
 var environmentConfig = require('../environment_config');
 var envConfig = new environmentConfig();
-consoleLogger(process.env.NODE_ENV);
+consoleLogger("ENVIRONMENT = " + process.env.NODE_ENV);
 
 var returnURL = envConfig.returnURL;
 var realmURL = envConfig.realmURL;

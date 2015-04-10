@@ -74,9 +74,22 @@
 <div admin-home-top-nav></div>
 <!--end of nav-->
 
+<!--start of complete registration form-->
+<div ng-if="!isFullyRegistered">
+    <div complete-registration></div>
+</div>
+<!--end of complete registration form-->
 
 <!--start of admin login form-->
-<div admin-info-login></div>
+<div ng-if="isFullyRegistered">
+
+    <div admin-info-login></div>
+
+    <!--start of grills edit-->
+    <div grills-edit></div>
+    <!--end of grills edit-->
+
+</div>
 <!--end of admin login form-->
 
 <!-- JAVASCRIPT -->

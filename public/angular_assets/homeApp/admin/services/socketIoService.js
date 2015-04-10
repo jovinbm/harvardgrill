@@ -48,6 +48,14 @@ angular.module('adminHomeApp')
 
             return {
 
+                checkIfFullyRegistered: function () {
+                    return $http.post('/checkIfFullyRegistered');
+                },
+
+                completeAccountRegistration: function (details) {
+                    return $http.post('/completeAccountRegistration', details);
+                },
+
                 getSocketRoom: function () {
                     //no grillName required here since this is the very first request
                     return $http.get('/api/getMyRoom');

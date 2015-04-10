@@ -52,8 +52,8 @@ angular.module('clientHomeApp')
                     return $http.post('/checkIfFullyRegistered');
                 },
 
-                updateUserDetails: function (details) {
-                    return $http.post('/updateUserDetails', details);
+                completeAccountRegistration: function (details) {
+                    return $http.post('/completeAccountRegistration', details);
                 },
 
                 getSocketRoom: function () {

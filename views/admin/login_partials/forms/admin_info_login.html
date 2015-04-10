@@ -8,8 +8,7 @@
     </div>
 
     <!--data-dv attributes for bootstrap validator plugin-->
-    <form name="adminLoginForm"
-          id="adminLoginForm">
+    <form name="grillOrderLoginForm">
 
         <h1 class="heading_1_2">Hello @{{myUsername}}</h1>
 
@@ -73,22 +72,22 @@
                    class="form-control"
                    id="adminPassword"
                    placeholder="Enter password here"
-                   ng-model="masterAdminLoginForm.password"
+                   ng-model="toGrillOrderFormModel.password"
                    ng-minlength="4"
                    ng-maxlength="20"
                    ng-pattern="/^[a-zA-Z0-9_]*$/"
                    required
                    ng-disabled="isLoading || universalDisable">
-                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.required">
+                    <span class="form-error-notice" ng-show="grillOrderLoginForm.password.$error.required">
                         <small>This is a required field:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.minlength">
+                    <span class="form-error-notice" ng-show="grillOrderLoginForm.password.$error.minlength">
                         <small>Minimum length required is 4:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.maxlength">
+                    <span class="form-error-notice" ng-show="grillOrderLoginForm.password.$error.maxlength">
                         <small>Minimum length required is 20:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="adminLoginForm.password.$error.pattern">
+                    <span class="form-error-notice" ng-show="grillOrderLoginForm.password.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
                     </span>
         </div>
@@ -96,8 +95,8 @@
         <div class="form-group col_no_padding ng-cloak col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <button type="submit"
                     class="btn btn-default btn-danger btn-lg btn-block"
-                    ng-disabled="adminLoginForm.$invalid || !oneGrillIsSelected"
-                    ng-click="submitAdminLoginForm()">ADMIN LOGIN
+                    ng-disabled="grillOrderLoginForm.$invalid || !oneGrillIsSelected"
+                    ng-click="signInToGrillOrder()">ADMIN LOGIN
             </button>
         </div>
     </form>

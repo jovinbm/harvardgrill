@@ -123,7 +123,7 @@ angular.module('clientHomeApp')
             //****************************end of toastr show functions
 
 
-            $scope.masterClientLoginForm = {
+            $scope.toGrillOrderFormModel = {
                 username: "",
                 password: "",
                 //grillName is updated when submitting
@@ -149,8 +149,8 @@ angular.module('clientHomeApp')
             //variable set to 'loading' to prevent showing of both the registration form / login form while the content is being loaded
             $scope.isFullyRegistered = 'loading';
 
-            $scope.submitUpdatedDetails = function () {
-                socketService.updateUserDetails($scope.registrationDetails)
+            $scope.completeAccountRegistration = function () {
+                socketService.completeAccountRegistration($scope.registrationDetails)
                     .success(function (resp) {
                         //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
                         $scope.responseStatusHandler(resp);
@@ -160,9 +160,9 @@ angular.module('clientHomeApp')
 
                         $scope.oneGrillIsSelected = false;
                         globals.allGrillStatuses(null, true, true);
-                        $scope.masterClientLoginForm.password1 = "";
-                        $scope.masterClientLoginForm.password2 = "";
-                        $scope.masterClientLoginForm.invitationCode = "";
+                        $scope.registrationDetails.password1 = "";
+                        $scope.registrationDetails.password2 = "";
+                        $scope.registrationDetails.invitationCode = "";
                         $scope.responseStatusHandler(errResponse);
                     })
             };
@@ -197,7 +197,7 @@ angular.module('clientHomeApp')
                     .success(function (resp) {
                         $scope.mySocketRoom = globals.socketRoom(resp.socketRoom);
                         $scope.myUsername = globals.username(resp.username);
-                        $scope.masterClientLoginForm.username = resp.username;
+                        $scope.toGrillOrderFormModel.username = resp.username;
                         $scope.myUniqueCuid = globals.uniqueCuid(resp.uniqueCuid);
 
                         //join the random temporary socketRoom given
@@ -217,7 +217,7 @@ angular.module('clientHomeApp')
 
             //************THE CLIENT INFO LOGIN FORM*****************
 
-            $scope.submitClientLoginForm = function () {
+            $scope.signInToGrillOrder = function () {
                 //check that only one grill is selected
                 checkIfGrillIsSelected();
                 if ($scope.oneGrillIsSelected) {
@@ -225,12 +225,12 @@ angular.module('clientHomeApp')
                     for (var prop in $scope.allGrillStatusesModel) {
                         if ($scope.allGrillStatusesModel.hasOwnProperty(prop)) {
                             if ($scope.allGrillStatusesModel[prop].isSelected == 'yes') {
-                                $scope.masterClientLoginForm.grillName = prop;
+                                $scope.toGrillOrderFormModel.grillName = prop;
                             }
                         }
                     }
                     //submit the login
-                    socketService.clientUserLogin($scope.masterClientLoginForm)
+                    socketService.clientUserLogin($scope.toGrillOrderFormModel)
                         .success(function (resp) {
                             //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
                             $scope.responseStatusHandler(resp);
@@ -240,7 +240,7 @@ angular.module('clientHomeApp')
 
                             $scope.oneGrillIsSelected = false;
                             globals.allGrillStatuses(null, true, true);
-                            $scope.masterClientLoginForm.password = "";
+                            $scope.toGrillOrderFormModel.password = "";
                             $scope.responseStatusHandler(errResponse);
                         })
                 } else {

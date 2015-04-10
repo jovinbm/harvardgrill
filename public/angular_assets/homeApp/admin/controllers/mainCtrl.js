@@ -122,7 +122,7 @@ angular.module('adminHomeApp')
 
             //****************************end of toastr show functions
 
-            $scope.masterAdminLoginForm = {
+            $scope.toGrillOrderFormModel = {
                 username: "",
                 password: "",
                 //grillName is updated when submitting
@@ -135,38 +135,96 @@ angular.module('adminHomeApp')
             $scope.myUniqueCuid = globals.uniqueCuid();
 
 
+            //******************registration details and functions
+            $scope.registrationDetails = {
+                updatePassword: false,
+                firstName: "",
+                lastName: "",
+                username: "",
+                email: "",
+                password1: "",
+                password2: "",
+                invitationCode: ""
+            };
+            //variable set to 'loading' to prevent showing of both the registration form / login form while the content is being loaded
+            $scope.isFullyRegistered = 'loading';
+
+            $scope.completeAccountRegistration = function () {
+                socketService.completeAccountRegistration($scope.registrationDetails)
+                    .success(function (resp) {
+                        //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        //hide password field since grill selection will be refreshed
+
+                        $scope.oneGrillIsSelected = false;
+                        globals.allGrillStatuses(null, true, true);
+                        $scope.registrationDetails.password1 = "";
+                        $scope.registrationDetails.password2 = "";
+                        $scope.registrationDetails.invitationCode = "";
+                        $scope.responseStatusHandler(errResponse);
+                    })
+            };
+
+            //************end of registration details
+
             //initial requests
-            socketService.getSocketRoom()
+            socketService.checkIfFullyRegistered()
                 .success(function (resp) {
-                    $scope.mySocketRoom = globals.socketRoom(resp.socketRoom);
-                    $scope.myUsername = globals.username(resp.username);
-                    $scope.masterAdminLoginForm.username = resp.username;
-                    $scope.myUniqueCuid = globals.uniqueCuid(resp.uniqueCuid);
-
-                    //join the random temporary socketRoom given
-                    socket.emit('joinRoom', {
-                        room: resp.socketRoom
-                    });
-
-                    //a success emit("joined") is picked up by "mainService" in mainFactory.js
-
-                    $scope.responseStatusHandler(resp);
+                    $scope.isFullyRegistered = true;
+                    continueSocketRoom();
                 })
                 .error(function (errResponse) {
-                    $scope.responseStatusHandler(errResponse);
+                    if (errResponse.loginErrorType == 'user') {
+                        //then user is not logged in
+                        $scope.isFullyRegistered = false;
+                        $scope.registrationDetails.fullName = errResponse.availableDetails.fullName;
+                        $scope.registrationDetails.username = errResponse.availableDetails.username;
+                        $scope.registrationDetails.email = errResponse.availableDetails.email;
+                        if (errResponse.updatePassword) {
+                            $scope.registrationDetails.updatePassword = true;
+                        }
+                    } else {
+                        $scope.responseStatusHandler(errResponse);
+                    }
+                    continueSocketRoom();
                 });
+
+            function continueSocketRoom() {
+                //initial requests
+                socketService.getSocketRoom()
+                    .success(function (resp) {
+                        $scope.mySocketRoom = globals.socketRoom(resp.socketRoom);
+                        $scope.myUsername = globals.username(resp.username);
+                        $scope.toGrillOrderFormModel.username = resp.username;
+                        $scope.myUniqueCuid = globals.uniqueCuid(resp.uniqueCuid);
+
+                        //join the random temporary socketRoom given
+                        socket.emit('joinRoom', {
+                            room: resp.socketRoom
+                        });
+
+                        //a success emit("joined") is picked up by "mainService" in mainFactory.js
+
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    });
+            }
 
 
             //************THE ADMIN LOGIN FORM*****************
 
-            $scope.masterAdminLoginForm = {
+            $scope.toGrillOrderFormModel = {
                 username: "",
                 password: "",
                 //grillName is updated when submitting
                 grillName: ""
             };
 
-            $scope.submitAdminLoginForm = function () {
+            $scope.signInToGrillOrder = function () {
                 //check that only one grill is selected
                 checkIfGrillIsSelected();
                 if ($scope.oneGrillIsSelected) {
@@ -174,12 +232,12 @@ angular.module('adminHomeApp')
                     for (var prop in $scope.allGrillStatusesModel) {
                         if ($scope.allGrillStatusesModel.hasOwnProperty(prop)) {
                             if ($scope.allGrillStatusesModel[prop].isSelected == 'yes') {
-                                $scope.masterAdminLoginForm.grillName = prop;
+                                $scope.toGrillOrderFormModel.grillName = prop;
                             }
                         }
                     }
                     //submit the login
-                    socketService.adminInfoLogin($scope.masterAdminLoginForm)
+                    socketService.adminInfoLogin($scope.toGrillOrderFormModel)
                         .success(function (resp) {
                             //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
                             $scope.responseStatusHandler(resp);
@@ -189,7 +247,7 @@ angular.module('adminHomeApp')
 
                             $scope.oneGrillIsSelected = false;
                             globals.allGrillStatuses(null, true, true);
-                            $scope.masterAdminLoginForm.password = "";
+                            $scope.toGrillOrderFormModel.password = "";
                             $scope.responseStatusHandler(errResponse);
                         })
                 } else {

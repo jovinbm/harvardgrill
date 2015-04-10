@@ -199,13 +199,14 @@
                                            class="form-control"
                                            id="username"
                                            placeholder="Enter your username here"
-                                           ng-model="masterLocalLoginForm.username"
+                                           ng-model="loginFormModel.username"
                                            ng-minlength="4"
                                            ng-maxlength="10"
                                            ng-pattern="/^[a-zA-Z0-9_]*$/"
                                            required
                                            ng-disabled="isLoading || universalDisable"
                                            name="username">
+
                             <span class="form-error-notice" ng-show="localLoginForm.username.$error.required">
                                 <small>This is a required field:</small>
                             </span>
@@ -228,7 +229,7 @@
                                            class="form-control"
                                            id="password"
                                            placeholder="Enter password here"
-                                           ng-model="masterLocalLoginForm.password"
+                                           ng-model="loginFormModel.password"
                                            ng-minlength="4"
                                            ng-maxlength="20"
                                            ng-pattern="/^[a-zA-Z0-9_]*$/"
@@ -339,8 +340,8 @@
                             </div>
 
                             <div class="row">
-                                <form name="clientRegistrationForm"
-                                      id="clientRegistrationForm">
+                                <form name="registrationForm"
+                                      id="registrationForm">
 
                                     <!--Email field-->
                                     <div class="form-group ng-cloak">
@@ -354,10 +355,10 @@
                                                required
                                                ng-disabled="isLoading || universalDisable"
                                                name="email">
-            <span class="form-error-notice" ng-show="clientRegistrationForm.email.$error.required">
+            <span class="form-error-notice" ng-show="registrationForm.email.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.email.$error.pattern">
+            <span class="form-error-notice" ng-show="registrationForm.email.$error.pattern">
                 <small>This is not a valid email</small>
             </span>
                                     </div>
@@ -376,13 +377,13 @@
                                                required
                                                ng-disabled="isLoading || universalDisable"
                                                name="firstName">
-            <span class="form-error-notice" ng-show="clientRegistrationForm.firstName.$error.required">
+            <span class="form-error-notice" ng-show="registrationForm.firstName.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.firstName.$error.minlength">
+            <span class="form-error-notice" ng-show="registrationForm.firstName.$error.minlength">
                 <small>Minimum length required is 2:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.firstName.$error.maxlength">
+            <span class="form-error-notice" ng-show="registrationForm.firstName.$error.maxlength">
                 <small>Maximum length required is 30:</small>
             </span>
                                     </div>
@@ -400,13 +401,13 @@
                                                required
                                                ng-disabled="isLoading || universalDisable"
                                                name="lastName">
-            <span class="form-error-notice" ng-show="clientRegistrationForm.lastName.$error.required">
+            <span class="form-error-notice" ng-show="registrationForm.lastName.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.lastName.$error.minlength">
+            <span class="form-error-notice" ng-show="registrationForm.lastName.$error.minlength">
                 <small>Minimum length required is 2:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.lastName.$error.maxlength">
+            <span class="form-error-notice" ng-show="registrationForm.lastName.$error.maxlength">
                 <small>Maximum length required is 30:</small>
             </span>
                                     </div>
@@ -425,16 +426,16 @@
                                                required
                                                ng-disabled="isLoading || universalDisable"
                                                name="username">
-            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.required">
+            <span class="form-error-notice" ng-show="registrationForm.username.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.minlength">
+            <span class="form-error-notice" ng-show="registrationForm.username.$error.minlength">
                 <small>Minimum length required is 4:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.maxlength">
+            <span class="form-error-notice" ng-show="registrationForm.username.$error.maxlength">
                 <small>Maximum length required is 10:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.username.$error.pattern">
+            <span class="form-error-notice" ng-show="registrationForm.username.$error.pattern">
                 <small>Only letters, numbers and underscores allowed:</small>
             </span>
                                     </div>
@@ -453,16 +454,16 @@
                                                ng-pattern="/^[a-zA-Z0-9_]*$/"
                                                required
                                                ng-disabled="isLoading || universalDisable">
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.required">
+                    <span class="form-error-notice" ng-show="registrationForm.password1.$error.required">
                         <small>This is a required field:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.minlength">
+                    <span class="form-error-notice" ng-show="registrationForm.password1.$error.minlength">
                         <small>Minimum length required is 4:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.maxlength">
+                    <span class="form-error-notice" ng-show="registrationForm.password1.$error.maxlength">
                         <small>Maximum length required is 20:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password1.$error.pattern">
+                    <span class="form-error-notice" ng-show="registrationForm.password1.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
                     </span>
                     <span class="form-error-notice"
@@ -485,16 +486,16 @@
                                                ng-pattern="/^[a-zA-Z0-9_]*$/"
                                                required
                                                ng-disabled="isLoading || universalDisable">
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.required">
+                    <span class="form-error-notice" ng-show="registrationForm.password2.$error.required">
                         <small>This is a required field:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.minlength">
+                    <span class="form-error-notice" ng-show="registrationForm.password2.$error.minlength">
                         <small>Minimum length required is 4:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.maxlength">
+                    <span class="form-error-notice" ng-show="registrationForm.password2.$error.maxlength">
                         <small>Maximum length required is 20:</small>
                     </span>
-                    <span class="form-error-notice" ng-show="clientRegistrationForm.password2.$error.pattern">
+                    <span class="form-error-notice" ng-show="registrationForm.password2.$error.pattern">
                         <small>Only letters, numbers and underscores allowed:</small>
                     </span>
                     <span class="form-error-notice"
@@ -516,23 +517,23 @@
                                                required
                                                ng-disabled="isLoading || universalDisable"
                                                name="invitationCode">
-            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.required">
+            <span class="form-error-notice" ng-show="registrationForm.invitationCode.$error.required">
                 <small>This is a required field:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.minlength">
+            <span class="form-error-notice" ng-show="registrationForm.invitationCode.$error.minlength">
                 <small>Minimum length required is 4:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.maxlength">
+            <span class="form-error-notice" ng-show="registrationForm.invitationCode.$error.maxlength">
                 <small>Maximum length required is 10:</small>
             </span>
-            <span class="form-error-notice" ng-show="clientRegistrationForm.invitationCode.$error.pattern">
+            <span class="form-error-notice" ng-show="registrationForm.invitationCode.$error.pattern">
                 <small>Only letters, numbers and underscores allowed:</small>
             </span>
                                     </div>
 
                                     <div class="form-group ng-cloak">
                                         <button class="btn btn-default btn-danger btn-lg btn-block"
-                                                ng-disabled="clientRegistrationForm.$invalid || isLoading || universalDisable"
+                                                ng-disabled="registrationForm.$invalid || isLoading || universalDisable"
                                                 ng-click="createAccount()">CREATE MY ACCOUNT
                                         </button>
                                     </div>

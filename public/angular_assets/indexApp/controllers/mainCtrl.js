@@ -160,20 +160,20 @@ angular.module('indexApp')
 
             //************THE LOCAL LOGIN FORM*****************
 
-            $scope.masterLocalLoginForm = {
+            $scope.loginFormModel = {
                 username: "",
                 password: ""
             };
 
             $scope.submitLocalLoginForm = function () {
-                socketService.localUserLogin($scope.masterLocalLoginForm)
+                socketService.localUserLogin($scope.loginFormModel)
                     .success(function (resp) {
                         //the responseStatusHandler handles all basic response stuff including redirecting the user if a success is picked
                         $scope.responseStatusHandler(resp);
                     })
                     .error(function (errResponse) {
                         globals.allGrillStatuses(null, true, true);
-                        $scope.masterLocalLoginForm.password = "";
+                        $scope.loginFormModel.password = "";
                         $scope.responseStatusHandler(errResponse);
                     })
             };
