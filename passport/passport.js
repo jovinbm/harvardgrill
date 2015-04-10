@@ -13,16 +13,17 @@ var errorLogger = function (module, text, err) {
     return eL('passport.js', module, text, err);
 };
 
-
-//harvard openId config
-//var returnURL = "http://www.harvardgrill.com/harvardId";
-//var realmURL = "http://www.harvardgrill.com";
-var returnURL = "http://localhost:4000/harvardId";
-var realmURL = "http://localhost:4000/";
-
-var cuid = require('cuid');
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
+
+var environmentConfig = require('../environment_Config');
+var envConfig = new environmentConfig();
+consoleLogger(process.env.NODE_ENV);
+
+var returnURL = envConfig.returnURL;
+var realmURL = envConfig.realmURL;
+
+var cuid = require('cuid');
 var userDB = require('../db/user_db.js');
 var User = require("../database/users/user_model.js");
 var bcrypt = require('bcrypt');
