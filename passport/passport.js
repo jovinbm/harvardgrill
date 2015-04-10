@@ -16,7 +16,7 @@ var errorLogger = function (module, text, err) {
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 
-var environmentConfig = require('../environment_Config');
+var environmentConfig = require('../environment_config');
 var envConfig = new environmentConfig();
 consoleLogger(process.env.NODE_ENV);
 
